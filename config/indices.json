@@ -1,0 +1,968 @@
+{
+ "_aide": "Composition des cartes de marché par indice. Les poids sont indicatifs (ordre de grandeur de la capitalisation) : ajuste-les ou ajoute des indices ici. Les symboles sont ceux de Yahoo Finance.",
+ "indices": [
+  {
+   "id": "sp500",
+   "nom": "S&P 500",
+   "note": "Principales valeurs",
+   "valeurs": [
+    {
+     "symbole": "NVDA",
+     "nom": "Nvidia",
+     "secteur": "Technologie",
+     "poids": 7.5
+    },
+    {
+     "symbole": "AAPL",
+     "nom": "Apple",
+     "secteur": "Technologie",
+     "poids": 6.8
+    },
+    {
+     "symbole": "MSFT",
+     "nom": "Microsoft",
+     "secteur": "Technologie",
+     "poids": 6.3
+    },
+    {
+     "symbole": "AVGO",
+     "nom": "Broadcom",
+     "secteur": "Technologie",
+     "poids": 2.6
+    },
+    {
+     "symbole": "ORCL",
+     "nom": "Oracle",
+     "secteur": "Technologie",
+     "poids": 0.8
+    },
+    {
+     "symbole": "PLTR",
+     "nom": "Palantir",
+     "secteur": "Technologie",
+     "poids": 0.6
+    },
+    {
+     "symbole": "AMD",
+     "nom": "AMD",
+     "secteur": "Technologie",
+     "poids": 0.6
+    },
+    {
+     "symbole": "CSCO",
+     "nom": "Cisco",
+     "secteur": "Technologie",
+     "poids": 0.5
+    },
+    {
+     "symbole": "IBM",
+     "nom": "IBM",
+     "secteur": "Technologie",
+     "poids": 0.5
+    },
+    {
+     "symbole": "CRM",
+     "nom": "Salesforce",
+     "secteur": "Technologie",
+     "poids": 0.5
+    },
+    {
+     "symbole": "MU",
+     "nom": "Micron",
+     "secteur": "Technologie",
+     "poids": 0.4
+    },
+    {
+     "symbole": "ADBE",
+     "nom": "Adobe",
+     "secteur": "Technologie",
+     "poids": 0.4
+    },
+    {
+     "symbole": "QCOM",
+     "nom": "Qualcomm",
+     "secteur": "Technologie",
+     "poids": 0.4
+    },
+    {
+     "symbole": "TXN",
+     "nom": "Texas Instruments",
+     "secteur": "Technologie",
+     "poids": 0.4
+    },
+    {
+     "symbole": "NOW",
+     "nom": "ServiceNow",
+     "secteur": "Technologie",
+     "poids": 0.4
+    },
+    {
+     "symbole": "INTC",
+     "nom": "Intel",
+     "secteur": "Technologie",
+     "poids": 0.3
+    },
+    {
+     "symbole": "AMAT",
+     "nom": "Applied Materials",
+     "secteur": "Technologie",
+     "poids": 0.3
+    },
+    {
+     "symbole": "GOOGL",
+     "nom": "Alphabet",
+     "secteur": "Communication",
+     "poids": 4.2
+    },
+    {
+     "symbole": "META",
+     "nom": "Meta",
+     "secteur": "Communication",
+     "poids": 2.8
+    },
+    {
+     "symbole": "NFLX",
+     "nom": "Netflix",
+     "secteur": "Communication",
+     "poids": 0.9
+    },
+    {
+     "symbole": "DIS",
+     "nom": "Disney",
+     "secteur": "Communication",
+     "poids": 0.4
+    },
+    {
+     "symbole": "TMUS",
+     "nom": "T-Mobile",
+     "secteur": "Communication",
+     "poids": 0.3
+    },
+    {
+     "symbole": "VZ",
+     "nom": "Verizon",
+     "secteur": "Communication",
+     "poids": 0.3
+    },
+    {
+     "symbole": "T",
+     "nom": "AT&T",
+     "secteur": "Communication",
+     "poids": 0.3
+    },
+    {
+     "symbole": "CMCSA",
+     "nom": "Comcast",
+     "secteur": "Communication",
+     "poids": 0.2
+    },
+    {
+     "symbole": "AMZN",
+     "nom": "Amazon",
+     "secteur": "Consommation cyclique",
+     "poids": 3.9
+    },
+    {
+     "symbole": "TSLA",
+     "nom": "Tesla",
+     "secteur": "Consommation cyclique",
+     "poids": 2.1
+    },
+    {
+     "symbole": "HD",
+     "nom": "Home Depot",
+     "secteur": "Consommation cyclique",
+     "poids": 0.7
+    },
+    {
+     "symbole": "MCD",
+     "nom": "McDonald's",
+     "secteur": "Consommation cyclique",
+     "poids": 0.4
+    },
+    {
+     "symbole": "BKNG",
+     "nom": "Booking",
+     "secteur": "Consommation cyclique",
+     "poids": 0.3
+    },
+    {
+     "symbole": "LOW",
+     "nom": "Lowe's",
+     "secteur": "Consommation cyclique",
+     "poids": 0.3
+    },
+    {
+     "symbole": "NKE",
+     "nom": "Nike",
+     "secteur": "Consommation cyclique",
+     "poids": 0.2
+    },
+    {
+     "symbole": "SBUX",
+     "nom": "Starbucks",
+     "secteur": "Consommation cyclique",
+     "poids": 0.2
+    },
+    {
+     "symbole": "BRK-B",
+     "nom": "Berkshire Hathaway",
+     "secteur": "Finance",
+     "poids": 1.7
+    },
+    {
+     "symbole": "JPM",
+     "nom": "JPMorgan",
+     "secteur": "Finance",
+     "poids": 1.5
+    },
+    {
+     "symbole": "V",
+     "nom": "Visa",
+     "secteur": "Finance",
+     "poids": 1.1
+    },
+    {
+     "symbole": "MA",
+     "nom": "Mastercard",
+     "secteur": "Finance",
+     "poids": 0.9
+    },
+    {
+     "symbole": "BAC",
+     "nom": "Bank of America",
+     "secteur": "Finance",
+     "poids": 0.6
+    },
+    {
+     "symbole": "WFC",
+     "nom": "Wells Fargo",
+     "secteur": "Finance",
+     "poids": 0.5
+    },
+    {
+     "symbole": "GS",
+     "nom": "Goldman Sachs",
+     "secteur": "Finance",
+     "poids": 0.4
+    },
+    {
+     "symbole": "MS",
+     "nom": "Morgan Stanley",
+     "secteur": "Finance",
+     "poids": 0.4
+    },
+    {
+     "symbole": "AXP",
+     "nom": "American Express",
+     "secteur": "Finance",
+     "poids": 0.4
+    },
+    {
+     "symbole": "C",
+     "nom": "Citigroup",
+     "secteur": "Finance",
+     "poids": 0.3
+    },
+    {
+     "symbole": "BLK",
+     "nom": "BlackRock",
+     "secteur": "Finance",
+     "poids": 0.3
+    },
+    {
+     "symbole": "LLY",
+     "nom": "Eli Lilly",
+     "secteur": "Santé",
+     "poids": 1.3
+    },
+    {
+     "symbole": "JNJ",
+     "nom": "Johnson & Johnson",
+     "secteur": "Santé",
+     "poids": 0.8
+    },
+    {
+     "symbole": "ABBV",
+     "nom": "AbbVie",
+     "secteur": "Santé",
+     "poids": 0.7
+    },
+    {
+     "symbole": "UNH",
+     "nom": "UnitedHealth",
+     "secteur": "Santé",
+     "poids": 0.6
+    },
+    {
+     "symbole": "MRK",
+     "nom": "Merck",
+     "secteur": "Santé",
+     "poids": 0.5
+    },
+    {
+     "symbole": "TMO",
+     "nom": "Thermo Fisher",
+     "secteur": "Santé",
+     "poids": 0.4
+    },
+    {
+     "symbole": "ABT",
+     "nom": "Abbott",
+     "secteur": "Santé",
+     "poids": 0.4
+    },
+    {
+     "symbole": "PFE",
+     "nom": "Pfizer",
+     "secteur": "Santé",
+     "poids": 0.3
+    },
+    {
+     "symbole": "AMGN",
+     "nom": "Amgen",
+     "secteur": "Santé",
+     "poids": 0.3
+    },
+    {
+     "symbole": "ISRG",
+     "nom": "Intuitive Surgical",
+     "secteur": "Santé",
+     "poids": 0.3
+    },
+    {
+     "symbole": "GE",
+     "nom": "GE Aerospace",
+     "secteur": "Industrie",
+     "poids": 0.5
+    },
+    {
+     "symbole": "CAT",
+     "nom": "Caterpillar",
+     "secteur": "Industrie",
+     "poids": 0.4
+    },
+    {
+     "symbole": "RTX",
+     "nom": "RTX",
+     "secteur": "Industrie",
+     "poids": 0.4
+    },
+    {
+     "symbole": "BA",
+     "nom": "Boeing",
+     "secteur": "Industrie",
+     "poids": 0.3
+    },
+    {
+     "symbole": "HON",
+     "nom": "Honeywell",
+     "secteur": "Industrie",
+     "poids": 0.3
+    },
+    {
+     "symbole": "UNP",
+     "nom": "Union Pacific",
+     "secteur": "Industrie",
+     "poids": 0.3
+    },
+    {
+     "symbole": "DE",
+     "nom": "Deere",
+     "secteur": "Industrie",
+     "poids": 0.2
+    },
+    {
+     "symbole": "LMT",
+     "nom": "Lockheed Martin",
+     "secteur": "Industrie",
+     "poids": 0.2
+    },
+    {
+     "symbole": "WMT",
+     "nom": "Walmart",
+     "secteur": "Consommation de base",
+     "poids": 0.9
+    },
+    {
+     "symbole": "COST",
+     "nom": "Costco",
+     "secteur": "Consommation de base",
+     "poids": 0.8
+    },
+    {
+     "symbole": "PG",
+     "nom": "Procter & Gamble",
+     "secteur": "Consommation de base",
+     "poids": 0.7
+    },
+    {
+     "symbole": "KO",
+     "nom": "Coca-Cola",
+     "secteur": "Consommation de base",
+     "poids": 0.5
+    },
+    {
+     "symbole": "PEP",
+     "nom": "PepsiCo",
+     "secteur": "Consommation de base",
+     "poids": 0.4
+    },
+    {
+     "symbole": "PM",
+     "nom": "Philip Morris",
+     "secteur": "Consommation de base",
+     "poids": 0.4
+    },
+    {
+     "symbole": "XOM",
+     "nom": "ExxonMobil",
+     "secteur": "Énergie",
+     "poids": 0.9
+    },
+    {
+     "symbole": "CVX",
+     "nom": "Chevron",
+     "secteur": "Énergie",
+     "poids": 0.5
+    },
+    {
+     "symbole": "COP",
+     "nom": "ConocoPhillips",
+     "secteur": "Énergie",
+     "poids": 0.2
+    },
+    {
+     "symbole": "NEE",
+     "nom": "NextEra",
+     "secteur": "Services collectifs",
+     "poids": 0.3
+    },
+    {
+     "symbole": "SO",
+     "nom": "Southern",
+     "secteur": "Services collectifs",
+     "poids": 0.2
+    },
+    {
+     "symbole": "DUK",
+     "nom": "Duke Energy",
+     "secteur": "Services collectifs",
+     "poids": 0.2
+    },
+    {
+     "symbole": "PLD",
+     "nom": "Prologis",
+     "secteur": "Immobilier",
+     "poids": 0.2
+    },
+    {
+     "symbole": "AMT",
+     "nom": "American Tower",
+     "secteur": "Immobilier",
+     "poids": 0.2
+    },
+    {
+     "symbole": "EQIX",
+     "nom": "Equinix",
+     "secteur": "Immobilier",
+     "poids": 0.2
+    },
+    {
+     "symbole": "LIN",
+     "nom": "Linde",
+     "secteur": "Matériaux",
+     "poids": 0.4
+    },
+    {
+     "symbole": "SHW",
+     "nom": "Sherwin-Williams",
+     "secteur": "Matériaux",
+     "poids": 0.2
+    }
+   ]
+  },
+  {
+   "id": "ndx",
+   "nom": "Nasdaq 100",
+   "note": "Principales valeurs",
+   "valeurs": [
+    {
+     "symbole": "NVDA",
+     "nom": "Nvidia",
+     "secteur": "Technologie",
+     "poids": 9.0
+    },
+    {
+     "symbole": "AAPL",
+     "nom": "Apple",
+     "secteur": "Technologie",
+     "poids": 8.5
+    },
+    {
+     "symbole": "MSFT",
+     "nom": "Microsoft",
+     "secteur": "Technologie",
+     "poids": 8.0
+    },
+    {
+     "symbole": "AVGO",
+     "nom": "Broadcom",
+     "secteur": "Technologie",
+     "poids": 5.0
+    },
+    {
+     "symbole": "PLTR",
+     "nom": "Palantir",
+     "secteur": "Technologie",
+     "poids": 1.8
+    },
+    {
+     "symbole": "AMD",
+     "nom": "AMD",
+     "secteur": "Technologie",
+     "poids": 1.6
+    },
+    {
+     "symbole": "CSCO",
+     "nom": "Cisco",
+     "secteur": "Technologie",
+     "poids": 1.5
+    },
+    {
+     "symbole": "INTU",
+     "nom": "Intuit",
+     "secteur": "Technologie",
+     "poids": 1.1
+    },
+    {
+     "symbole": "QCOM",
+     "nom": "Qualcomm",
+     "secteur": "Technologie",
+     "poids": 1.0
+    },
+    {
+     "symbole": "TXN",
+     "nom": "Texas Instruments",
+     "secteur": "Technologie",
+     "poids": 1.0
+    },
+    {
+     "symbole": "ADBE",
+     "nom": "Adobe",
+     "secteur": "Technologie",
+     "poids": 0.9
+    },
+    {
+     "symbole": "AMAT",
+     "nom": "Applied Materials",
+     "secteur": "Technologie",
+     "poids": 0.9
+    },
+    {
+     "symbole": "MU",
+     "nom": "Micron",
+     "secteur": "Technologie",
+     "poids": 0.9
+    },
+    {
+     "symbole": "LRCX",
+     "nom": "Lam Research",
+     "secteur": "Technologie",
+     "poids": 0.8
+    },
+    {
+     "symbole": "PANW",
+     "nom": "Palo Alto Networks",
+     "secteur": "Technologie",
+     "poids": 0.8
+    },
+    {
+     "symbole": "KLAC",
+     "nom": "KLA",
+     "secteur": "Technologie",
+     "poids": 0.7
+    },
+    {
+     "symbole": "INTC",
+     "nom": "Intel",
+     "secteur": "Technologie",
+     "poids": 0.7
+    },
+    {
+     "symbole": "ADP",
+     "nom": "ADP",
+     "secteur": "Technologie",
+     "poids": 0.7
+    },
+    {
+     "symbole": "ASML",
+     "nom": "ASML",
+     "secteur": "Technologie",
+     "poids": 0.6
+    },
+    {
+     "symbole": "CRWD",
+     "nom": "CrowdStrike",
+     "secteur": "Technologie",
+     "poids": 0.6
+    },
+    {
+     "symbole": "GOOGL",
+     "nom": "Alphabet",
+     "secteur": "Communication",
+     "poids": 5.5
+    },
+    {
+     "symbole": "META",
+     "nom": "Meta",
+     "secteur": "Communication",
+     "poids": 3.7
+    },
+    {
+     "symbole": "NFLX",
+     "nom": "Netflix",
+     "secteur": "Communication",
+     "poids": 2.5
+    },
+    {
+     "symbole": "TMUS",
+     "nom": "T-Mobile",
+     "secteur": "Communication",
+     "poids": 1.5
+    },
+    {
+     "symbole": "CMCSA",
+     "nom": "Comcast",
+     "secteur": "Communication",
+     "poids": 0.7
+    },
+    {
+     "symbole": "AMZN",
+     "nom": "Amazon",
+     "secteur": "Consommation",
+     "poids": 5.5
+    },
+    {
+     "symbole": "TSLA",
+     "nom": "Tesla",
+     "secteur": "Consommation",
+     "poids": 3.0
+    },
+    {
+     "symbole": "COST",
+     "nom": "Costco",
+     "secteur": "Consommation",
+     "poids": 2.4
+    },
+    {
+     "symbole": "PEP",
+     "nom": "PepsiCo",
+     "secteur": "Consommation",
+     "poids": 1.1
+    },
+    {
+     "symbole": "BKNG",
+     "nom": "Booking",
+     "secteur": "Consommation",
+     "poids": 1.0
+    },
+    {
+     "symbole": "MELI",
+     "nom": "MercadoLibre",
+     "secteur": "Consommation",
+     "poids": 0.7
+    },
+    {
+     "symbole": "SBUX",
+     "nom": "Starbucks",
+     "secteur": "Consommation",
+     "poids": 0.6
+    },
+    {
+     "symbole": "ISRG",
+     "nom": "Intuitive Surgical",
+     "secteur": "Santé",
+     "poids": 1.0
+    },
+    {
+     "symbole": "AMGN",
+     "nom": "Amgen",
+     "secteur": "Santé",
+     "poids": 0.9
+    },
+    {
+     "symbole": "GILD",
+     "nom": "Gilead",
+     "secteur": "Santé",
+     "poids": 0.8
+    },
+    {
+     "symbole": "VRTX",
+     "nom": "Vertex",
+     "secteur": "Santé",
+     "poids": 0.7
+    },
+    {
+     "symbole": "LIN",
+     "nom": "Linde",
+     "secteur": "Industrie et matériaux",
+     "poids": 1.2
+    },
+    {
+     "symbole": "HON",
+     "nom": "Honeywell",
+     "secteur": "Industrie et matériaux",
+     "poids": 0.8
+    }
+   ]
+  },
+  {
+   "id": "cac40",
+   "nom": "CAC 40",
+   "note": "",
+   "valeurs": [
+    {
+     "symbole": "MC.PA",
+     "nom": "LVMH",
+     "secteur": "Luxe et consommation",
+     "poids": 8.0
+    },
+    {
+     "symbole": "OR.PA",
+     "nom": "L'Oréal",
+     "secteur": "Luxe et consommation",
+     "poids": 5.0
+    },
+    {
+     "symbole": "RMS.PA",
+     "nom": "Hermès",
+     "secteur": "Luxe et consommation",
+     "poids": 4.5
+    },
+    {
+     "symbole": "EL.PA",
+     "nom": "EssilorLuxottica",
+     "secteur": "Luxe et consommation",
+     "poids": 5.0
+    },
+    {
+     "symbole": "KER.PA",
+     "nom": "Kering",
+     "secteur": "Luxe et consommation",
+     "poids": 1.5
+    },
+    {
+     "symbole": "BN.PA",
+     "nom": "Danone",
+     "secteur": "Luxe et consommation",
+     "poids": 2.5
+    },
+    {
+     "symbole": "RI.PA",
+     "nom": "Pernod Ricard",
+     "secteur": "Luxe et consommation",
+     "poids": 1.0
+    },
+    {
+     "symbole": "CA.PA",
+     "nom": "Carrefour",
+     "secteur": "Luxe et consommation",
+     "poids": 0.5
+    },
+    {
+     "symbole": "AC.PA",
+     "nom": "Accor",
+     "secteur": "Luxe et consommation",
+     "poids": 0.6
+    },
+    {
+     "symbole": "SU.PA",
+     "nom": "Schneider Electric",
+     "secteur": "Industrie",
+     "poids": 7.0
+    },
+    {
+     "symbole": "AIR.PA",
+     "nom": "Airbus",
+     "secteur": "Industrie",
+     "poids": 6.5
+    },
+    {
+     "symbole": "SAF.PA",
+     "nom": "Safran",
+     "secteur": "Industrie",
+     "poids": 5.5
+    },
+    {
+     "symbole": "DG.PA",
+     "nom": "Vinci",
+     "secteur": "Industrie",
+     "poids": 3.5
+    },
+    {
+     "symbole": "SGO.PA",
+     "nom": "Saint-Gobain",
+     "secteur": "Industrie",
+     "poids": 2.5
+    },
+    {
+     "symbole": "LR.PA",
+     "nom": "Legrand",
+     "secteur": "Industrie",
+     "poids": 1.5
+    },
+    {
+     "symbole": "HO.PA",
+     "nom": "Thales",
+     "secteur": "Industrie",
+     "poids": 1.5
+    },
+    {
+     "symbole": "EN.PA",
+     "nom": "Bouygues",
+     "secteur": "Industrie",
+     "poids": 0.6
+    },
+    {
+     "symbole": "BVI.PA",
+     "nom": "Bureau Veritas",
+     "secteur": "Industrie",
+     "poids": 0.7
+    },
+    {
+     "symbole": "TTE.PA",
+     "nom": "TotalEnergies",
+     "secteur": "Énergie et services collectifs",
+     "poids": 6.0
+    },
+    {
+     "symbole": "ENGI.PA",
+     "nom": "Engie",
+     "secteur": "Énergie et services collectifs",
+     "poids": 2.0
+    },
+    {
+     "symbole": "VIE.PA",
+     "nom": "Veolia",
+     "secteur": "Énergie et services collectifs",
+     "poids": 1.2
+    },
+    {
+     "symbole": "SAN.PA",
+     "nom": "Sanofi",
+     "secteur": "Santé",
+     "poids": 5.5
+    },
+    {
+     "symbole": "ERF.PA",
+     "nom": "Eurofins",
+     "secteur": "Santé",
+     "poids": 0.5
+    },
+    {
+     "symbole": "BNP.PA",
+     "nom": "BNP Paribas",
+     "secteur": "Finance",
+     "poids": 4.0
+    },
+    {
+     "symbole": "CS.PA",
+     "nom": "AXA",
+     "secteur": "Finance",
+     "poids": 4.0
+    },
+    {
+     "symbole": "GLE.PA",
+     "nom": "Société Générale",
+     "secteur": "Finance",
+     "poids": 2.0
+    },
+    {
+     "symbole": "ACA.PA",
+     "nom": "Crédit Agricole",
+     "secteur": "Finance",
+     "poids": 1.2
+    },
+    {
+     "symbole": "ENX.PA",
+     "nom": "Euronext",
+     "secteur": "Finance",
+     "poids": 0.7
+    },
+    {
+     "symbole": "EDEN.PA",
+     "nom": "Edenred",
+     "secteur": "Finance",
+     "poids": 0.3
+    },
+    {
+     "symbole": "AI.PA",
+     "nom": "Air Liquide",
+     "secteur": "Matériaux",
+     "poids": 5.5
+    },
+    {
+     "symbole": "MT.AS",
+     "nom": "ArcelorMittal",
+     "secteur": "Matériaux",
+     "poids": 1.0
+    },
+    {
+     "symbole": "DSY.PA",
+     "nom": "Dassault Systèmes",
+     "secteur": "Technologie et médias",
+     "poids": 1.5
+    },
+    {
+     "symbole": "CAP.PA",
+     "nom": "Capgemini",
+     "secteur": "Technologie et médias",
+     "poids": 1.2
+    },
+    {
+     "symbole": "STMPA.PA",
+     "nom": "STMicroelectronics",
+     "secteur": "Technologie et médias",
+     "poids": 1.0
+    },
+    {
+     "symbole": "PUB.PA",
+     "nom": "Publicis",
+     "secteur": "Technologie et médias",
+     "poids": 1.3
+    },
+    {
+     "symbole": "ORA.PA",
+     "nom": "Orange",
+     "secteur": "Technologie et médias",
+     "poids": 1.2
+    },
+    {
+     "symbole": "ML.PA",
+     "nom": "Michelin",
+     "secteur": "Automobile",
+     "poids": 1.2
+    },
+    {
+     "symbole": "STLAP.PA",
+     "nom": "Stellantis",
+     "secteur": "Automobile",
+     "poids": 1.0
+    },
+    {
+     "symbole": "RNO.PA",
+     "nom": "Renault",
+     "secteur": "Automobile",
+     "poids": 0.5
+    },
+    {
+     "symbole": "URW.PA",
+     "nom": "Unibail-Rodamco-Westfield",
+     "secteur": "Immobilier",
+     "poids": 0.7
+    }
+   ]
+  }
+ ]
+}

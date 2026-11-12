@@ -1,0 +1,35 @@
+name: Mise à jour du marché
+
+on:
+  schedule:
+    # 4 passages par jour, du lundi au vendredi. Les heures sont en UTC (Paris = UTC+1 en hiver, UTC+2 en été).
+    # Pour changer la fréquence, modifie cette ligne : minute, heures, jour du mois, mois, jours de la semaine.
+    - cron: "17 7,11,15,20 * * 1-5"
+  workflow_dispatch: {}   # bouton « Run workflow » pour lancer un passage à la main
+
+permissions:
+  contents: write   # le robot enregistre les JSON mis à jour dans le dépôt
+
+concurrency:
+  group: maj-marche
+  cancel-in-progress: false
+
+jobs:
+  maj:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Installer les dépendances
+        run: pip install -r scripts/requirements.txt
+      - name: Récupérer les cours
+        run: python scripts/update_market.py
+      - name: Enregistrer les fichiers mis à jour
+        run: |
+          git config user.name "hub-robot"
+          git config user.email "hub-robot@users.noreply.github.com"
+          git add data/market.json data/heatmap.json
+          git diff --cached --quiet || (git commit -m "Marché : mise à jour automatique" && git push)

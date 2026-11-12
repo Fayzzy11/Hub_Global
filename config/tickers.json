@@ -1,0 +1,573 @@
+{
+  "_aide": "Valeurs suivies dans la vue Marché (symboles Yahoo Finance). Ajoute, retire ou reclasse des lignes : le robot de mise à jour suit ce fichier. Le premier ticker est celui du tableau de bord du quartier.",
+  "historique_jours": 70,
+  "tickers": [
+    {
+      "symbole": "^FCHI",
+      "nom": "CAC 40",
+      "devise": "EUR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^STOXX50E",
+      "nom": "Euro Stoxx 50",
+      "devise": "EUR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^STOXX",
+      "nom": "Stoxx Europe 600",
+      "devise": "EUR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^GDAXI",
+      "nom": "DAX",
+      "devise": "EUR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^FTSE",
+      "nom": "FTSE 100",
+      "devise": "GBP",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^SSMI",
+      "nom": "SMI",
+      "devise": "CHF",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^IBEX",
+      "nom": "IBEX 35",
+      "devise": "EUR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "FTSEMIB.MI",
+      "nom": "FTSE MIB",
+      "devise": "EUR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^AEX",
+      "nom": "AEX",
+      "devise": "EUR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
+      "symbole": "^GSPC",
+      "nom": "S&P 500",
+      "devise": "USD",
+      "groupe": "Indices actions",
+      "sous_groupe": "États-Unis"
+    },
+    {
+      "symbole": "^NDX",
+      "nom": "Nasdaq 100",
+      "devise": "USD",
+      "groupe": "Indices actions",
+      "sous_groupe": "États-Unis"
+    },
+    {
+      "symbole": "^DJI",
+      "nom": "Dow Jones",
+      "devise": "USD",
+      "groupe": "Indices actions",
+      "sous_groupe": "États-Unis"
+    },
+    {
+      "symbole": "^RUT",
+      "nom": "Russell 2000",
+      "devise": "USD",
+      "groupe": "Indices actions",
+      "sous_groupe": "États-Unis"
+    },
+    {
+      "symbole": "^N225",
+      "nom": "Nikkei 225",
+      "devise": "JPY",
+      "groupe": "Indices actions",
+      "sous_groupe": "Asie-Pacifique"
+    },
+    {
+      "symbole": "^HSI",
+      "nom": "Hang Seng",
+      "devise": "HKD",
+      "groupe": "Indices actions",
+      "sous_groupe": "Asie-Pacifique"
+    },
+    {
+      "symbole": "000001.SS",
+      "nom": "Shanghai Composite",
+      "devise": "CNY",
+      "groupe": "Indices actions",
+      "sous_groupe": "Asie-Pacifique"
+    },
+    {
+      "symbole": "^NSEI",
+      "nom": "Nifty 50",
+      "devise": "INR",
+      "groupe": "Indices actions",
+      "sous_groupe": "Asie-Pacifique"
+    },
+    {
+      "symbole": "^KS11",
+      "nom": "KOSPI",
+      "devise": "KRW",
+      "groupe": "Indices actions",
+      "sous_groupe": "Asie-Pacifique"
+    },
+    {
+      "symbole": "^AXJO",
+      "nom": "ASX 200",
+      "devise": "AUD",
+      "groupe": "Indices actions",
+      "sous_groupe": "Asie-Pacifique"
+    },
+    {
+      "symbole": "^BVSP",
+      "nom": "Bovespa",
+      "devise": "BRL",
+      "groupe": "Indices actions",
+      "sous_groupe": "Amérique latine"
+    },
+    {
+      "symbole": "^MXX",
+      "nom": "IPC Mexique",
+      "devise": "MXN",
+      "groupe": "Indices actions",
+      "sous_groupe": "Amérique latine"
+    },
+    {
+      "symbole": "^IRX",
+      "nom": "Taux US 3 mois",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux souverains US"
+    },
+    {
+      "symbole": "^FVX",
+      "nom": "Taux US 5 ans",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux souverains US"
+    },
+    {
+      "symbole": "^TNX",
+      "nom": "Taux US 10 ans",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux souverains US"
+    },
+    {
+      "symbole": "^TYX",
+      "nom": "Taux US 30 ans",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux souverains US"
+    },
+    {
+      "symbole": "SHY",
+      "nom": "Trésor US 1-3 ans (SHY)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Obligations d'État"
+    },
+    {
+      "symbole": "IEF",
+      "nom": "Trésor US 7-10 ans (IEF)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Obligations d'État"
+    },
+    {
+      "symbole": "TLT",
+      "nom": "Trésor US 20 ans et plus (TLT)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Obligations d'État"
+    },
+    {
+      "symbole": "TIP",
+      "nom": "Trésor US indexé inflation (TIP)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Obligations d'État"
+    },
+    {
+      "symbole": "IEGA.L",
+      "nom": "État zone euro (IEGA)",
+      "devise": "EUR",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Obligations d'État"
+    },
+    {
+      "symbole": "LQD",
+      "nom": "Crédit investment grade USD (LQD)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Crédit"
+    },
+    {
+      "symbole": "HYG",
+      "nom": "Haut rendement USD (HYG)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Crédit"
+    },
+    {
+      "symbole": "IEAC.L",
+      "nom": "Crédit investment grade EUR (IEAC)",
+      "devise": "EUR",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Crédit"
+    },
+    {
+      "symbole": "IHYG.L",
+      "nom": "Haut rendement EUR (IHYG)",
+      "devise": "EUR",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Crédit"
+    },
+    {
+      "symbole": "EMB",
+      "nom": "Dette émergente USD (EMB)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Crédit"
+    },
+    {
+      "symbole": "AGG",
+      "nom": "Agrégat obligataire US (AGG)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Agrégats"
+    },
+    {
+      "symbole": "BNDX",
+      "nom": "Obligations monde hors US (BNDX)",
+      "devise": "USD",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Agrégats"
+    },
+    {
+      "symbole": "GC=F",
+      "nom": "Or",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "SI=F",
+      "nom": "Argent",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "PL=F",
+      "nom": "Platine",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "PA=F",
+      "nom": "Palladium",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "HG=F",
+      "nom": "Cuivre",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux industriels"
+    },
+    {
+      "symbole": "ALI=F",
+      "nom": "Aluminium",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux industriels"
+    },
+    {
+      "symbole": "BZ=F",
+      "nom": "Pétrole Brent",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "CL=F",
+      "nom": "Pétrole WTI",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "NG=F",
+      "nom": "Gaz naturel US",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "TTF=F",
+      "nom": "Gaz naturel Europe (TTF)",
+      "devise": "EUR",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "RB=F",
+      "nom": "Essence",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "HO=F",
+      "nom": "Fioul",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "ZC=F",
+      "nom": "Maïs",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "ZW=F",
+      "nom": "Blé",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "ZS=F",
+      "nom": "Soja",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "KC=F",
+      "nom": "Café",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "SB=F",
+      "nom": "Sucre",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "CC=F",
+      "nom": "Cacao",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "CT=F",
+      "nom": "Coton",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "EURUSD=X",
+      "nom": "EUR/USD",
+      "devise": "USD",
+      "groupe": "Devises",
+      "sous_groupe": "Euro"
+    },
+    {
+      "symbole": "EURGBP=X",
+      "nom": "EUR/GBP",
+      "devise": "GBP",
+      "groupe": "Devises",
+      "sous_groupe": "Euro"
+    },
+    {
+      "symbole": "EURCHF=X",
+      "nom": "EUR/CHF",
+      "devise": "CHF",
+      "groupe": "Devises",
+      "sous_groupe": "Euro"
+    },
+    {
+      "symbole": "EURJPY=X",
+      "nom": "EUR/JPY",
+      "devise": "JPY",
+      "groupe": "Devises",
+      "sous_groupe": "Euro"
+    },
+    {
+      "symbole": "GBPUSD=X",
+      "nom": "GBP/USD",
+      "devise": "USD",
+      "groupe": "Devises",
+      "sous_groupe": "Dollar"
+    },
+    {
+      "symbole": "USDJPY=X",
+      "nom": "USD/JPY",
+      "devise": "JPY",
+      "groupe": "Devises",
+      "sous_groupe": "Dollar"
+    },
+    {
+      "symbole": "USDCHF=X",
+      "nom": "USD/CHF",
+      "devise": "CHF",
+      "groupe": "Devises",
+      "sous_groupe": "Dollar"
+    },
+    {
+      "symbole": "AUDUSD=X",
+      "nom": "AUD/USD",
+      "devise": "USD",
+      "groupe": "Devises",
+      "sous_groupe": "Dollar"
+    },
+    {
+      "symbole": "USDCAD=X",
+      "nom": "USD/CAD",
+      "devise": "CAD",
+      "groupe": "Devises",
+      "sous_groupe": "Dollar"
+    },
+    {
+      "symbole": "DX-Y.NYB",
+      "nom": "Indice dollar (DXY)",
+      "devise": "pts",
+      "groupe": "Devises",
+      "sous_groupe": "Dollar"
+    },
+    {
+      "symbole": "USDCNY=X",
+      "nom": "USD/CNY",
+      "devise": "CNY",
+      "groupe": "Devises",
+      "sous_groupe": "Émergents"
+    },
+    {
+      "symbole": "USDBRL=X",
+      "nom": "USD/BRL",
+      "devise": "BRL",
+      "groupe": "Devises",
+      "sous_groupe": "Émergents"
+    },
+    {
+      "symbole": "USDMXN=X",
+      "nom": "USD/MXN",
+      "devise": "MXN",
+      "groupe": "Devises",
+      "sous_groupe": "Émergents"
+    },
+    {
+      "symbole": "USDINR=X",
+      "nom": "USD/INR",
+      "devise": "INR",
+      "groupe": "Devises",
+      "sous_groupe": "Émergents"
+    },
+    {
+      "symbole": "^VIX",
+      "nom": "VIX (volatilité actions US)",
+      "devise": "pts",
+      "groupe": "Volatilité et crypto",
+      "sous_groupe": "Volatilité"
+    },
+    {
+      "symbole": "^MOVE",
+      "nom": "MOVE (volatilité taux US)",
+      "devise": "pts",
+      "groupe": "Volatilité et crypto",
+      "sous_groupe": "Volatilité"
+    },
+    {
+      "symbole": "BTC-USD",
+      "nom": "Bitcoin",
+      "devise": "USD",
+      "groupe": "Volatilité et crypto",
+      "sous_groupe": "Crypto"
+    },
+    {
+      "symbole": "ETH-USD",
+      "nom": "Ethereum",
+      "devise": "USD",
+      "groupe": "Volatilité et crypto",
+      "sous_groupe": "Crypto"
+    },
+    {
+      "symbole": "CW8.PA",
+      "nom": "Amundi MSCI World (CW8)",
+      "devise": "EUR",
+      "groupe": "ETF",
+      "sous_groupe": "Actions"
+    },
+    {
+      "symbole": "SPY",
+      "nom": "S&P 500 (SPY)",
+      "devise": "USD",
+      "groupe": "ETF",
+      "sous_groupe": "Actions"
+    },
+    {
+      "symbole": "QQQ",
+      "nom": "Nasdaq 100 (QQQ)",
+      "devise": "USD",
+      "groupe": "ETF",
+      "sous_groupe": "Actions"
+    },
+    {
+      "symbole": "EFA",
+      "nom": "Actions développées hors US (EFA)",
+      "devise": "USD",
+      "groupe": "ETF",
+      "sous_groupe": "Actions"
+    },
+    {
+      "symbole": "EEM",
+      "nom": "Actions émergentes (EEM)",
+      "devise": "USD",
+      "groupe": "ETF",
+      "sous_groupe": "Actions"
+    },
+    {
+      "symbole": "VNQ",
+      "nom": "Immobilier coté US (VNQ)",
+      "devise": "USD",
+      "groupe": "ETF",
+      "sous_groupe": "Actifs réels"
+    },
+    {
+      "symbole": "GLD",
+      "nom": "Or physique (GLD)",
+      "devise": "USD",
+      "groupe": "ETF",
+      "sous_groupe": "Actifs réels"
+    }
+  ]
+}

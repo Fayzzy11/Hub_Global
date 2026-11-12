@@ -1,0 +1,16 @@
+{
+  "name": "Hub · Noah",
+  "short_name": "Hub",
+  "description": "Tableau de bord personnel : projets, marché, cours, réseau, documents.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F5F0E6",
+  "theme_color": "#18202F",
+  "lang": "fr",
+  "icons": [
+    { "src": "assets/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
