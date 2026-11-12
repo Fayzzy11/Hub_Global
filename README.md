@@ -20,6 +20,14 @@ Tableau de bord personnel sous forme d'application installable : quartier financ
 5. **Connecter l'application** : Réglages > Dépôt privé, coller le jeton, choisir un code de protection.
 6. **Installer** : bouton « Installer » du navigateur (PC, Android) ou Partager > « Sur l'écran d'accueil » (iPhone).
 
+## Quartier 3D
+
+- Le quartier s'affiche avec three.js (embarqué dans `assets/lib/`, aucune dépendance à un serveur tiers).
+- Les tours, la Grande Arche et le décor sont des modèles réalisés dans Blender, exportés en GLB compressé (`assets/modeles/`, 3,5 Mo au total). Chaque silhouette de tour existe en trois hauteurs : plus la fiche est récente, plus la tour est haute.
+- Les scripts qui génèrent ces modèles sont dans `modelisation/`. Pour les régénérer : Python 3.11, `pip install bpy==5.0.1`, puis `python exporter_tours.py` et `python exporter_decor.py` (les fichiers sortent dans `modelisation/modeles/`, à recopier dans `assets/modeles/`).
+- Réglages > Qualité du quartier 3D : « Allégée » affiche une ville simplifiée dessinée par le code, pour les appareils modestes ; « Toujours en liste » désactive la 3D.
+- Licences : three.js (MIT, voir `assets/lib/LICENCE-three.txt`), décodeur Draco (Apache 2.0, Google).
+
 ## Marché
 
 - `config/tickers.json` : valeurs suivies (indices, taux et obligations, matières premières, devises, volatilité, crypto, ETF). Symboles Yahoo Finance.

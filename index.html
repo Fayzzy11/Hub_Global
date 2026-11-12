@@ -112,12 +112,19 @@ label.coche input{width:17px;height:17px;accent-color:var(--or)}
 #u-scene:active{cursor:grabbing}
 #u-canvas{width:100%;height:100%;display:block}
 #u-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.u-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 52%,rgba(14,18,30,.26) 100%)}
-.u-noeud{position:absolute;left:0;top:0;pointer-events:auto;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap;color:var(--encre);transform-origin:0 0;will-change:transform;transition:opacity .25s}
-.u-noeud b{display:block;font:600 12.5px/1 var(--texte);background:var(--papier);border:1.5px solid var(--c,var(--encre));border-radius:99px;padding:6px 11px;box-shadow:0 6px 16px -8px rgba(10,14,22,.7)}
-.u-noeud.vif b,.u-noeud:hover b,.u-noeud:focus-visible b{background:var(--c,var(--encre));color:#fff}
-.u-noeud.attenue{opacity:.25}
-.u-noeud .pt{display:inline-block;width:7px;height:7px;border-radius:50%;background:#E0A526;margin-left:7px;vertical-align:1px}
+/* La scène 3D est traitée comme une image de cinéma : textes clairs posés dessus, voile sombre à gauche pour la lisibilité */
+#v-univers:not(.plan){--encre:#F6F1E6;--encre2:rgba(246,241,230,.76);--doux:rgba(246,241,230,.58);--trait:rgba(255,255,255,.18);--papier:rgba(11,15,25,.72);--fond:#0B0F19;--or:#EBC66E;--or-doux:rgba(235,198,110,.16);--hausse:#7FE2B0;--baisse:#FF9E88;--ombre:0 18px 40px -22px rgba(0,0,0,.8);color:var(--encre);background:#0B0F19}
+/* Étiquette d'une tour : numéro, nom et l'information du moment, accrochés à droite de son enseigne */
+.u-noeud{position:absolute;left:0;top:0;pointer-events:auto;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap;color:#fff;text-align:left;transform-origin:0 50%;will-change:transform;transition:opacity .25s}
+.u-noeud b{display:flex;flex-direction:column;gap:4px;font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(9,13,22,.66);border-left:2px solid var(--c,#fff);border-radius:1px 5px 5px 1px;padding:5px 9px 5px 8px}
+.u-noeud b .n{font-style:normal;color:color-mix(in srgb,var(--c,#fff) 50%,#fff);margin-right:7px}
+.u-noeud b small{display:none;font:400 10.5px/1.15 var(--texte);letter-spacing:.01em;text-transform:none;color:rgba(255,255,255,.82);max-width:210px;overflow:hidden;text-overflow:ellipsis}
+.u-noeud.vif b small,.u-noeud:hover b small,.u-noeud:focus-visible b small{display:block}
+.u-noeud.vif,.u-noeud:hover{z-index:999998!important}
+.u-noeud.vif b,.u-noeud:hover b,.u-noeud:focus-visible b{background:color-mix(in srgb,var(--c,#18202F) 82%,#000)}
+.u-noeud.vif b .n,.u-noeud:hover b .n{color:#fff}
+.u-noeud.attenue{opacity:.22}
+.u-noeud .pt{display:inline-block;width:6px;height:6px;border-radius:50%;background:#F0B93A;margin-left:7px;vertical-align:1px;box-shadow:0 0 8px #F0B93A}
 #u-bulle{position:absolute;left:0;top:0;width:264px;background:var(--papier);border:1px solid var(--trait);border-radius:12px;padding:12px 14px;box-shadow:var(--ombre);font-size:13px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:999999}
 #u-bulle.vu{opacity:1} #u-bulle b{font:500 16px/1.15 var(--titre)} #u-bulle p{margin:8px 0 0;color:var(--encre2)}
 .tuile{--c:var(--encre);position:relative;flex:none;width:54px;height:54px;border-radius:15px;background:linear-gradient(145deg,color-mix(in srgb,var(--c) 74%,#fff),var(--c));border:1.5px solid color-mix(in srgb,var(--c) 80%,#000);color:#fff;display:grid;place-items:center;box-shadow:0 10px 20px -12px rgba(10,14,22,.8);font:600 19px/1 var(--titre)}
@@ -127,32 +134,40 @@ label.coche input{width:17px;height:17px;accent-color:var(--or)}
 .tuile.petite svg{width:21px;height:21px}
 .neuf{position:absolute;top:-5px;right:-5px;width:13px;height:13px;border-radius:50%;background:#E0A526;border:2px solid var(--papier);animation:pouls 1.8s ease-in-out infinite}
 @keyframes pouls{50%{transform:scale(1.35);opacity:.55}}
-.u-voile{position:absolute;left:0;top:0;right:0;height:250px;background:linear-gradient(180deg,var(--fond) 12%,transparent);pointer-events:none}
-.u-hud{position:absolute;right:16px;top:22px;display:flex;flex-direction:column;gap:8px;align-items:stretch;width:196px}
-.u-hud button{background:color-mix(in srgb,var(--papier) 88%,transparent);backdrop-filter:blur(6px);border:1px solid var(--trait);border-radius:10px;padding:9px 12px;text-align:left;cursor:pointer;color:var(--encre);box-shadow:var(--ombre)}
-.u-hud button:hover{border-color:var(--encre2)}
-.u-hud b{display:block;font:600 17px/1.2 var(--mono);margin-top:5px;font-variant-numeric:tabular-nums}
-.u-hud b small{font:400 12px var(--texte);color:var(--encre2);margin-left:4px}
-.u-hud b.alerte{color:var(--or)}
+.u-voile{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(6,9,16,.8) 0,rgba(6,9,16,.52) 26%,rgba(6,9,16,0) 58%),linear-gradient(180deg,rgba(6,9,16,.3) 0,rgba(6,9,16,0) 20%,rgba(6,9,16,0) 74%,rgba(6,9,16,.6) 100%)}
+/* Les chiffres qui comptent, en ligne sous le titre */
+.u-hud{display:flex;gap:14px 28px;flex-wrap:wrap;margin-top:28px}
+.u-hud button{display:flex;flex-direction:column-reverse;justify-content:flex-end;gap:9px;background:none;border:0;border-top:1px solid var(--trait);padding:13px 0 0;min-width:84px;text-align:left;cursor:pointer;color:var(--encre)}
+.u-hud button:hover{border-top-color:var(--encre)}
+.u-hud b{display:block;font:600 clamp(21px,2.1vw,30px)/1 var(--texte);letter-spacing:-.015em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.u-hud b small{display:block;font:400 11.5px/1.2 var(--texte);letter-spacing:0;color:var(--encre2);margin-top:5px;max-width:132px;overflow:hidden;text-overflow:ellipsis}
+.u-hud b.alerte{color:var(--or)} .u-hud b.hausse{color:var(--hausse)} .u-hud b.baisse{color:var(--baisse)}
 #v-univers.plan .u-hud{display:none}
-.u-aide{font-size:12px;color:var(--encre2);background:color-mix(in srgb,var(--papier) 85%,transparent);padding:5px 10px;border-radius:99px}
+.u-aide{font-size:12px;color:var(--encre2)}
 .puce[aria-pressed="true"]{background:var(--encre);color:var(--fond);border-color:var(--encre)}
 .u-legende .puce{background:var(--papier)} .u-legende .puce[aria-pressed="true"]{background:var(--encre);color:var(--fond);border-color:var(--encre)}
-.u-tete{position:absolute;left:clamp(16px,4vw,48px);top:30px;max-width:min(430px,82vw);pointer-events:none}
+.u-tete{position:absolute;left:clamp(18px,4.4vw,60px);top:clamp(26px,9vh,84px);max-width:min(600px,86vw);pointer-events:none}
 .u-tete>*{pointer-events:auto}
-.u-tete p{color:var(--encre2);margin-top:8px}
-.u-recents{margin-top:16px;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.u-tete h1{font-size:clamp(34px,4.7vw,66px);line-height:.98;letter-spacing:-.022em;margin-top:18px;font-weight:500}
+.u-tete h1 em{font-weight:400}
+.u-tete p{color:var(--encre2);margin-top:18px;max-width:400px;font-size:14.5px;line-height:1.55}
+#v-univers.plan .u-tete{top:30px} #v-univers.plan .u-tete h1{font-size:clamp(26px,3.2vw,38px);line-height:1.1;margin-top:8px} #v-univers.plan .u-tete h1 br{display:none}
+#v-univers:not(.plan) .u-outils .btn{backdrop-filter:blur(8px)}
+.u-recents{margin-top:16px;display:none;flex-direction:column;gap:2px;align-items:flex-start}
 .u-recents button{background:none;border:0;padding:3px 0;cursor:pointer;font-size:13px;color:var(--encre);text-align:left}
 .u-recents button:hover{color:var(--encre)}
 .u-outils{position:absolute;right:16px;bottom:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .u-legende{position:absolute;left:clamp(16px,4vw,48px);bottom:18px;display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12px;color:var(--encre2);max-width:62%}
 .u-legende i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
-#u-liste{position:absolute;inset:0;overflow:auto;padding:150px clamp(16px,4vw,48px) 80px;display:none;background:var(--fond)}
+#u-liste{position:absolute;inset:0;overflow:auto;padding:160px clamp(18px,4.4vw,60px) 80px;display:none;background:var(--fond)}
 #v-univers.plan #u-liste{display:block}
 #v-univers.plan #u-scene,#v-univers.plan .u-legende,#v-univers.plan .u-voile{display:none}
+.u-legende .puce{background:var(--papier)}
 .noeud{cursor:pointer;text-align:left;width:100%;display:block}
 .noeud:hover{border-color:var(--encre2)}
-@media (max-width:820px){.u-tete{top:18px}.u-recents{display:none}.u-aide{display:none}.u-legende{max-width:none;right:16px;bottom:62px}.u-hud{left:16px;right:16px;top:110px;width:auto;flex-direction:row;overflow-x:auto;scrollbar-width:none}.u-hud button{flex:none;padding:7px 10px}.u-hud b{font-size:14px}#u-liste{padding-top:120px}.u-voile{height:170px}}
+@media (max-width:820px){.u-tete{top:18px;right:16px;max-width:none}.u-tete h1{font-size:30px;margin-top:10px}.u-tete p{margin-top:10px;font-size:13.5px}.u-recents{display:none}.u-aide{display:none}.u-legende{max-width:none;right:16px;bottom:62px}
+  .u-hud{flex-wrap:nowrap;gap:22px;margin-top:16px;overflow-x:auto;scrollbar-width:none}.u-hud button{flex:none;padding-top:10px;gap:7px}.u-hud b{font-size:19px}.u-hud b small{font-size:11px}#u-liste{padding-top:120px}
+  .u-voile{background:linear-gradient(180deg,rgba(6,9,16,.82) 0,rgba(6,9,16,.5) 24%,rgba(6,9,16,0) 46%,rgba(6,9,16,0) 72%,rgba(6,9,16,.66) 100%)}.u-noeud b small{display:none}}
 
 /* ---------- Fiche (panneau latéral) ---------- */
 #fiche{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--papier);border-left:1px solid var(--trait);box-shadow:var(--ombre);transform:translateX(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);z-index:30;overflow:auto;padding:24px 24px 40px}
@@ -225,16 +240,16 @@ dialog form{display:grid;gap:12px}
   <main>
     <!-- 01 Univers -->
     <section class="vue" id="v-univers">
-      <div id="u-scene"><canvas id="u-canvas"></canvas><div class="u-vignette"></div><div id="u-labels"></div></div>
+      <div id="u-scene"><canvas id="u-canvas"></canvas><div id="u-labels"></div></div>
       <div class="u-voile"></div>
       <div id="u-liste"></div>
       <div class="u-tete">
         <div class="sur" id="u-date"></div>
-        <h1>Le quartier</h1>
+        <h1>Tout ton hub,<br> <em>une seule place.</em></h1>
         <p class="petit" id="u-sous"></p>
+        <div class="u-hud" id="u-hud"></div>
         <div class="u-recents" id="u-recents"></div>
       </div>
-      <div class="u-hud" id="u-hud"></div>
       <div class="u-legende" id="u-legende"></div>
       <div class="u-outils">
         <button class="btn mini" data-act="uTheme" id="u-theme">Nuit</button>
@@ -268,15 +283,17 @@ dialog form{display:grid;gap:12px}
 <dialog id="dlg"></dialog>
 <div id="toast" role="status"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<!-- Halo lumineux du mode nuit (facultatif : sans ces scripts, la scène s'affiche simplement sans halo) -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/GammaCorrectionShader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<!-- Moteur 3D (three.js r128, licence MIT) et ses compléments, embarqués avec l'app : rien n'est téléchargé d'un serveur tiers -->
+<script src="assets/lib/three.min.js"></script>
+<script src="assets/lib/CopyShader.js"></script>
+<script src="assets/lib/LuminosityHighPassShader.js"></script>
+<script src="assets/lib/GammaCorrectionShader.js"></script>
+<script src="assets/lib/EffectComposer.js"></script>
+<script src="assets/lib/RenderPass.js"></script>
+<script src="assets/lib/ShaderPass.js"></script>
+<script src="assets/lib/UnrealBloomPass.js"></script>
+<script src="assets/lib/GLTFLoader.js"></script>
+<script src="assets/lib/DRACOLoader.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -641,7 +658,7 @@ ${JSON.stringify(p, null, 2)}`, "Bloc copié : colle-le à la fin de ta session 
       La caméra vole vers la tour sélectionnée.
       Repli automatique en vue liste si la 3D est absente.
    ============================================================ */
-const U = { pret: false, echec: false, actif: false, pause: false, noeuds: [], flux: [], autos: [], liens: [], cibles: [], balises: [], bateaux: [], orb: { th: .85, ph: .98, d: 0 }, cons: { th: .85, ph: .98, d: 0 }, decal: { x: 0, y: 0 }, survol: null, filtre: null, repos: 0 };
+const U = { pret: false, echec: false, actif: false, pause: false, noeuds: [], flux: [], autos: [], liens: [], cibles: [], balises: [], bateaux: [], orb: { th: .85, ph: 1.37, d: 0 }, cons: { th: .85, ph: 1.37, d: 0 }, decal: { x: 0, y: 0 }, survol: null, filtre: null, repos: 0 };
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const modeLeger = () => { // rendu allégé : demandé dans les réglages, ou appareil modeste détecté
   if (R.mode3d !== "auto") return R.mode3d === "leger";
@@ -650,7 +667,7 @@ const modeLeger = () => { // rendu allégé : demandé dans les réglages, ou ap
 };
 const mouvementReduit = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const estNuit = () => document.documentElement.dataset.theme === "nuit";
-const distDefaut = () => (U.w && U.w < U.h ? 195 : 134);
+const distDefaut = () => (U.w && U.w < U.h ? 150 : 104);
 const fraicheur = p => Math.max(0, Math.min(1, 1 - joursDepuis(p.derniere_maj) / 45));
 const couleurDe = p => p.couleur || R.couleurs[p.type] || "#27457A";
 const alea = g => () => { g |= 0; g = g + 0x6D2B79F5 | 0; let t = Math.imul(g ^ g >>> 15, 1 | g); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
@@ -683,33 +700,73 @@ function tuile(p, classe = "") {
   return `<span class="tuile ${classe}" style="--c:${esc(couleurDe(p))}">${k ? `<svg viewBox="0 0 24 24" aria-hidden="true">${PICTOS[k]}</svg>` : esc(monogramme(p.nom))}${p.logo ? `<img src="${esc(p.logo)}" alt="" onerror="this.remove()">` : ""}${recent(p) ? '<i class="neuf" title="Mis à jour récemment"></i>' : ""}</span>`;
 }
 
+/* Modèles 3D réalisés dans Blender (fichiers GLB compressés du dossier assets/modeles) : façades en vraie géométrie,
+   ombrage des creux déjà calculé. Chargés à la demande puis gardés en mémoire. Tant qu'un modèle manque (mode léger,
+   premier lancement hors ligne, fichier absent), la tour dessinée par le code prend le relais. */
+const MOD = { cache: new Map(), attente: new Set(), chargeur: null, vus: false };
+function modele(nom) {
+  if (MOD.cache.has(nom)) return MOD.cache.get(nom);
+  if (MOD.attente.has(nom)) return null;
+  try { if (!MOD.chargeur) { MOD.chargeur = new THREE.GLTFLoader(); const d = new THREE.DRACOLoader(); d.setDecoderPath("assets/lib/draco/"); MOD.chargeur.setDRACOLoader(d); } }
+  catch { MOD.cache.set(nom, null); return null; }
+  MOD.attente.add(nom);
+  const fini = M => {
+    MOD.cache.set(nom, M); MOD.attente.delete(nom); if (MOD.attente.size) return;
+    clearTimeout(MOD.minuteur); MOD.minuteur = setTimeout(() => { if (!U.pret || S.vue !== "univers") return; if (!MOD.vus) { MOD.vus = true; U.tIntro = mouvementReduit ? -1e9 : performance.now(); } univConstruire(); }, 30);
+  };
+  MOD.chargeur.load(`assets/modeles/${nom}.glb`, g => {
+    const pieces = [], bo = new THREE.Box3(); g.scene.updateMatrixWorld(true);
+    g.scene.traverse(o => { if (!o.isMesh) return; o.geometry.applyMatrix4(o.matrixWorld); o.geometry.userData.garde = true; o.geometry.computeBoundingBox(); bo.union(o.geometry.boundingBox); pieces.push({ geo: o.geometry, mat: o.material.name }); o.material.dispose(); });
+    fini(pieces.length ? { pieces, bo, haut: bo.max.y, lx: bo.max.x - bo.min.x, lz: bo.max.z - bo.min.z } : null);
+  }, undefined, () => fini(null));
+  return null;
+}
+
 function univInit() {
   if (U.pret || U.echec) return;
   if (!window.THREE) { U.echec = true; return; }
   const leger = modeLeger();
   try { U.r = new THREE.WebGLRenderer({ canvas: $("#u-canvas"), antialias: !leger, powerPreference: "high-performance" }); } catch { U.echec = true; return; }
-  U.pr = U.prMax = leger ? 1 : Math.min(devicePixelRatio || 1, 2); U.r.setPixelRatio(U.pr); U.o3 = new THREE.Object3D();
+  U.pr = U.prMax = leger ? 1 : Math.min(devicePixelRatio || 1, innerWidth < 820 ? 1.5 : 2); U.r.setPixelRatio(U.pr); U.o3 = new THREE.Object3D(); // sur téléphone, une définition de 1,5 suffit et ménage la batterie
   U.r.outputEncoding = THREE.sRGBEncoding; U.r.toneMapping = THREE.ACESFilmicToneMapping;
   U.r.shadowMap.enabled = !leger; U.r.shadowMap.type = THREE.PCFSoftShadowMap;
   U.r.shadowMap.autoUpdate = false; // les ombres ne sont recalculées que lorsque la ville change, pas à chaque image
   U.aniso = Math.min(8, U.r.capabilities.getMaxAnisotropy());
-  U.scene = new THREE.Scene(); U.cam = new THREE.PerspectiveCamera(35, 1, .5, 1400);
+  U.scene = new THREE.Scene(); U.cam = new THREE.PerspectiveCamera(32, 1, 1.5, 1800);
   U.vise = new THREE.Vector3(...Q.CENTRE); U.viseCible = new THREE.Vector3(...Q.CENTRE);
   U.ciel = new THREE.HemisphereLight(0xffffff, 0xb9ad90, .7); U.scene.add(U.ciel);
   U.soleil = new THREE.DirectionalLight(0xfff1dc, 1.15); U.soleil.position.set(40, 54, 26); U.soleil.castShadow = !leger;
-  Object.assign(U.soleil.shadow.camera, { left: -72, right: 72, top: 60, bottom: -60, near: 1, far: 240 });
-  { const def = innerWidth < 900 ? 2048 : 4096; U.soleil.shadow.mapSize.set(def, def); } // ombres statiques : calculées une fois, donc en haute définition U.soleil.shadow.bias = -.0004; U.soleil.shadow.normalBias = .03; U.scene.add(U.soleil);
+  Object.assign(U.soleil.shadow.camera, { left: -72, right: 72, top: 60, bottom: -60, near: 1, far: 240 }); U.soleil.shadow.camera.updateProjectionMatrix(); // sans ce recalcul, seule une petite zone centrale recevait des ombres
+  { const def = innerWidth < 900 ? 2048 : 4096; U.soleil.shadow.mapSize.set(def, def); } // ombres statiques : calculées une fois, donc en haute définition
+  U.soleil.shadow.bias = -.0012; U.soleil.shadow.normalBias = .09; U.scene.add(U.soleil);
   U.grp = new THREE.Group(); U.scene.add(U.grp); U.rayon = new THREE.Raycaster();
-  // Halo lumineux de nuit (post-traitement). Absent en mode léger ou si les scripts ne sont pas chargés.
-  if (!leger && THREE.EffectComposer && THREE.UnrealBloomPass && THREE.GammaCorrectionShader) {
+  // Post-traitement, comme au cinéma : halo des sources lumineuses, étalonnage des couleurs, vignette et grain léger.
+  // Absent en mode léger ou si les scripts ne sont pas chargés : la scène s'affiche alors directement.
+  if (!leger && THREE.EffectComposer && THREE.UnrealBloomPass && THREE.ShaderPass) {
     try {
-      U.compo = new THREE.EffectComposer(U.r); U.compo.addPass(new THREE.RenderPass(U.scene, U.cam));
-      U.compo.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(512, 512), .62, .55, .62));
-      U.compo.addPass(new THREE.ShaderPass(THREE.GammaCorrectionShader));
+      const cible = U.r.capabilities.isWebGL2 && THREE.WebGLMultisampleRenderTarget ? new THREE.WebGLMultisampleRenderTarget(4, 4, { format: THREE.RGBAFormat }) : new THREE.WebGLRenderTarget(4, 4, { format: THREE.RGBAFormat }); // garde l'anticrénelage
+      cible.texture.encoding = THREE.sRGBEncoding; // l'image intermédiaire est stockée en sRGB : pas de paliers visibles dans les tons sombres
+      cible.depthTexture = new THREE.DepthTexture(4, 4, THREE.UnsignedIntType); // profondeur sur 24 bits : sans elle, les surfaces proches (sol, routes) se strient
+      U.compo = new THREE.EffectComposer(U.r, cible); U.compo.addPass(new THREE.RenderPass(U.scene, U.cam));
+      U.halo = new THREE.UnrealBloomPass(new THREE.Vector2(512, 512), .3, .5, .9); U.compo.addPass(U.halo);
+      U.etalon = new THREE.ShaderPass({ uniforms: { tDiffuse: { value: null }, uT: { value: 0 }, uVig: { value: .5 }, uSat: { value: 1.08 }, uCon: { value: 1.06 }, uGrain: { value: .028 }, uOmbres: { value: new THREE.Vector3(.96, 1, 1.06) }, uClairs: { value: new THREE.Vector3(1.05, 1, .95) } },
+        vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }",
+        fragmentShader: `uniform sampler2D tDiffuse; uniform float uT, uVig, uSat, uCon, uGrain; uniform vec3 uOmbres, uClairs; varying vec2 vUv;
+          float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+          void main(){
+            vec3 c = texture2D(tDiffuse, vUv).rgb;
+            float l = dot(c, vec3(.2126, .7152, .0722));
+            c = mix(vec3(l), c, uSat); c = (c - .5) * uCon + .5;                              // saturation, contraste
+            c *= mix(uOmbres, uClairs, smoothstep(.15, .85, l));                               // ombres froides, lumières chaudes
+            float d = distance(vUv, vec2(.5, .52)); c *= 1. - uVig * smoothstep(.38, 1., d);  // vignette
+            c += (h21(vUv * 913. + fract(uT) * 7.) - .5) * uGrain;                            // grain
+            gl_FragColor = vec4(clamp(c, 0., 1.), 1.);
+          }` });
+      U.compo.addPass(U.etalon);
     } catch { U.compo = null; }
   }
   const zone = $("#u-scene");
-  new ResizeObserver(() => { const w = zone.clientWidth, h = zone.clientHeight; if (!w || !h) return; U.r.setSize(w, h, false); U.compo?.setSize(w, h); U.cam.aspect = w / h; U.cam.fov = w < h ? 42 : 35; U.cam.updateProjectionMatrix(); U.w = w; U.h = h; if (!U.orb.d) U.orb.d = U.cons.d = distDefaut(); }).observe(zone);
+  new ResizeObserver(() => { const w = zone.clientWidth, h = zone.clientHeight; if (!w || !h) return; U.r.setSize(w, h, false); U.compo?.setPixelRatio(U.pr); U.compo?.setSize(w, h); U.cam.aspect = w / h; U.cam.fov = w < h ? 42 : 32; U.cam.updateProjectionMatrix(); U.w = w; U.h = h; if (!U.orb.d) U.orb.d = U.cons.d = distDefaut(); }).observe(zone);
   // Commandes : glisser pour tourner, molette ou pincement pour zoomer, clic sur une tour pour ouvrir sa fiche
   const pts = new Map(); let ecart = 0, bouge = 0;
   const viser = e => { const r = zone.getBoundingClientRect(); U.souris = { x: e.clientX - r.left, y: e.clientY - r.top }; U.sourisBouge = true; };
@@ -717,7 +774,7 @@ function univInit() {
   zone.addEventListener("pointerdown", e => { U.repos = 0; if (e.target.closest(".u-noeud")) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); bouge = 0; zone.setPointerCapture(e.pointerId); });
   zone.addEventListener("pointermove", e => {
     viser(e); const p = pts.get(e.pointerId); if (!p) return; const dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY; bouge += Math.abs(dx) + Math.abs(dy); U.repos = 0;
-    if (pts.size === 1) { U.cons.th -= dx * .006; U.cons.ph = Math.min(1.42, Math.max(.3, U.cons.ph - dy * .005)); }
+    if (pts.size === 1) { U.cons.th -= dx * .006; U.cons.ph = Math.min(1.5, Math.max(.3, U.cons.ph - dy * .005)); }
     else if (pts.size === 2) { const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y); if (ecart) zoomer(ecart / d); ecart = d; }
   });
   const fin = e => {
@@ -740,8 +797,8 @@ function viserNoeud() {
 function univViser(n) {
   if (!U.pret || !U.vise) return;
   const tour = a => ((a - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; // plus court chemin angulaire
-  if (n && !n.centre) { U.dAvant ??= U.cons.d; U.viseCible.set(n.sol.x, Math.min(9, n.sommet.y * .55), n.sol.z); U.cons.d = U.w < U.h ? 92 : 60; U.cons.th += tour(n.th); }
-  else { U.viseCible.set(...Q.CENTRE); if (U.dAvant) U.cons.d = U.dAvant; U.dAvant = null; }
+  if (n && !n.centre) { U.dAvant ??= U.cons.d; U.phAvant ??= U.cons.ph; U.viseCible.set(n.sol.x, Math.min(9, n.sommet.y * .55), n.sol.z); U.cons.d = U.w < U.h ? 92 : 58; U.cons.ph = Math.min(U.cons.ph, 1.08); U.cons.th += tour(n.th); } // la caméra s'élève pour dégager la tour de ses voisines
+  else { U.viseCible.set(...Q.CENTRE); if (U.dAvant) U.cons.d = U.dAvant; if (U.phAvant) U.cons.ph = U.phAvant; U.dAvant = U.phAvant = null; }
 }
 
 /* ---------- Textures dessinées dans des canevas (aucune image à télécharger) ---------- */
@@ -812,7 +869,7 @@ function infoEcran(p) {
 }
 /* Le quartier s'inspire de La Défense : la Grande Arche à l'ouest, l'esplanade piétonne dans l'axe, les tours de part
    et d'autre, le boulevard circulaire autour, puis la Seine, le pont de Neuilly et l'avenue qui file vers l'Étoile. */
-const Q = { LX: 60, LZ: 40, RX: 44, RZ: 27, ARCHE: -36, SEINE: 56, ETOILE: 126, XS: [-22, -13, -4, 5, 14, 23], RANGS: [10.5, 18.5], CENTRE: [7, 4, 0] };
+const Q = { LX: 60, LZ: 40, RX: 44, RZ: 27, ARCHE: -36, SEINE: 56, ETOILE: 126, XS: [-22, -13, -4, 5, 14, 23], RANGS: [10.5, 18.5], CENTRE: [4, 6.5, 0] };
 function textureQuartier(nuit, large, tours, voisins, lampes) {
   const s = large / (2 * Q.LX), haut = Math.round(2 * Q.LZ * s), c = document.createElement("canvas"); c.width = large; c.height = haut;
   const x = c.getContext("2d"), h = alea(7), X = v => (v + Q.LX) * s, Z = v => (v + Q.LZ) * s, base = nuit ? "#161C29" : "#B4AEA0";
@@ -825,7 +882,12 @@ function textureQuartier(nuit, large, tours, voisins, lampes) {
   x.save(); ellipse(Q.RX, Q.RZ); x.clip(); x.fillStyle = nuit ? "#1B2231" : "#C7C1B2"; x.fillRect(0, 0, large, haut);
   [-17.5, -8.5, .5, 9.5, 18.5, 27.5].forEach(vx => voie(() => { x.beginPath(); x.moveTo(X(vx), 0); x.lineTo(X(vx), haut); }, 1.3, false));
   [-14.5, 14.5].forEach(vz => voie(() => { x.beginPath(); x.moveTo(0, Z(vz)); x.lineTo(large, Z(vz)); }, 1.3, false));
+  // passages piétons aux carrefours
+  x.fillStyle = marque; [-17.5, -8.5, .5, 9.5, 18.5, 27.5].forEach(vx => [-14.5, 14.5].forEach(vz => [-1, 1].forEach(c => { for (let k = -2; k <= 2; k++) { x.fillRect(X(vx + k * .24 - .07), Z(vz + c * 1.05 - .22), .14 * s, .44 * s); x.fillRect(X(vx + c * 1.05 - .22), Z(vz + k * .24 - .07), .44 * s, .14 * s); } })));
   x.restore();
+  // joints de dallage sur tout le quartier, à peine visibles : ils donnent l'échelle
+  x.save(); ellipse(Q.RX - 1.6, Q.RZ - 1.6); x.clip(); x.globalCompositeOperation = "multiply"; x.strokeStyle = nuit ? "rgba(200,205,220,.9)" : "rgba(196,186,166,.55)"; x.lineWidth = Math.max(1, s * .035); x.beginPath();
+  for (let vx = -Q.RX; vx <= Q.RX; vx += .8) { x.moveTo(X(vx), 0); x.lineTo(X(vx), haut); } for (let vz = -Q.RZ; vz <= Q.RZ; vz += .8) { x.moveTo(0, Z(vz)); x.lineTo(large, Z(vz)); } x.stroke(); x.restore();
   voie(() => ellipse(Q.RX, Q.RZ), 2.6); // boulevard circulaire
   voie(() => { x.beginPath(); x.moveTo(X(35), Z(0)); x.lineTo(X(Q.LX), Z(0)); }, 2.8); // sortie vers le pont de Neuilly
   // pelouses à la pointe est
@@ -840,7 +902,7 @@ function textureQuartier(nuit, large, tours, voisins, lampes) {
   // parcelles des tours : parvis clair, liseré à la couleur de la fiche, ombre de contact
   tours.forEach(t => { dalle(t.x - 2.9, t.z - 2.9, t.x + 2.9, t.z + 2.9, .6, melange(t.coul, nuit ? "#1B2231" : "#EDE8DC", nuit ? .7 : .82)); x.lineWidth = .22 * s; x.strokeStyle = t.coul; x.stroke(); });
   if (!nuit) [...tours.map(t => [t.x, t.z, 4.6, .4]), ...voisins.map(v => [v[0], v[1], 4, .3]), [Q.ARCHE - 3.6, -3.6, 3, .3], [Q.ARCHE - 3.6, 3.6, 3, .3], [Q.ARCHE + 3.6, -3.6, 3, .3], [Q.ARCHE + 3.6, 3.6, 3, .3]].forEach(([cx, cz, r, a]) => { const g = x.createRadialGradient(X(cx), Z(cz), .7 * s, X(cx), Z(cz), r * s); g.addColorStop(0, `rgba(30,25,16,${a})`); g.addColorStop(1, "rgba(30,25,16,0)"); x.fillStyle = g; x.fillRect(X(cx - r), Z(cz - r), 2 * r * s, 2 * r * s); });
-  if (nuit) lampes.forEach(([lx, lz]) => { const g = x.createRadialGradient(X(lx), Z(lz), 0, X(lx), Z(lz), 3.2 * s); g.addColorStop(0, "rgba(255,205,130,.4)"); g.addColorStop(1, "rgba(255,205,130,0)"); x.fillStyle = g; x.fillRect(X(lx - 3.2), Z(lz - 3.2), 6.4 * s, 6.4 * s); });
+  if (nuit) lampes.forEach(([lx, lz]) => { const g = x.createRadialGradient(X(lx), Z(lz), 0, X(lx), Z(lz), 3.2 * s); g.addColorStop(0, "rgba(255,205,130,.75)"); g.addColorStop(.4, "rgba(255,205,130,.3)"); g.addColorStop(1, "rgba(255,205,130,0)"); x.fillStyle = g; x.fillRect(X(lx - 3.2), Z(lz - 3.2), 6.4 * s, 6.4 * s); });
   // bords fondus dans le sol lointain
   const rgb = nuit ? "22,28,41" : "180,174,160"; [[0, 0, 5 * s, 0], [large, 0, large - 5 * s, 0], [0, 0, 0, 5 * s], [0, haut, 0, haut - 5 * s]].forEach(([x0, y0, x1, y1]) => { const g = x.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, `rgba(${rgb},1)`); g.addColorStop(1, `rgba(${rgb},0)`); x.fillStyle = g; x.fillRect(0, 0, large, haut); });
   const t = texture(c); t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; return { t, base };
@@ -850,7 +912,7 @@ function univConstruire() {
   rendreListeUnivers();
   if (!U.pret) return;
   // Nettoyage de la scène précédente
-  U.grp.traverse(o => { o.geometry?.dispose(); [].concat(o.material || []).forEach(m => { m.map?.dispose(); m.emissiveMap?.dispose(); m.normalMap?.dispose(); m.dispose(); }); });
+  U.grp.traverse(o => { if (!o.geometry?.userData.garde) o.geometry?.dispose(); [].concat(o.material || []).forEach(m => { m.map?.dispose(); m.emissiveMap?.dispose(); m.normalMap?.dispose(); m.dispose(); }); });
   while (U.grp.children.length) U.grp.remove(U.grp.children[0]);
   U.envTex?.dispose();
   const zoneLogos = $("#u-labels"); zoneLogos.innerHTML = `<div id="u-bulle"></div>`;
@@ -859,20 +921,51 @@ function univConstruire() {
   if (U.tIntro === undefined) U.tIntro = mouvementReduit ? -1e9 : performance.now(); // les tours sortent de terre au premier affichage
 
   // ---------- Lumière, ciel, reflets ----------
-  U.scene.background = fond; U.scene.fog = new THREE.Fog(fond, 120, 330);
-  U.r.toneMappingExposure = nuit ? 1.05 : 1.0;
-  U.ciel.intensity = nuit ? .66 : .42; U.ciel.color.set(nuit ? 0x8fa6d8 : 0xdfeaff); U.ciel.groundColor.set(nuit ? 0x0c111c : 0xc7b99a);
-  U.soleil.intensity = nuit ? .62 : 1.45; U.soleil.color.set(nuit ? 0x9db4ff : 0xfff0d6); U.soleil.position.set(46, 58, 34);
+  const lin = c => new THREE.Color(c).convertSRGBToLinear();
+  const brume = leger ? fond : lin(nuit ? "#0B1122" : "#D8C3AC"); // la brume prend la couleur de l'horizon : fin d'après-midi dorée, ou nuit bleue
+  U.scene.background = brume; U.scene.fog = new THREE.Fog(brume, 120, 330);
+  U.r.toneMappingExposure = nuit ? 1.18 : (leger ? .95 : 1.0);
+  U.ciel.intensity = nuit ? (leger ? .66 : .62) : (leger ? .42 : .34); U.ciel.color.set(nuit ? 0x7f95d0 : (leger ? 0xdfeaff : 0xa9c2ee)); U.ciel.groundColor.set(nuit ? 0x0c111c : (leger ? 0xc7b99a : 0x8a7560));
+  U.soleil.intensity = nuit ? .6 : (leger ? 1.2 : 1.85); U.soleil.color.set(nuit ? 0x9db4ff : (leger ? 0xfff0d6 : 0xffd3a1));
+  if (leger) U.soleil.position.set(46, 58, 34); else if (nuit) U.soleil.position.set(-38, 62, -44); else U.soleil.position.set(54, 31, -60); // soleil bas : ombres longues, lumière chaude
+  if (U.halo) { U.halo.strength = nuit ? .85 : .24; U.halo.radius = nuit ? .62 : .45; U.halo.threshold = nuit ? .6 : .9; const u = U.etalon.uniforms; u.uVig.value = nuit ? .62 : .46; u.uSat.value = nuit ? 1.12 : 1.1; u.uOmbres.value.set(...(nuit ? [.92, .98, 1.1] : [.95, 1, 1.07])); u.uClairs.value.set(...(nuit ? [1.04, 1, .97] : [1.06, 1, .93])); }
   const degradeCiel = (arrets, nuages) => { const cs = document.createElement("canvas"); cs.width = 512; cs.height = 256; const xs = cs.getContext("2d"), g = xs.createLinearGradient(0, 0, 0, 256), hn = alea(31); arrets.forEach(([a, b]) => g.addColorStop(a, b)); xs.fillStyle = g; xs.fillRect(0, 0, 512, 256);
     for (let i = 0; i < (nuages ? 26 : 0); i++) { const cx = hn() * 512, cy = 34 + hn() * 78, rx = 26 + hn() * 46; for (let k = 0; k < 5; k++) { const px = cx + (hn() - .5) * rx * 1.6, py = cy + (hn() - .5) * 9, r = rx * (.35 + hn() * .4), gg = xs.createRadialGradient(px, py, 0, px, py, r); gg.addColorStop(0, "rgba(255,255,255,.5)"); gg.addColorStop(1, "rgba(255,255,255,0)"); xs.save(); xs.translate(px, py); xs.scale(1, .42); xs.translate(-px, -py); xs.fillStyle = gg; xs.fillRect(px - r, py - r, 2 * r, 2 * r); xs.restore(); } }
     const t = new THREE.CanvasTexture(cs); t.encoding = THREE.sRGBEncoding; return t; };
-  if (!leger) { // ciel nuageux converti en carte de reflets : c'est lui qu'on voit dans le verre et dans la Seine
-    const sc = new THREE.Scene(), tc = degradeCiel(nuit ? [[0, "#05080F"], [.5, "#1B2748"], [.56, "#27345A"], [1, "#06080D"]] : [[0, "#7FB0E6"], [.48, "#E6EEF5"], [.56, "#F3ECDB"], [1, "#948C79"]], !nuit);
-    sc.add(new THREE.Mesh(new THREE.SphereGeometry(50, 24, 16), new THREE.MeshBasicMaterial({ map: tc, side: THREE.BackSide })));
-    const pm = new THREE.PMREMGenerator(U.r); U.envTex = pm.fromScene(sc, .03).texture; U.scene.environment = U.envTex; pm.dispose(); tc.dispose();
-  } else U.scene.environment = null;
-  U.grp.add(new THREE.Mesh(new THREE.SphereGeometry(900, 32, 20), new THREE.MeshBasicMaterial({ map: degradeCiel(nuit ? [[0, "#03050B"], [.3, "#0A1226"], [.5, fondHex], [1, fondHex]] : [[0, "#6FA6E0"], [.28, "#A9CBEC"], [.47, fondHex], [1, fondHex]], !nuit), side: THREE.BackSide, fog: false, toneMapped: false, depthWrite: false })));
-  const astre = new THREE.Sprite(new THREE.SpriteMaterial({ map: halo(nuit ? "#DCE6FF" : "#FFF4D6"), transparent: true, fog: false, depthWrite: false, toneMapped: false })); astre.position.copy(U.soleil.position).normalize().multiplyScalar(820); astre.scale.setScalar(nuit ? 70 : 230); U.grp.add(astre);
+  if (!leger) {
+    // Ciel calculé au pixel près : dégradé du zénith à l'horizon, lueur chaude autour du soleil, voile de nuages. Le même ciel sert
+    // de carte de reflets (avec une ligne d'immeubles à l'horizon) : c'est lui qu'on voit dans le verre des tours et dans la Seine.
+    const dirS = U.soleil.position.clone().normalize();
+    const matCiel = () => new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false, fog: false, uniforms: { uS: { value: dirS }, uN: { value: nuit ? 1 : 0 }, uH: { value: new THREE.Vector3(brume.r, brume.g, brume.b) } },
+      vertexShader: "varying vec3 vD; void main(){ vD = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }",
+      fragmentShader: `varying vec3 vD; uniform vec3 uS, uH; uniform float uN;
+        float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+        float bruit(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }
+        float fbm(vec2 p){ float a = .5, s = 0.; for (int i = 0; i < 4; i++) { s += a * bruit(p); p = p * 2.03 + 11.7; a *= .5; } return s; }
+        void main(){
+          vec3 d = normalize(vD); float h = d.y, s = max(dot(d, uS), 0.), t = pow(clamp(h, 0., 1.), .45);
+          vec3 zen = mix(vec3(.075, .2, .52), vec3(.003, .006, .024), uN), cs = mix(vec3(1., .66, .36), vec3(.5, .6, 1.), uN);
+          vec3 c = mix(uH, zen, t);
+          c += cs * (pow(s, 5.) * .3 + pow(s, 40.) * .6) * mix(1., .18, uN) * (1. - t * .6);   // le ciel se réchauffe près du soleil
+          c += cs * pow(s, 1500.) * mix(26., 7., uN);                                            // disque de l'astre
+          if (h > 0.) { vec2 p = d.xz / (h + .14) * 1.25; float k = smoothstep(.5, .8, fbm(p + vec2(3.1, 1.7))) * smoothstep(0., .2, h) * .8;
+            vec3 cn = mix(mix(vec3(.9, .7, .56), vec3(1., .9, .82), t) + cs * pow(s, 3.) * .45, vec3(.035, .05, .1), uN); c = mix(c, cn, k); }
+          c = mix(c, uH * .82, smoothstep(0., -.05, h));
+          gl_FragColor = vec4(c, 1.);
+          #include <tonemapping_fragment>
+          #include <encodings_fragment>
+        }` });
+    const sc = new THREE.Scene(); sc.add(new THREE.Mesh(new THREE.SphereGeometry(50, 32, 20), matCiel()));
+    const hz = alea(77), teintesH = (nuit ? ["#0f1626", "#18223a", "#0b101c", "#202c48"] : ["#8d96a2", "#a9adb3", "#767d89", "#bcb9b2"]).map(c => new THREE.MeshBasicMaterial({ color: lin(c) }));
+    for (let i = 0; i < 54; i++) { const a = i / 54 * 6.2832 + hz() * .1, r = 30 + hz() * 9, hh = 1.5 + hz() * hz() * 15, m = new THREE.Mesh(new THREE.BoxGeometry(2.4 + hz() * 3, hh, 2.4 + hz() * 3), teintesH[i % 4]); m.position.set(Math.cos(a) * r, hh / 2 - 1.2, Math.sin(a) * r); m.rotation.y = -a; sc.add(m); }
+    { const solR = new THREE.Mesh(new THREE.CircleGeometry(49, 24), new THREE.MeshBasicMaterial({ color: lin(nuit ? "#0d1220" : "#aaa092") })); solR.rotation.x = -Math.PI / 2; solR.position.y = -1.2; sc.add(solR); }
+    const pm = new THREE.PMREMGenerator(U.r); U.envTex = pm.fromScene(sc, .012).texture; U.scene.environment = U.envTex; pm.dispose(); sc.traverse(o => { o.geometry?.dispose(); o.material?.dispose(); });
+    U.grp.add(new THREE.Mesh(new THREE.SphereGeometry(1500, 32, 20), matCiel()));
+  } else {
+    U.scene.environment = null;
+    U.grp.add(new THREE.Mesh(new THREE.SphereGeometry(900, 32, 20), new THREE.MeshBasicMaterial({ map: degradeCiel(nuit ? [[0, "#03050B"], [.3, "#0A1226"], [.5, fondHex], [1, fondHex]] : [[0, "#6FA6E0"], [.28, "#A9CBEC"], [.47, fondHex], [1, fondHex]], !nuit), side: THREE.BackSide, fog: false, toneMapped: false, depthWrite: false })));
+    const astre = new THREE.Sprite(new THREE.SpriteMaterial({ map: halo(nuit ? "#DCE6FF" : "#FFF4D6"), transparent: true, fog: false, depthWrite: false, toneMapped: false })); astre.position.copy(U.soleil.position).normalize().multiplyScalar(820); astre.scale.setScalar(nuit ? 70 : 230); U.grp.add(astre);
+  }
   if (nuit) { const pe = []; for (let i = 0; i < 600; i++) { const a = h() * 6.283, b = Math.acos(h() * .96); pe.push(860 * Math.sin(b) * Math.cos(a), 860 * Math.cos(b), 860 * Math.sin(b) * Math.sin(a)); }
     const ge = new THREE.BufferGeometry(); ge.setAttribute("position", new THREE.Float32BufferAttribute(pe, 3)); U.grp.add(new THREE.Points(ge, new THREE.PointsMaterial({ color: 0xffffff, size: 1.6, sizeAttenuation: false, transparent: true, opacity: .75, fog: false, depthWrite: false }))); }
 
@@ -890,6 +983,40 @@ function univConstruire() {
     geo.computeVertexNormals(); return geo; };
   const lueur = (coul, taille, x, y, z, parent) => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: halo(coul), transparent: true, depthWrite: false, toneMapped: false })); s.scale.setScalar(taille); s.position.set(x, y, z); (parent || U.grp).add(s); return s; };
   const geoB = caisse(1, 1, 1), o3 = U.o3;
+  // Modèles Blender : les matériaux sont recréés ici d'après leur nom, pour suivre le thème (jour, nuit) et la couleur de chaque fiche
+  const EM = .08, modeles = !leger && !!(THREE.GLTFLoader && THREE.DRACOLoader); // un mètre de modèle = 0,08 unité de scène
+  const stdM = o => std({ vertexColors: true, ...o }); // l'ombrage des creux est stocké dans les couleurs de sommets
+  const FIXES = {
+    alu: () => stdM({ color: nuit ? 0x7d8494 : 0xb9bec6, metalness: .9, roughness: .36 }), noir: () => stdM({ color: 0x15181e, metalness: .6, roughness: .42 }),
+    bronze: () => stdM({ color: nuit ? 0x6b4d2c : 0x8d6436, metalness: .88, roughness: .38 }), pierre: () => stdM({ color: nuit ? 0x565d74 : 0xd9d1bf, roughness: .85 }),
+    beton: () => stdM({ color: nuit ? 0x6a7186 : 0xecebe6, roughness: .7 }), toit: () => stdM({ color: nuit ? 0x232a3a : 0x55565b, roughness: .92 }),
+    tech: () => stdM({ color: nuit ? 0x4a5162 : 0x8d9299, metalness: .45, roughness: .55 }), vegetal: () => stdM({ color: nuit ? 0x1f3a2b : 0x4c8a3c, roughness: .95, envMapIntensity: .3 }),
+    ecorce: () => stdM({ color: nuit ? 0x2a2420 : 0x5f4832, roughness: 1 }), marbre: () => stdM({ color: nuit ? 0x8d909c : 0xe9e6de, metalness: .05, roughness: .42 }),
+    zinc: () => stdM({ color: nuit ? 0x2b3140 : 0x8a9099, metalness: .35, roughness: .55 }), chaussee: () => stdM({ color: nuit ? 0x0c111a : 0x3d424c, roughness: .9 }),
+    coque: () => stdM({ color: nuit ? 0x9aa0b0 : 0xf2f0ea, roughness: .5, metalness: .1 }), carrosserie: () => stdM({ color: 0xffffff, metalness: .6, roughness: .28 }), pneu: () => stdM({ color: 0x0c0c0e, roughness: .9 }), rouge: () => stdM({ color: nuit ? 0x8a1f18 : 0xc8281c, metalness: .2, roughness: .45 }),
+    fer: () => stdM({ color: nuit ? 0x8a7450 : 0x6b5947, roughness: .7, emissive: 0xffb44a, emissiveIntensity: nuit ? .5 : 0 }), toile: () => stdM({ color: nuit ? 0x9aa0b0 : 0xf4f3ee, roughness: .8 }),
+    hall: () => stdM({ color: nuit ? 0x2a2218 : 0x1a222c, metalness: nuit ? .2 : .9, roughness: .12, emissive: 0xffcf8a, emissiveIntensity: nuit ? 1.15 : .06 }), // halls d'entrée éclairés la nuit
+    lumiere: () => stdM({ color: 0xfff3d6, emissive: 0xffe6b0, emissiveIntensity: nuit ? 2.2 : .35, roughness: .5 })
+  };
+  const fixes = {}, palettes = new Map();
+  const palette = (cle, coul) => { // cinq nuances de vitrage par tour (reflets et stores variés d'un panneau à l'autre), plus la couleur de la fiche
+    if (!palettes.has(cle)) {
+      const base = melange(coul, "#9CBEDD", .5), P = {};
+      [["verre_a", .2, .04], ["verre_b", .16, .07], ["verre_c", .12, .11], ["verre_d", .18, .055]].forEach(([nom, sombre, rug]) => { P[nom] = stdM({ color: melange(base, "#0A111C", sombre + (nuit ? .42 : 0)), metalness: nuit ? .85 : .62, roughness: rug, envMapIntensity: nuit ? .8 : 1.5 }); });
+      P.verre_e = stdM({ color: melange(base, nuit ? "#141B28" : "#D8D2C6", nuit ? .6 : .16), metalness: nuit ? .85 : .5, roughness: nuit ? .1 : .2, envMapIntensity: nuit ? .8 : 1.4 }); // stores baissés le jour
+      [["verre_d", "#FFCB74", 1.25, .012], ["verre_e", "#FFE6B8", .85, .012]].forEach(([nom, c, n, j]) => { const m = P[nom]; m.emissive.set(c).convertSRGBToLinear(); m.emissiveIntensity = m.userData.base = nuit ? n : j; m.userData.vif = nuit ? n * 1.7 : .45; }); // bureaux encore allumés ; ils s'éclairent tous quand la tour est visée
+      P.accent = stdM({ color: coul, emissive: coul, emissiveIntensity: nuit ? 1.6 : .25, metalness: .3, roughness: .45 }); P.accent.userData.base = P.accent.emissiveIntensity; P.accent.userData.vif = nuit ? 2.6 : 1.1;
+      palettes.set(cle, P);
+    }
+    return palettes.get(cle);
+  };
+  const matModele = (nom, cle, coul) => nom.startsWith("verre_") || nom === "accent" ? palette(cle, coul)[nom] : (fixes[nom] ||= (FIXES[nom] || FIXES.tech)());
+  const poserModele = (M, cle, coul, parent) => { const corps = new THREE.Group(); corps.scale.setScalar(EM); M.pieces.forEach(pc => { const m = new THREE.Mesh(pc.geo, matModele(pc.mat, cle, coul)); m.castShadow = m.receiveShadow = ombres; corps.add(m); }); parent.add(corps); return corps; };
+  const pret = nom => { if (!modeles) return null; const M = modele(nom); return M || (MOD.attente.has(nom) ? undefined : null); }; // objet : modèle prêt ; undefined : en cours de chargement ; null : indisponible, on dessine la version de repli
+  const semer = (M, matrices, cle, coul, parent, teinte) => M.pieces.map(pc => { const im = new THREE.InstancedMesh(pc.geo, matModele(pc.mat, cle, coul), matrices.length); matrices.forEach((mx, i) => im.setMatrixAt(i, mx)); if (teinte) matrices.forEach((_, i) => im.setColorAt(i, teinte(i, pc.mat))); im.castShadow = im.receiveShadow = ombres; im.frustumCulled = false; (parent || U.grp).add(im); return im; }); // un même modèle répété : un seul appel de dessin par matière
+  const blanc = new THREE.Color(1, 1, 1);
+  const invisible = new THREE.MeshBasicMaterial({ visible: false });
+  const zoneClic = (M, parent) => { const b = new THREE.Mesh(new THREE.BoxGeometry(M.lx * EM, M.haut * EM, M.lz * EM), invisible); b.position.set((M.bo.max.x + M.bo.min.x) / 2 * EM, M.haut * EM / 2, (M.bo.max.z + M.bo.min.z) / 2 * EM); parent.add(b); return b; }; // boîte invisible : la visée reste instantanée malgré le détail des façades
   const instancier = (matrices, materiau, ombre = ombres, geo = geoB) => { if (!matrices.length) return null; const im = new THREE.InstancedMesh(geo, materiau, matrices.length); matrices.forEach((m, i) => im.setMatrixAt(i, m)); im.castShadow = im.receiveShadow = ombre; im.frustumCulled = false; U.grp.add(im); return im; };
   const pose = (x, y, z, sx, sy, sz, ry = 0) => { o3.position.set(x, y, z); o3.rotation.set(0, ry, 0); o3.scale.set(sx, sy, sz); o3.updateMatrix(); return o3.matrix.clone(); };
 
@@ -900,9 +1027,9 @@ function univConstruire() {
   const lampes = []; for (let vx = -29; vx <= 33; vx += 4.4) lampes.push([vx, -5.2], [vx, 5.2]); for (let k = 0; k < 28; k++) { const a = k / 28 * 6.2832; lampes.push([Math.cos(a) * (Q.RX + 1.7), Math.sin(a) * (Q.RZ + 1.7)]); }
 
   // ---------- 2. Sol, Seine, pont, avenue ----------
-  const tq = textureQuartier(nuit, leger ? 1024 : 2048, places, voisins, lampes);
-  const sol = new THREE.Mesh(new THREE.PlaneGeometry(2 * Q.LX, 2 * Q.LZ), std({ map: tq.t, roughness: .9, metalness: 0 })); sol.rotation.x = -Math.PI / 2; sol.receiveShadow = ombres; U.grp.add(sol);
-  const loin = new THREE.Mesh(new THREE.CircleGeometry(760, 48), std({ color: tq.base, roughness: 1 })); loin.rotation.x = -Math.PI / 2; loin.position.y = -.06; loin.receiveShadow = ombres; U.grp.add(loin);
+  const tq = textureQuartier(nuit, leger ? 1024 : (innerWidth >= 900 && U.r.capabilities.maxTextureSize >= 4096 ? 4096 : 2048), places, voisins, lampes);
+  const sol = new THREE.Mesh(new THREE.PlaneGeometry(2 * Q.LX, 2 * Q.LZ), std({ map: tq.t, roughness: leger ? .9 : .78, metalness: 0, envMapIntensity: .55 })); sol.rotation.x = -Math.PI / 2; sol.receiveShadow = ombres; U.grp.add(sol);
+  const loin = new THREE.Mesh(new THREE.CircleGeometry(760, 48), std({ color: tq.base, roughness: 1 })); loin.rotation.x = -Math.PI / 2; loin.position.y = -.12; loin.receiveShadow = ombres; U.grp.add(loin);
   U.rides = null;
   if (!leger) { // relief des vaguelettes : somme de sinusoïdes, raccord parfait d'un bord à l'autre
     const N = 128, cr = document.createElement("canvas"); cr.width = cr.height = N; const xr = cr.getContext("2d"), im = xr.createImageData(N, N), ondes = [[2, 1, 0, 1], [1, 3, 1.3, .8], [4, 2, 2.1, .5], [3, 6, .7, .35], [7, 3, 4.2, .25], [5, 9, 5.5, .2]];
@@ -910,35 +1037,49 @@ function univConstruire() {
     xr.putImageData(im, 0, 0); U.rides = new THREE.CanvasTexture(cr); U.rides.wrapS = U.rides.wrapT = THREE.RepeatWrapping; U.rides.repeat.set(1.5, 90);
   }
   const eau = new THREE.Mesh(new THREE.PlaneGeometry(8.6, 540), std({ color: nuit ? 0x0c1a30 : 0x3b6a90, metalness: leger ? .2 : .92, roughness: .1, envMapIntensity: nuit ? 1.6 : 1.3, ...(U.rides ? { normalMap: U.rides, normalScale: new THREE.Vector2(.5, .5) } : {}) })); eau.rotation.x = -Math.PI / 2; eau.position.set(Q.SEINE, .05, 0); eau.receiveShadow = ombres; U.grp.add(eau);
-  instancier([pose(Q.SEINE - 4.5, .3, 0, .6, .7, 540), pose(Q.SEINE + 4.5, .3, 0, .6, .7, 540), pose(Q.SEINE, .95, -1.65, 13, .5, .16), pose(Q.SEINE, .95, 1.65, 13, .5, .16), pose(Q.SEINE - 2.2, .3, 0, .9, .7, 3.4), pose(Q.SEINE + 2.2, .3, 0, .9, .7, 3.4)], pierre); // quais, garde-corps et piles du pont
-  const chaussee = std({ color: nuit ? 0x0c111a : 0x454a55, roughness: .92 });
-  instancier([pose(Q.SEINE, .62, 0, 13, .3, 3.2), pose((Q.SEINE + 4.8 + Q.ETOILE - 7) / 2, .02, 0, Q.ETOILE - 7 - Q.SEINE - 4.8, .04, 3)], chaussee); // tablier du pont de Neuilly, puis l'avenue vers l'Étoile
+  const chaussee = std({ color: nuit ? 0x0c111a : 0x454a55, roughness: .92 }), MP = pret("pont");
+  instancier([pose(Q.SEINE - 4.5, .3, 0, .6, .7, 540), pose(Q.SEINE + 4.5, .3, 0, .6, .7, 540)], pierre); // quais
+  instancier([pose((Q.SEINE + 4.8 + Q.ETOILE - 7) / 2, .02, 0, Q.ETOILE - 7 - Q.SEINE - 4.8, .04, 3)], chaussee); // l'avenue vers l'Étoile
+  if (MP) { const g = new THREE.Group(); g.position.set(Q.SEINE, 0, 0); poserModele(MP, "decor", "#8FA3B8", g); U.grp.add(g); } // pont de Neuilly : arches d'acier, garde-corps, candélabres
+  else if (MP === null) { instancier([pose(Q.SEINE, .95, -1.65, 13, .5, .16), pose(Q.SEINE, .95, 1.65, 13, .5, .16), pose(Q.SEINE - 2.2, .3, 0, .9, .7, 3.4), pose(Q.SEINE + 2.2, .3, 0, .9, .7, 3.4)], pierre); instancier([pose(Q.SEINE, .62, 0, 13, .3, 3.2)], chaussee); }
+  U.bateaux = []; { const MB = pret("bateau"); if (MB) [[-1.9, 1, 30], [1.9, -1, -80]].forEach(([dx, sens, z0]) => { const g = new THREE.Group(); g.position.set(Q.SEINE + dx, .07, z0); g.rotation.y = -sens * Math.PI / 2; g.scale.setScalar(1.5); poserModele(MB, "decor", "#C8A24A", g); U.grp.add(g); U.bateaux.push({ g, sens }); }); } // bateaux-mouches sur la Seine
 
   // ---------- 3. La Grande Arche : repère du quartier et porte de l'agent global ----------
   const gC = new THREE.Group(); gC.position.set(Q.ARCHE, 0, 0); U.grp.add(gC);
-  const FM = facade("#ECE9E2", 2, nuit, "marbre"), marbre = verre(FM, 4, 4), marbreL = verre(FM, 1, 4), marbreT = verre(FM, 4, 1), HA = 9, EP = 1.5, parois = [marbre, marbreL];
-  maille(caisse(9, HA, EP), parois, 0, .5 + HA / 2, -3.75, gC); maille(caisse(9, HA, EP), parois, 0, .5 + HA / 2, 3.75, gC);
-  const linteau = maille(new THREE.BoxGeometry(9, EP, 6), marbreT, 0, .5 + HA - EP / 2, 0, gC); maille(new THREE.BoxGeometry(9.6, .5, 9.6), pierre, 0, .25, 0, gC);
-  { const vit = verre(facade("#3A4658", 4, nuit, "sombre"), 4, 4); [-1, 1].forEach(c => maille(new THREE.BoxGeometry(8.7, HA - EP - .1, .1), vit, 0, .5 + (HA - EP) / 2, c * 2.94, gC)); maille(new THREE.BoxGeometry(8.7, .1, 5.8), vit, 0, .5 + HA - EP - .06, 0, gC); } // intérieur vitré
+  const HA = 9, EP = 1.5, MA = pret("arche"), clicsA = [];
+  if (MA) { // modèle détaillé : caissons de marbre et de verre, embrasures biseautées, escaliers, nuage de toile, ascenseurs
+    poserModele(MA, "arche", "#B9C4D2", gC);
+    [[0, 4.9, -3.75, 9, 9.2, 1.5], [0, 4.9, 3.75, 9, 9.2, 1.5], [0, 8.5, 0, 9, 1.5, 6]].forEach(([x, y, z, w, hh, d]) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, hh, d), invisible); b.position.set(x, y, z); gC.add(b); clicsA.push(b); });
+  } else if (MA === null) {
+    const FM = facade("#ECE9E2", 2, nuit, "marbre"), marbre = verre(FM, 4, 4), marbreL = verre(FM, 1, 4), marbreT = verre(FM, 4, 1), parois = [marbre, marbreL];
+    maille(caisse(9, HA, EP), parois, 0, .5 + HA / 2, -3.75, gC); maille(caisse(9, HA, EP), parois, 0, .5 + HA / 2, 3.75, gC);
+    maille(new THREE.BoxGeometry(9, EP, 6), marbreT, 0, .5 + HA - EP / 2, 0, gC); maille(new THREE.BoxGeometry(9.6, .5, 9.6), pierre, 0, .25, 0, gC);
+    { const vit = verre(facade("#3A4658", 4, nuit, "sombre"), 4, 4); [-1, 1].forEach(c => maille(new THREE.BoxGeometry(8.7, HA - EP - .1, .1), vit, 0, .5 + (HA - EP) / 2, c * 2.94, gC)); maille(new THREE.BoxGeometry(8.7, .1, 5.8), vit, 0, .5 + HA - EP - .06, 0, gC); } // intérieur vitré
+  }
   const nCentre = { centre: true, groupe: gC, ordre: 0, th: 1.25, haut: V(Q.ARCHE, HA + 4.6, 0), puce: V(Q.ARCHE, HA + 6.9, 0), sol: V(Q.ARCHE, 0, 0), sommet: V(Q.ARCHE, HA + 1, 0), phase: 0, ech: 1, mats: [] };
-  gC.traverse(o => { if (o.isMesh) { o.userData.noeud = nCentre; U.cibles.push(o); } });
+  (MA ? clicsA : (() => { const l = []; gC.traverse(o => { if (o.isMesh) l.push(o); }); return l; })()).forEach(o => { o.userData.noeud = nCentre; U.cibles.push(o); });
+  if (MA) { const P = palette("arche", "#B9C4D2"); nCentre.mats = [P.verre_d, P.verre_e]; }
 
   // ---------- 4. Les tours des fiches ----------
   const geoSigne = new THREE.PlaneGeometry(1, 1);
   const poser = (n, coul, def, taille) => {
     n.signe = new THREE.Mesh(geoSigne, new THREE.MeshBasicMaterial({ map: enseigne(def, coul), transparent: true, toneMapped: false })); n.signe.position.copy(n.haut); n.taille = taille; n.signe.userData.noeud = n; U.grp.add(n.signe); U.cibles.push(n.signe);
-    const lab = document.createElement("button"); lab.className = "u-noeud"; lab.style.setProperty("--c", coul); lab.innerHTML = `<b>${esc(n.centre ? "Agent global" : n.p.nom)}${!n.centre && recent(n.p) ? '<i class="pt"></i>' : ""}</b>`;
+    const lab = document.createElement("button"); lab.className = "u-noeud"; lab.style.setProperty("--c", coul); { const i = n.centre ? null : infoEcran(n.p), info = n.centre ? "Interroger tous tes projets" : [i.valeur, i.detail].filter(Boolean).join(" · ");
+      lab.innerHTML = `<b><span><i class="n">${String(n.ordre).padStart(2, "0")}</i>${esc(n.centre ? "Agent global" : n.p.nom)}${!n.centre && recent(n.p) ? '<i class="pt"></i>' : ""}</span>${info ? `<small>${esc(info)}</small>` : ""}</b>`; }
     lab.onclick = () => activer(n); lab.onmouseenter = lab.onfocus = () => { U.puce = n; }; lab.onmouseleave = lab.onblur = () => { U.puce = null; };
     zoneLogos.append(lab); n.lab = lab; U.noeuds.push(n);
   };
-  poser(nCentre, "#141B28", { mono: "N", texte: "#E2B552" }, 3.4);
+  poser(nCentre, "#141B28", { mono: "N", texte: "#E2B552" }, 3.0);
   const STYLES = ["rideau", "rideau", "sombre", "bandes", "rideau", "sombre", "rideau", "bandes"];
   places.forEach((pl, i) => {
     const { p, x, z, th, coul } = pl, hh = 6 + 8 * fraicheur(p), v8 = i % 8, F = facade(coul, i * 13 + 5, nuit, STYLES[v8]), g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = z < 0 ? 0 : Math.PI; U.grp.add(g);
     const accent = std({ color: coul, emissive: coul, emissiveIntensity: nuit ? 1.6 : .25, metalness: .3, roughness: .45 }), ry = Math.max(1, Math.round(hh / 2.6));
-    maille(new THREE.BoxGeometry(4.4, .5, 4.4), pierre, 0, .25, 0, g);
     let sommet = hh;
-    switch (v8) { // huit silhouettes inspirées des tours du quartier
+    const fr = fraicheur(p), nomM = `t${v8}_h${fr > .6 ? 2 : fr > .25 ? 1 : 0}`, M = modeles ? modele(nomM) : null, clics = [];
+    if (M) { poserModele(M, p.id, coul, g); clics.push(zoneClic(M, g)); sommet = M.haut * EM - .5; } // modèle détaillé : trois hauteurs selon la fraîcheur de la fiche
+    else if (modeles && MOD.attente.has(nomM)) sommet = [7, 10.5, 14][fr > .6 ? 2 : fr > .25 ? 1 : 0]; // le modèle arrive : la tour sortira de terre dès qu'il sera chargé
+    if (!M) maille(new THREE.BoxGeometry(4.4, .5, 4.4), pierre, 0, .25, 0, g); // socle des tours dessinées par le code (les modèles ont leur propre emmarchement)
+    if (M || (modeles && MOD.attente.has(nomM))) {} else switch (v8) { // repli : huit silhouettes dessinées par le code
       case 0: boite(F, 2.9, hh * .8, 2.9, 0, .5, 0, g); maille(new THREE.CylinderGeometry(.95, 2.05, hh * .2, 4), [verre(F, 8, 1), toit, toit], 0, .5 + hh * .9, 0, g).rotation.y = Math.PI / 4; maille(new THREE.BoxGeometry(1.36, .16, 1.36), accent, 0, .5 + hh + .08, 0, g); break; // fuseau à sommet effilé
       case 1: { const t = maille(new THREE.CylinderGeometry(1.85, 1.85, hh, 44), [verre(F, 9, ry), toit, toit], 0, .5 + hh / 2, 0, g); t.scale.z = .62; const c = maille(new THREE.TorusGeometry(1.86, .07, 6, 44), accent, 0, .5 + hh, 0, g); c.rotation.x = Math.PI / 2; c.scale.y = .62; break; } // tour elliptique
       case 2: maille(new THREE.CylinderGeometry(1.3, 2.05, hh, 6), [verre(F, 9, ry), toit, toit], 0, .5 + hh / 2, 0, g); maille(new THREE.CylinderGeometry(1.34, 1.34, .16, 6), accent, 0, .5 + hh + .08, 0, g); break; // cristal à facettes
@@ -952,20 +1093,26 @@ function univConstruire() {
     maille(new THREE.CylinderGeometry(.04, .04, 3, 5), sombre, 0, sommet + 1.5, 0, g).castShadow = false; // mât de l'enseigne
     if (nuit) U.balises.push({ s: lueur("#FF4A3A", 1.1, 0, sommet + .35, 0, g), phase: i * .9 });
     const mats = new Set(); g.traverse(o => [].concat(o.material || []).forEach(m => { if (m.emissiveMap) mats.add(m); }));
+    if (M) { const P = palette(p.id, coul); [P.verre_d, P.verre_e, P.accent].forEach(m => mats.add(m)); }
     const n = { p, th, ordre: i + 1, groupe: g, mats: [...mats], haut: V(x, sommet + 4.2, z), puce: V(x, sommet + 6.4, z), sol: V(x, .06, z), phase: i * 1.7, ech: 1, sommet: V(x, sommet + .6, z) };
-    g.traverse(o => { if (o.isMesh) { o.userData.noeud = n; U.cibles.push(o); } });
-    poser(n, coul, { mono: monogramme(p.nom), picto: p.logo ? null : pictoDe(p), logo: p.logo, neuf: recent(p) }, 2.9);
+    (M ? clics : (() => { const l = []; g.traverse(o => { if (o.isMesh) l.push(o); }); return l; })()).forEach(o => { o.userData.noeud = n; U.cibles.push(o); });
+    poser(n, coul, { mono: monogramme(p.nom), picto: p.logo ? null : pictoDe(p), logo: p.logo, neuf: recent(p) }, 2.5);
   });
   U.selection = new THREE.Mesh(new THREE.RingGeometry(3.3, 3.62, 64), new THREE.MeshBasicMaterial({ color: nuit ? 0x7fd6ff : 0x18202f, transparent: true, opacity: .9, side: THREE.DoubleSide, toneMapped: false })); U.selection.rotation.x = -Math.PI / 2; U.selection.visible = false; U.grp.add(U.selection);
 
   // ---------- 5. Le reste de la ville, en quelques maillages instanciés ----------
   U.ville = new THREE.Group(); U.grp.add(U.ville);
-  { // tours voisines du quartier d'affaires : verre neutre, hauteurs variées
+  { // tours voisines (emplacements libres) et immeubles de bureaux au-delà du boulevard : verre neutre, hauteurs variées
     const FV = [facade("#8FA3B8", 51, nuit, "rideau"), facade("#7C8794", 52, nuit, "bandes")], lots = [[], []], toits = [];
-    voisins.forEach(([x, z]) => { const hh = 3.2 + h() * 4.6, w = 2.6 + h() * 1.2, d = 2.4 + h() * 1.2, k = h() < .6 ? 0 : 1; lots[k].push(pose(x, hh / 2, z, w, hh, d)); toits.push(pose(x, hh + .1, z, w + .05, .2, d + .05)); });
-    [36.5, -36.5].forEach(z0 => { for (let vx = -30; vx <= 30; vx += 7.5) { const hh = 2.4 + h() * 3.6; lots[1].push(pose(vx + h() * 2, hh / 2, z0 * (.92 + h() * .16), 3 + h() * 1.5, hh, 2.6 + h())); } }); // immeubles de bureaux au-delà du boulevard
+    const repli = (x, z, hh, w, d, k) => { lots[k].push(pose(x, hh / 2, z, w, hh, d)); toits.push(pose(x, hh + .1, z, w + .05, .2, d + .05)); };
+    voisins.forEach(([x, z], i) => { const nom = `t${(i * 3 + 2) % 8}_h${i % 2}`, M = pret(nom), hh = 3.2 + h() * 4.6, w = 2.6 + h() * 1.2, d = 2.4 + h() * 1.2, k = h() < .6 ? 0 : 1;
+      if (M) { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = z < 0 ? 0 : Math.PI; poserModele(M, "voisin" + (i % 3), ["#8FA3B8", "#9A9488", "#7E94A8"][i % 3], g); U.ville.add(g); } else if (M === null) repli(x, z, hh, w, d, k); });
+    const bureaux = [[], [], [], []], MBu = [0, 1, 2, 3].map(k => pret("bureau" + k));
+    [36.5, -36.5].forEach(z0 => { for (let vx = -30; vx <= 30; vx += 7.5) { const hh = 2.4 + h() * 3.6, x = vx + h() * 2, z = z0 * (.92 + h() * .16), w = 3 + h() * 1.5, d = 2.6 + h(), k = Math.floor(h() * 4) % 4;
+      if (MBu[k]) bureaux[k].push(pose(x, 0, z, EM * 1.12, EM * (1 + h() * .25), EM * 1.12, (z < 0 ? 0 : Math.PI) + (h() - .5) * .12)); else if (MBu[k] === null) repli(x, z, hh, w, d, 1); } });
+    bureaux.forEach((L, k) => { if (L.length) semer(MBu[k], L, "bureau" + k, ["#8FA3B8", "#7C8794", "#A39A88", "#6F8FA8"][k], U.ville); });
     lots.forEach((L, k) => { if (!L.length) return; const m = verre(FV[k], 2, 2), im = new THREE.InstancedMesh(geoB, [m, toit], L.length); L.forEach((mx, i) => im.setMatrixAt(i, mx)); im.castShadow = im.receiveShadow = ombres; im.frustumCulled = false; U.ville.add(im); });
-    const it = new THREE.InstancedMesh(geoB, toit, toits.length || 1); toits.forEach((mx, i) => it.setMatrixAt(i, mx)); it.count = toits.length; it.frustumCulled = false; U.ville.add(it);
+    if (toits.length) { const it = new THREE.InstancedMesh(geoB, toit, toits.length); toits.forEach((mx, i) => it.setMatrixAt(i, mx)); it.frustumCulled = false; U.ville.add(it); }
   }
   { // tissu parisien autour : îlots de pierre claire, toits de zinc
     const murs = [], zinc = [], pas = leger ? 9.5 : 7.6, portee = leger ? 95 : 150, ca = Math.cos(.2), sa = Math.sin(.2); let ix = 0;
@@ -975,30 +1122,46 @@ function univConstruire() {
       if ((x / (Q.RX + 5.5)) ** 2 + (z / (Q.RZ + 5.5)) ** 2 < 1 || (Math.abs(x) < 37 && Math.abs(Math.abs(z) - 36.5) < 3.6) || Math.abs(x - Q.SEINE) < 8 || (x > Q.SEINE && Math.abs(z) < 4.4) || Math.hypot(x - Q.ETOILE, z) < 9.5 || Math.hypot(x, z) > portee) continue;
       const long = pas * .8, large = pas * (.26 + h() * .06), ecart = pas * .27, travers = h() < .35; // deux barres d'immeubles de part et d'autre d'une cour
       [-1, 1].forEach(c => { const hh = 1.45 + h() * .95, ox = travers ? c * ecart : 0, oz = travers ? 0 : c * ecart, wx = x + ox * ca - oz * sa, wz = z + ox * sa + oz * ca, sx = travers ? large : long, sz = travers ? long : large;
-        murs.push(pose(wx, hh / 2, wz, sx, hh, sz, -.2)); zinc.push(pose(wx, hh + .19, wz, sx * .9, .38, sz * .78, -.2)); });
+        murs.push(pose(wx, hh / 2, wz, sx, hh, sz, -.2)); zinc.push(pose(wx, hh + .24, wz, sx, .48, sz, -.2)); });
     } }
-    const mp = verre(facade("#D9CFB8", 61, nuit, "pierre"), 3, 1), im = instancier(murs, [mp, toit]), teintesP = [0xffffff, 0xf3ead8, 0xe6e2da, 0xfaf1dc].map(c => new THREE.Color(c).convertSRGBToLinear()); if (im) murs.forEach((_, i) => im.setColorAt(i, teintesP[(i >> 1) % 4])); instancier(zinc, std({ color: nuit ? 0x2b3140 : 0x8a9099, roughness: .55, metalness: .35 }));
+    const mp = verre(facade("#D9CFB8", 61, nuit, "pierre"), 3, 1), im = instancier(murs, [mp, toit]), teintesP = [0xffffff, 0xf3ead8, 0xe6e2da, 0xfaf1dc].map(c => new THREE.Color(c).convertSRGBToLinear()); if (im) murs.forEach((_, i) => im.setColorAt(i, teintesP[(i >> 1) % 4])); { const comble = new THREE.CylinderGeometry(.5, .7071, 1, 4, 1).toNonIndexed(); comble.rotateY(Math.PI / 4); comble.computeVertexNormals(); instancier(zinc, std({ color: nuit ? 0x2b3140 : 0x76808c, roughness: .5, metalness: .4 }), ombres, comble); } // combles mansardés en zinc
   }
   { // repères lointains dans l'axe : l'Arc de Triomphe sur sa place, et la tour Eiffel
     const pl = new THREE.Mesh(new THREE.CircleGeometry(7.5, 40), std({ color: nuit ? 0x283042 : 0xd9d2c3, roughness: .9 })); pl.rotation.x = -Math.PI / 2; pl.position.set(Q.ETOILE, .03, 0); U.grp.add(pl);
-    instancier([pose(Q.ETOILE, 2.1, -1.55, 3, 4.2, 1.3), pose(Q.ETOILE, 2.1, 1.55, 3, 4.2, 1.3), pose(Q.ETOILE, 4.95, 0, 3, 1.5, 4.4)], pierre);
-    const fer = std({ color: nuit ? 0x8a7450 : 0x6b5947, roughness: .7, emissive: 0xffb44a, emissiveIntensity: nuit ? .5 : 0 }), ex = 100, ez = 46;
-    [[1.05, 2.7, 5, 2.5], [.45, 1.05, 6, 8], [.04, .45, 8, 15]].forEach(([rt, rb, hh2, yc]) => { maille(new THREE.CylinderGeometry(rt, rb, hh2, 4), fer, ex, yc, ez).rotation.y = Math.PI / 4; });
+    const MAr = pret("arc"), ME = pret("eiffel"), ex = 100, ez = 46;
+    if (MAr) { const g = new THREE.Group(); g.position.set(Q.ETOILE, 0, 0); g.scale.setScalar(1.4); poserModele(MAr, "decor", "#8FA3B8", g); U.grp.add(g); }
+    else if (MAr === null) instancier([pose(Q.ETOILE, 2.1, -1.55, 3, 4.2, 1.3), pose(Q.ETOILE, 2.1, 1.55, 3, 4.2, 1.3), pose(Q.ETOILE, 4.95, 0, 3, 1.5, 4.4)], pierre);
+    if (ME) { const g = new THREE.Group(); g.position.set(ex, 0, ez); g.rotation.y = .5; g.scale.setScalar(.82); poserModele(ME, "decor", "#8FA3B8", g); U.grp.add(g); }
+    else if (ME === null) { const fer = std({ color: nuit ? 0x8a7450 : 0x6b5947, roughness: .7, emissive: 0xffb44a, emissiveIntensity: nuit ? .5 : 0 }); [[1.05, 2.7, 5, 2.5], [.45, 1.05, 6, 8], [.04, .45, 8, 15]].forEach(([rt, rb, hh2, yc]) => { maille(new THREE.CylinderGeometry(rt, rb, hh2, 4), fer, ex, yc, ez).rotation.y = Math.PI / 4; }); }
+    const MS = pret("sculpture"); if (MS) { const g = new THREE.Group(); g.position.set(19.5, .02, 0); g.rotation.y = .6; g.scale.setScalar(.9); poserModele(MS, "decor", "#8FA3B8", g); U.grp.add(g); } // stabile rouge sur l'esplanade
   }
   { // arbres : alignements de l'esplanade, de l'avenue et des quais, bosquets des pelouses
     const pts = []; for (let vx = -28; vx <= 32; vx += 2.6) pts.push([vx, -3.6, .78], [vx, 3.6, .78]);
     if (!leger) { for (let vx = Q.SEINE + 8; vx <= Q.ETOILE - 9; vx += 3.4) pts.push([vx, -2.3, .7], [vx, 2.3, .7]); for (let vz = -70; vz <= 70; vz += 4.6) if (Math.abs(vz) > 4) pts.push([Q.SEINE - 5.6, vz, .8], [Q.SEINE + 5.6, vz, .8]);
-      [[36, -9], [36, 9], [-30, -16], [-30, 16]].forEach(([px, pz]) => { for (let j = 0; j < 7; j++) pts.push([px + (h() - .5) * 8, pz + (h() - .5) * 4.4, .7 + h() * .5]); }); }
+      [[36, -9], [36, 9], [-30, -16], [-30, 16]].forEach(([px, pz]) => { for (let j = 0; j < 7; j++) pts.push([px + (h() - .5) * 8, pz + (h() - .5) * 4.4, .7 + h() * .5]); });
+      [-17.5, -8.5, .5, 9.5, 18.5, 27.5].forEach(vx => { for (let vz = 6.6; vz <= 25; vz += 2.9) [-1, 1].forEach(c => [-1, 1].forEach(cote => { const tx = vx + cote * 1.05, tz = c * vz; if (Math.abs(vz - 14.5) > 1.6 && (tx / (Q.RX - 3)) ** 2 + (tz / (Q.RZ - 3)) ** 2 < 1) pts.push([tx, tz, .62 + h() * .2]); })); }); // rues du quartier
+      for (let k = 0; k < 44; k++) { const a = k / 44 * 6.2832; if (Math.abs(Math.sin(a)) > .12 || Math.cos(a) < 0) pts.push([Math.cos(a) * (Q.RX + 3.1), Math.sin(a) * (Q.RZ + 3.1), .7 + h() * .25]); } } // pourtour du boulevard
     const verts = [0x3f7d35, 0x4c8a3c, 0x5a9646].map(c => new THREE.Color(nuit ? 0x1f3a2b : c).convertSRGBToLinear());
+    const MAb = [0, 1, 2].map(k => pret("arbre" + k));
+    if (MAb.every(M => M)) { // arbres modelés : trois essences, tailles, orientations et verts variés
+      const lots = [[], [], []], tons = [new THREE.Color(1, 1, 1), new THREE.Color(.86, .98, .8), new THREE.Color(1.08, 1.02, .78)];
+      pts.forEach(([x, z, e], i) => { const k = i % 5 === 0 ? 1 : i % 3 === 0 ? 2 : 0, ec = EM * e * (k === 2 ? 1.7 : 1.3) * (.85 + h() * .3); lots[k].push(pose(x, 0, z, ec, ec * (.9 + h() * .25), ec, h() * 6.28)); });
+      lots.forEach((L, k) => { if (L.length) semer(MAb[k], L, "decor", "#8FA3B8", U.grp, (i, mat) => mat === "vegetal" ? tons[(i * 7 + k) % 3] : blanc); });
+    } else if (MAb.some(M => M === null)) {
     const feuilles = new THREE.InstancedMesh(new THREE.SphereGeometry(.62, 9, 7), std({ color: 0xffffff, roughness: .95, envMapIntensity: .2 }), pts.length), troncs = new THREE.InstancedMesh(new THREE.CylinderGeometry(.07, .1, .9, 5), std({ color: 0x5f4832, roughness: 1 }), pts.length);
     pts.forEach(([x, z, e], i) => { feuilles.setMatrixAt(i, pose(x, .85 + e * .5, z, e, e * 1.18, e)); feuilles.setColorAt(i, verts[i % 3]); troncs.setMatrixAt(i, pose(x, .45, z, 1, 1, 1)); });
     feuilles.castShadow = troncs.castShadow = ombres; feuilles.receiveShadow = ombres; feuilles.frustumCulled = troncs.frustumCulled = false; U.grp.add(feuilles, troncs);
+    }
+    const ML = pret("lampadaire"); if (ML) semer(ML, lampes.map(([x, z], i) => pose(x, 0, z, EM * 1.5, EM * 1.5, EM * 1.5, i < 30 ? Math.PI / 2 : Math.atan2(x, z))), "decor", "#8FA3B8"); // candélabres de l'esplanade et du boulevard
   }
   { // circulation sur le boulevard circulaire : deux maillages instanciés, phares en nuage de points la nuit
     const teintes = [0xf4f1ea, 0xc8ccd2, 0x20242c, 0x2b4a7a, 0xb8322a, 0x8d949c], nbA = leger ? 8 : 18;
-    U.caisses = new THREE.InstancedMesh(new THREE.BoxGeometry(.95, .3, .46), std({ color: 0xffffff, metalness: .55, roughness: .3 }), nbA); U.habitacles = new THREE.InstancedMesh(new THREE.BoxGeometry(.5, .22, .4), std({ color: 0x1b2230, metalness: .7, roughness: .2 }), nbA);
-    for (let i = 0; i < nbA; i++) { U.caisses.setColorAt(i, new THREE.Color(teintes[i % 6]).convertSRGBToLinear()); U.autos.push({ sens: i % 2 ? 1 : -1, a: h() * 6.283, v: (.05 + h() * .03) }); }
-    U.caisses.frustumCulled = U.habitacles.frustumCulled = false; U.grp.add(U.caisses, U.habitacles); U.phares = U.feux = null;
+    const MV = pret("voiture"), couleurs = i => new THREE.Color(teintes[i % 6]).convertSRGBToLinear();
+    for (let i = 0; i < nbA; i++) U.autos.push({ sens: i % 2 ? 1 : -1, a: h() * 6.283, v: (.05 + h() * .03) });
+    if (MV) U.vehicules = semer(MV, U.autos.map(() => pose(0, -9, 0, 1, 1, 1)), "decor", "#8FA3B8", U.grp, (i, mat) => mat === "carrosserie" ? couleurs(i) : blanc).map(im => ({ im, y: .04, s: EM * 2.3 })); // berlines modelées
+    else { const caisses = new THREE.InstancedMesh(new THREE.BoxGeometry(.95, .3, .46), std({ color: 0xffffff, metalness: .55, roughness: .3 }), nbA), habitacles = new THREE.InstancedMesh(new THREE.BoxGeometry(.5, .22, .4), std({ color: 0x1b2230, metalness: .7, roughness: .2 }), nbA);
+      for (let i = 0; i < nbA; i++) caisses.setColorAt(i, couleurs(i)); caisses.frustumCulled = habitacles.frustumCulled = false; U.grp.add(caisses, habitacles); U.vehicules = [{ im: caisses, y: .26, s: 1 }, { im: habitacles, y: .5, s: 1 }]; }
+    U.phares = U.feux = null;
     if (nuit) [["phares", "#FFE9B0", 1.1], ["feux", "#FF3B2F", .7]].forEach(([nom, c, t]) => { const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(new Float32Array(nbA * 3), 3)); U[nom] = new THREE.Points(g, new THREE.PointsMaterial({ map: halo(c), size: t, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true })); U[nom].frustumCulled = false; U.grp.add(U[nom]); });
   }
 
@@ -1021,7 +1184,7 @@ function appliquerEtat(force) {
   U.noeuds.forEach(n => {
     const vif = (!U.filtre || n.centre || n.p.type === U.filtre) && (!sv || sv.centre || n.centre || lie(n, sv)), actif = n === sv || n === choisi;
     n.signe.material.opacity = vif ? 1 : .2; n.lab.classList.toggle("attenue", !vif); n.lab.classList.toggle("vif", actif); n.cible = actif ? 1.28 : 1;
-    n.mats.forEach(m => { m.emissiveIntensity = m.userData.base * (actif ? (nuit ? 1.7 : 4.5) : 1); }); // la tour visée s'illumine
+    n.mats.forEach(m => { m.emissiveIntensity = actif ? (m.userData.vif ?? m.userData.base * (nuit ? 1.7 : 4.5)) : m.userData.base; }); // la tour visée s'illumine
   });
   const foyer = sv && !sv.centre ? sv : choisi; U.liens.forEach(l => { l.arc.visible = !!foyer && (l.a === foyer || l.b === foyer); }); // les liens n'apparaissent que pour la tour visée
   const marque = sv && !sv.centre ? sv : choisi; U.selection.visible = !!marque; if (marque) U.selection.position.set(marque.sol.x, .11, marque.sol.z);
@@ -1043,11 +1206,11 @@ function univBoucle(t) {
   U.repos += dt; if (anime && !U.pause && !U.survol && U.repos > 6) U.cons.th += dt * .025;
   U.vise.lerp(U.viseCible, k);
   const kc = 1 - Math.exp(-dt * 7); o.th += (U.cons.th - o.th) * kc; o.ph += (U.cons.ph - o.ph) * kc; o.d += (U.cons.d - o.d) * kc;
-  const ouverte = !!S.projet, cx = ouverte && U.w >= 700 ? Math.min(230, U.w * .2) : 0, cy = ouverte && U.w < 700 ? U.h * .3 : -U.h * .04;
+  const ouverte = !!S.projet, cx = ouverte && U.w >= 700 ? Math.min(230, U.w * .2) : (U.w >= 900 ? -U.w * .13 : 0), cy = ouverte && U.w < 700 ? U.h * .3 : -U.h * .04;
   U.decal.x += (cx - U.decal.x) * k; U.decal.y += (cy - U.decal.y) * k;
   U.cam.position.set(U.vise.x + o.d * Math.sin(o.ph) * Math.sin(o.th), U.vise.y + o.d * Math.cos(o.ph), U.vise.z + o.d * Math.sin(o.ph) * Math.cos(o.th)); U.cam.lookAt(U.vise);
   U.cam.setViewOffset(U.w, U.h, U.decal.x, U.decal.y, U.w, U.h);
-  U.scene.fog.near = o.d * 1.2; U.scene.fog.far = Math.max(360, o.d * 3.6);
+  U.scene.fog.near = o.d * 1.05; U.scene.fog.far = Math.max(420, o.d * 4.2);
   if (U.puce) U.survol = U.puce; else if (!U.souris) U.survol = null; else if (U.sourisBouge || (image & 7) === 0) { U.survol = viserNoeud(); U.sourisBouge = false; } // visée seulement quand la souris bouge
   appliquerEtat();
   // Les tours sortent de terre au premier affichage
@@ -1066,23 +1229,25 @@ function univBoucle(t) {
   }
   { const o3 = U.o3, da = anime ? dt : 0, pf = U.phares?.geometry.attributes.position, pr = U.feux?.geometry.attributes.position; // voitures sur le boulevard circulaire
     U.autos.forEach((a, i) => { a.a += a.sens * a.v * da; const rx = Q.RX + a.sens * .62, rz = Q.RZ + a.sens * .62, x = Math.cos(a.a) * rx, z = Math.sin(a.a) * rz, tx = -Math.sin(a.a) * rx * a.sens, tz = Math.cos(a.a) * rz * a.sens, ry = Math.atan2(-tz, tx);
-      o3.position.set(x, .26, z); o3.rotation.set(0, ry, 0); o3.scale.setScalar(1); o3.updateMatrix(); U.caisses.setMatrixAt(i, o3.matrix); o3.position.y = .5; o3.updateMatrix(); U.habitacles.setMatrixAt(i, o3.matrix);
+      o3.rotation.set(0, ry, 0); U.vehicules.forEach(vh => { o3.position.set(x, vh.y, z); o3.scale.setScalar(vh.s); o3.updateMatrix(); vh.im.setMatrixAt(i, o3.matrix); });
       if (pf) { pf.setXYZ(i, x + Math.cos(ry) * .55, .3, z - Math.sin(ry) * .55); pr.setXYZ(i, x - Math.cos(ry) * .55, .3, z + Math.sin(ry) * .55); } });
-    U.caisses.instanceMatrix.needsUpdate = U.habitacles.instanceMatrix.needsUpdate = true; if (pf) pf.needsUpdate = pr.needsUpdate = true; }
+    U.vehicules.forEach(vh => { vh.im.instanceMatrix.needsUpdate = true; }); if (pf) pf.needsUpdate = pr.needsUpdate = true;
+    U.bateaux.forEach(b => { b.g.position.z += b.sens * da * 1.1; if (Math.abs(b.g.position.z) > 190) b.g.position.z = -b.sens * 190; }); }
   const base = distDefaut();
   U.noeuds.forEach(n => {
     const leve = intro ? rebond((ti - .25 - n.ordre * .1) / 1.15) : 1; if (poser) n.groupe.scale.y = Math.max(.001, leve);
     n.ech += ((n.cible || 1) - n.ech) * Math.min(1, dt * 10);
     const flot = anime ? Math.sin(t / 1100 + n.phase) * .14 : 0, hy = n.haut.y * Math.min(1, leve);
     n.signe.position.set(n.haut.x, hy + flot, n.haut.z); n.signe.quaternion.copy(U.cam.quaternion); n.signe.scale.setScalar(Math.max(.001, n.taille * n.ech * Math.min(1, leve)));
-    v.set(n.puce.x, n.puce.y * Math.min(1, leve) + flot + (n.ech - 1) * 2, n.puce.z); const dist = v.distanceTo(U.cam.position); v.project(U.cam);
+    v.set(n.haut.x, hy + flot, n.haut.z); const dist = v.distanceTo(U.cam.position); v.project(U.cam); // l'étiquette s'accroche à droite de l'enseigne
+    const demi = n.taille * n.ech * .5 * (U.h / 2) / Math.tan(U.cam.fov * Math.PI / 360) / dist;
     n.sx = (v.x + 1) / 2 * U.w; n.sy = (1 - v.y) / 2 * U.h;
-    const ech = Math.min(1.35, Math.max(.6, base / dist * (U.w < 600 ? .7 : 1)));
-    n.lab.style.transform = `translate(${n.sx.toFixed(1)}px,${n.sy.toFixed(1)}px) scale(${ech.toFixed(3)}) translate(-50%,-50%)`;
+    const ech = Math.min(1.12, Math.max(.72, base / dist * (U.w < 600 ? .8 : 1)));
+    n.lab.style.transform = `translate(${(n.sx + demi + 7).toFixed(1)}px,${n.sy.toFixed(1)}px) translate(0,-50%) scale(${ech.toFixed(3)})`;
     n.lab.style.display = v.z > 1 || leve < .6 ? "none" : ""; n.lab.style.zIndex = Math.round((1 - v.z) * 100000);
   });
   const b = $("#u-bulle"); if (U.survol && b) { const x = Math.min(U.w - 276, Math.max(8, U.survol.sx + 26)), y = Math.min(U.h - 200, Math.max(8, U.survol.sy + 18)); b.style.transform = `translate(${x.toFixed(0)}px,${y.toFixed(0)}px)`; }
-  if (U.compo && nuit && !(U.pr <= .75 && U.ms > 34)) U.compo.render(); else U.r.render(U.scene, U.cam); // le halo est coupé en dernier recours
+  if (U.compo && !(U.pr <= .75 && U.ms > 34)) { U.etalon.uniforms.uT.value = t / 1000; U.compo.render(); } else U.r.render(U.scene, U.cam); // le post-traitement est coupé en dernier recours
 }
 function univActif(oui) {
   const plan = R.mode3d === "2d" || U.echec || S.plan;
@@ -1109,7 +1274,7 @@ RENDU.univers = () => {
   if (R.mode3d !== "2d") univInit();
   univConstruire(); rendreHud();
   const L = projets();
-  $("#u-date").textContent = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  $("#u-date").textContent = "01 — Univers · " + new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   $("#u-sous").innerHTML = L.length ? `${L.length} tours reliées au hub, ${L.filter(recent).length} mises à jour ces trois derniers jours.${U.echec && R.mode3d !== "2d" ? " La 3D n'est pas disponible sur cet appareil : vue liste affichée." : ""}${S.demo ? " <b>Mode démonstration.</b>" : ""}` : "Aucune fiche chargée.";
   $("#u-recents").innerHTML = [...L].sort((a, b) => String(b.derniere_maj).localeCompare(String(a.derniere_maj))).slice(0, 4).map(p => `<button data-act="fiche" data-id="${esc(p.id)}"><span class="mono">${esc(fDate(p.derniere_maj))}</span> · ${esc(p.nom)}</button>`).join("");
   $("#u-legende").innerHTML = TYPES.filter(t => L.some(p => p.type === t)).map(t => `<button class="puce" aria-pressed="${U.filtre === t}" data-act="uFiltre" data-t="${esc(t)}"><i style="background:${esc(R.couleurs[t])}"></i>${esc(t)}</button>`).join("") + `<span class="u-aide">Glisse pour tourner · molette ou pincement pour zoomer · clique une tour ou la Grande Arche. Plus la tour est haute, plus la fiche est récente.</span>`;
@@ -1119,7 +1284,7 @@ RENDU.univers = () => {
   $("#u-theme").textContent = estNuit() ? "Jour" : "Nuit";
 };
 Object.assign(ACT, {
-  uRecentrer: () => { fermerFiche(); const d = ((.85 - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; Object.assign(U.cons, { th: U.cons.th + d, ph: .98, d: distDefaut() }); U.dAvant = null; U.viseCible?.set(...Q.CENTRE); U.repos = 0; },
+  uRecentrer: () => { fermerFiche(); const d = ((.85 - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; Object.assign(U.cons, { th: U.cons.th + d, ph: 1.37, d: distDefaut() }); U.dAvant = U.phAvant = null; U.viseCible?.set(...Q.CENTRE); U.repos = 0; },
   uBascule: () => { S.plan = !S.plan; univActif(true); RENDU.univers(); },
   uFiltre: d => { U.filtre = U.filtre === d.t ? null : d.t; $$("#u-legende .puce").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === U.filtre)); appliquerEtat(true); },
   uTheme: () => { R.theme = estNuit() ? "clair" : "nuit"; sauverReglages(); appliquerTheme(); RENDU.univers(); }
