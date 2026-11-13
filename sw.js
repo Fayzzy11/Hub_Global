@@ -2,7 +2,7 @@
    Stratégie « réseau d'abord » : la version en ligne est toujours préférée, la copie
    en cache ne sert que sans connexion. Les appels à l'API de GitHub (données privées)
    ne sont jamais mis en cache ici. */
-const CACHE = "hub-v6";
+const CACHE = "hub-v7";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", e => {

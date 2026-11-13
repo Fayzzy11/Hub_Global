@@ -44,14 +44,27 @@ Tableau de bord personnel sous forme d'application installable : quartier financ
 
 ## Marché
 
-- `config/tickers.json` : valeurs suivies (indices, taux et obligations, matières premières, devises, volatilité, crypto, ETF). Symboles Yahoo Finance.
+### Dans l'application
+- **Vue d'ensemble** : bandeau des chiffres clés, favoris, actions dans le monde (variations sur 1 jour, 1 semaine, 1 mois, 3 mois, depuis janvier, 1 an), plus fortes hausses et baisses, secteurs américains et européens, styles et facteurs, courbes des taux américaine et zone euro (aujourd'hui et il y a un mois, pentes 2-10 ans), devises, matières premières, volatilité et crypto, obligations et crédit.
+- **Mes pages** : pages composées à la main, comme un écran de terminal. Panneaux au choix : bandeau, liste, tableau des performances, graphique (comparaison en base 100), classement en barres, plus fortes variations, courbes des taux, carte de marché. Favoris et pages sont enregistrés dans le dépôt privé (`data/marche-perso.json`) et suivent sur tous les appareils.
+- **Fiche d'une valeur** (clic sur une valeur ou recherche) : graphique avec curseur, performances, plus haut et plus bas sur un an, étoile des favoris, ajout à une page.
+- **Cartes** et **Tableau** : cartes de marché par indice (dont une carte des grandes valeurs de la zone euro) et tableau complet, colonnes au choix.
+
+### Le robot
+- `config/tickers.json` : valeurs suivies (symboles Yahoo Finance), classées par catégorie. Clés facultatives : `secours`, `court` (nom court), `source` (`tresor` ou `bce` pour les taux officiels).
 - `config/indices.json` : composition des cartes par indice, avec des poids indicatifs.
-- `scripts/update_market.py` : récupère les cours avec yfinance et écrit `data/market.json` et `data/heatmap.json`.
-- `.github/workflows/update.yml` : un passage par heure en semaine, de 6 h 17 à 21 h 17 UTC (GitHub lance souvent ces passages en retard et en saute certains ; en prévoir un par heure garde les données fraîches). La fréquence se change sur la ligne `cron`.
-- Chaque valeur est demandée séparément ; son dernier point est le dernier cours affiché par Yahoo, daté sur sa place de cotation. Une valeur peut avoir des symboles de secours (clé `secours` dans `config/tickers.json`).
+- `scripts/update_market.py` : écrit `data/market.json` (environ un an de clôtures par valeur, en format compact, et les courbes des taux) et `data/heatmap.json`. Sources : Yahoo Finance (différé d'environ 15 minutes), Trésor américain et BCE (publiés une fois par jour ouvré).
+- `.github/workflows/update.yml` : un passage par heure en semaine. **GitHub lance très mal ces passages programmés** (souvent avec des heures de retard, parfois jamais) : c'est pourquoi l'application peut relancer le robot elle-même.
+- **Relance depuis l'application** : crée un jeton « fine-grained » limité à ce dépôt, avec la seule permission `Actions : Read and write`, et colle-le dans Réglages > Robot du marché (une fois par appareil). L'application relance alors le robot avec le bouton « Actualiser » et toute seule à l'ouverture quand les cours ont plus d'une heure (en semaine, de 8 h à 23 h, au plus une fois par demi-heure). Ce jeton ne peut ni lire ni modifier les données ou le code.
 - **Message Discord** (facultatif) : ajoute le secret `DISCORD_WEBHOOK_URL` (Settings > Secrets and variables > Actions > New repository secret) avec l'adresse d'un webhook de ton salon. Le robot envoie alors un résumé par tranche de la journée (matin, midi, après-midi, soir) et à chaque lancement à la main. Les valeurs citées se règlent avec la clé `notification` de `config/tickers.json`.
 
-Les cours sont différés (environ 15 minutes) et non garantis. Les fichiers livrés au départ sont des exemples fictifs, signalés dans l'interface, remplacés au premier passage du robot.
+Les cours sont différés et non garantis. Les fichiers livrés au départ sont des exemples fictifs, signalés dans l'interface, remplacés au premier passage du robot.
+
+## Bibliothèque : recherche dans le texte des briefs
+
+- À l'envoi d'un PDF (bouton « Ajouter le PDF du jour » ou dépôt de plusieurs PDF), l'application lit son texte dans le navigateur avec pdf.js (embarqué dans `assets/lib/`, licence Apache 2.0) et le range dans `data/briefs-texte.json` du dépôt privé. Le résumé (« The big picture ») et les sociétés citées sont remplis au passage.
+- La recherche lit ce texte : taper « nvidia » montre les briefs qui en parlent, avec le nombre de mentions et les passages surlignés. Les sociétés des cartes de marché sont reconnues par leur nom et par leur symbole (« nvidia » et « NVDA »).
+- Un bandeau propose de lire le texte des PDF déposés avant cette fonction. Les PDF scannés (images sans texte) ne sont pas lisibles.
 
 ## Déposer beaucoup de fichiers
 
@@ -64,6 +77,8 @@ data/projects.json        fiches de contexte (projets, sites, outils, bot)
 data/networking.json      contacts et modèles de messages
 data/courses.json         base de cours
 data/morning-brief.json   index des briefs
+data/briefs-texte.json    texte des briefs, pour la recherche
+data/marche-perso.json    favoris et pages du Marché
 documents/briefs/         PDF des briefs envoyés par « Ajouter le PDF du jour » (AAAA-MM-JJ.pdf)
 pdf/                      PDF des briefs ajoutés à la main (ancien emplacement)
 documents/cours/<cours>/   fichiers d'un cours

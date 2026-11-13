@@ -253,7 +253,7 @@ td:first-child span{font:11px var(--mono);color:var(--doux)}
 
 /* ---------- Cartes de marché (treemap) ---------- */
 :root{--neutre:#DAD3C3} [data-theme="nuit"]{--neutre:#2A3346}
-#hm{position:relative;border-radius:10px;overflow:hidden;background:var(--papier);border:1px solid var(--trait)}
+#hm,.hm{position:relative;border-radius:10px;overflow:hidden;background:var(--papier);border:1px solid var(--trait)}
 .hm-c{position:absolute;border:0;margin:0;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;line-height:1.08;cursor:pointer;font-family:var(--texte);box-shadow:inset 0 0 0 1px var(--papier);outline-offset:-3px}
 .hm-c b{font-weight:600} .hm-c span{font:500 .62em/1.2 var(--mono);white-space:nowrap}
 .hm-c:hover{filter:brightness(1.08)}
@@ -305,6 +305,98 @@ dialog form{display:grid;gap:12px}
 #verrou{position:fixed;inset:0;background:var(--fond);z-index:80;display:none;place-items:center;padding:20px}
 #verrou.vu{display:grid}
 #verrou form{width:min(400px,100%);display:grid;gap:14px}
+/* ---------- Marché : vue d'ensemble, pages, fiches ---------- */
+.m-barre{margin-bottom:16px;gap:10px}
+.m-cherche{max-width:240px;margin-left:auto}
+.pans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.pan{container-type:inline-size;background:var(--papier);border:1px solid var(--trait);border-radius:10px;padding:14px 16px;min-width:0;box-shadow:var(--ombre)}
+.pan.t2{grid-column:span 2}.pan.t3{grid-column:1/-1}
+.pan-tete{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.pan-tete h3{font-size:17px}
+.pan-outils{display:flex;gap:4px;flex-wrap:wrap}
+.pan-corps{min-width:0}
+@media (max-width:1100px){.pans{grid-template-columns:repeat(2,minmax(0,1fr))}.pan.t3,.pan.t2{grid-column:1/-1}}
+@media (max-width:700px){.pans{grid-template-columns:minmax(0,1fr)}.pan.t2,.pan.t3{grid-column:auto}.m-cherche{max-width:none;margin-left:0;width:100%}}
+.table-zone.sans-cadre{border:0;background:none;border-radius:0}
+table.tm{font-size:13.5px}
+table.tm td,table.tm th{padding:7px 8px}
+table.tm td:first-child,table.tm th:first-child{padding-left:0;background:var(--papier)}
+table.tm td.nom{white-space:normal;min-width:120px}
+table.tm.perf td.cel{font-size:12.5px;border-left:2px solid var(--papier)}
+table.tm th.choisie{color:var(--encre)}
+@container (max-width:560px){table.tm.perf .p-ext{display:none}table.tm td,table.tm th{padding:6px 5px}table.tm.perf td.cel{font-size:11.5px}table.tm td.nom{min-width:0}}
+.m-barre .seg{max-width:100%;overflow-x:auto}.m-barre .seg button{white-space:nowrap}
+tr.clic{cursor:pointer}tr.clic:hover td{background:color-mix(in srgb,var(--or) 7%,transparent)}
+.etoile{border:0;background:none;cursor:pointer;font-size:19px;line-height:1;color:var(--doux);padding:4px 6px;border-radius:6px}
+.etoile[aria-pressed="true"]{color:var(--or)}
+.etoile:hover{background:var(--or-doux)}
+svg.mini{display:block}
+/* Bandeau de tuiles */
+.bdx{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x proximity}
+@media (min-width:900px){.bdx{flex-wrap:wrap;overflow:visible}}
+.bd{flex:1 0 132px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border:1px solid var(--trait);border-radius:9px;background:var(--fond);padding:9px 10px 6px;cursor:pointer;color:var(--encre);font:inherit}
+.bd:hover{border-color:var(--encre2)}
+.bd .sur{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.bd b{font-size:16px;font-weight:600}
+/* Barres centrées sur zéro */
+.barres{display:flex;flex-direction:column;gap:2px}
+.br{display:grid;grid-template-columns:minmax(90px,44%) 1fr 66px;align-items:center;gap:8px;border:0;background:none;padding:4px 2px;cursor:pointer;color:var(--encre);font:inherit;font-size:13px;text-align:left;border-radius:6px}
+.br:hover{background:var(--or-doux)}
+.br-nom{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.br-zone{position:relative;height:12px;background:linear-gradient(90deg,transparent calc(50% - .5px),var(--trait) calc(50% - .5px),var(--trait) calc(50% + .5px),transparent calc(50% + .5px))}
+.br-zone i{position:absolute;top:1px;bottom:1px;border-radius:3px}
+.br-zone i.pos{left:50%;background:var(--hausse)}.br-zone i.neg{right:50%;background:var(--baisse)}
+.br .mono{text-align:right;font-size:12.5px}
+/* Palmarès */
+.pl{display:flex;justify-content:space-between;gap:10px;width:100%;border:0;background:none;padding:5px 2px;border-bottom:1px solid var(--trait);cursor:pointer;color:var(--encre);font:inherit;font-size:13.5px;text-align:left}
+.pl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl:hover{background:var(--or-doux)}
+/* Graphiques */
+.graphe{position:relative;margin-top:6px}
+.graphe svg{width:100%;height:auto;display:block;touch-action:pan-y}
+.g-grille{stroke:var(--trait);stroke-width:1}
+.g-base{stroke:var(--doux);stroke-dasharray:3 4}
+.g-txt{font:10.5px var(--mono);fill:var(--doux)}
+.g-curseur{stroke:var(--encre2);stroke-width:1;stroke-dasharray:2 3}
+.g-info[hidden]{display:none}
+.g-info{position:absolute;top:4px;background:var(--papier);border:1px solid var(--trait);border-radius:8px;padding:6px 9px;font-size:12px;box-shadow:var(--ombre);pointer-events:none;display:flex;flex-direction:column;gap:2px;max-width:60%}
+.g-info i,.g-leg i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.g-leg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--encre2);margin-top:6px}
+.g-leg i.tiret{background:none;border-top:2px dashed var(--doux);height:0}
+.mini-seg button{padding:5px 9px;font-size:11.5px}
+.courbes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.g-courbe{width:100%;height:auto;display:block}
+.g-auj{stroke:var(--encre);stroke-width:2;fill:var(--encre)}
+polyline.g-auj{fill:none}
+.g-mois{stroke:var(--doux);stroke-width:1.5;stroke-dasharray:4 4;fill:var(--doux)}
+polyline.g-mois{fill:none}
+/* Fiche d'une valeur */
+dialog.fv[open]{width:min(860px,96vw)}
+.fv-perf{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:12px}
+.fv-perf div{border:1px solid var(--trait);border-radius:8px;padding:8px 9px;display:flex;flex-direction:column;gap:5px}
+.fv-perf b{font-size:15px}
+@media (max-width:700px){.fv-perf{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.fv-plage{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.fv-jauge{flex:1;min-width:120px;position:relative;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--baisse),var(--neutre),var(--hausse))}
+.fv-jauge i{position:absolute;top:-5px;width:4px;height:16px;margin-left:-2px;border-radius:2px;background:var(--encre)}
+/* Éditeur de panneau */
+.ed-pan{gap:14px}
+.ed-types{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.ed-type{border:1px solid var(--trait);border-radius:9px;padding:9px 10px;display:flex;flex-direction:column;gap:3px;cursor:pointer}
+.ed-type input{position:absolute;opacity:0;pointer-events:none}
+.ed-type.choisi{border-color:var(--or);background:var(--or-doux)}
+.ed-choix{border:1px solid var(--trait);border-radius:10px;padding:10px 12px}
+.ed-choix legend{font-weight:500;padding:0 6px}
+.ed-liste{max-height:300px;overflow:auto;border-top:1px solid var(--trait);padding-top:6px}
+.ed-liste summary{cursor:pointer;font-weight:500;padding:6px 0}
+.ed-liste .coche{display:flex;padding:3px 0 3px 10px}
+/* Indicateur de chargement */
+.tourne{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:tourne .8s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes tourne{to{transform:rotate(360deg)}}
+/* Bibliothèque : extraits trouvés dans le texte des briefs */
+.extraits{margin:8px 0 2px;display:flex;flex-direction:column;gap:6px}
+.extraits p{font-size:13px;line-height:1.5;color:var(--encre2);border-left:2px solid var(--or);padding-left:9px}
+mark{background:var(--or-doux);color:var(--encre);border-radius:3px;padding:0 2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -428,12 +520,13 @@ const VUES = [
 const REGLAGES_DEFAUT = {
   theme: "clair", mode3d: "auto", scene3d: "reseau", liensApp: true, ordre: VUES.map(v => v.id), masquees: [],
   couleurs: { "projet Claude": "#27457A", outil: "#A87B1E", site: "#28734F", bot: "#B2452F" },
-  marche: { colonnes: ["cours", "jour", "periode", "graph", "devise"], periode: "1m", masques: [], onglet: "cartes", carte: { indice: "", taille: "poids", secteurs: true, echelle: 3 } }
+  marche: { version: 2, colonnes: ["cours", "jour", "periode", "graph", "devise"], per: "1J", masques: [], onglet: "apercu", page: "", auto: true, carte: { indice: "", taille: "poids", secteurs: true, echelle: 3 } }
 };
 let R = Object.assign({}, REGLAGES_DEFAUT, LS.lire("hub.reglages", {}));
 R.couleurs = Object.assign({}, REGLAGES_DEFAUT.couleurs, R.couleurs);
 R.marche = Object.assign({}, REGLAGES_DEFAUT.marche, R.marche);
 R.marche.carte = Object.assign({}, REGLAGES_DEFAUT.marche.carte, R.marche.carte);
+if (LS.lire("hub.reglages", {}).marche?.version !== 2) Object.assign(R.marche, { version: 2, onglet: "apercu", per: "1J", colonnes: [...new Set([...R.marche.colonnes, "haut", "bas"])] }); // nouvelle vue Marché : on ouvre sur la vue d'ensemble
 VUES.forEach(v => { if (R.ordre.includes(v.id)) return; const i = R.ordre.indexOf("reseau"); if (i < 0) R.ordre.push(v.id); else R.ordre.splice(i, 0, v.id); }); // une vue ajoutée par une mise à jour prend place avant le carnet réseau
 const sauverReglages = () => LS.ecrire("hub.reglages", R);
 function appliquerTheme() {
@@ -484,6 +577,7 @@ const JEUX = {
   courses: { prive: true, vide: () => ({ version: 1, cours: [] }), nom: "Base de cours" },
   calendrier: { prive: true, vide: () => ({ version: 1, evenements: [], categories: [] }), nom: "Calendrier" },
   "morning-brief": { prive: true, vide: () => ({ version: 1, briefs: [] }), nom: "Morning brief" },
+  "marche-perso": { prive: true, vide: () => ({ version: 1, favoris: [], pages: [] }), nom: "Marché : favoris et pages" },
   market: { prive: false, vide: () => ({ tickers: [] }), nom: "Marché" },
   heatmap: { prive: false, vide: () => ({ indices: [] }), nom: "Cartes de marché" }
 };
@@ -499,7 +593,7 @@ const GH = {
   ref: () => "?ref=" + encodeURIComponent(GH.cfg.branche || "main"),
   async api(chemin, o = {}) {
     let r;
-    try { r = await fetch(`https://api.github.com/repos/${o.depot || GH.cfg.proprietaire + "/" + GH.cfg.depot}${chemin ? "/" + chemin : ""}`, { method: o.methode || "GET", cache: "no-store", headers: { Authorization: "Bearer " + GH.jeton, Accept: o.brut ? "application/vnd.github.raw+json" : "application/vnd.github+json" }, body: o.corps ? JSON.stringify(o.corps) : undefined }); }
+    try { r = await fetch(`https://api.github.com/repos/${o.depot || GH.cfg.proprietaire + "/" + GH.cfg.depot}${chemin ? "/" + chemin : ""}`, { method: o.methode || "GET", cache: "no-store", headers: { Authorization: "Bearer " + (o.jeton || GH.jeton), Accept: o.brut ? "application/vnd.github.raw+json" : "application/vnd.github+json" }, body: o.corps ? JSON.stringify(o.corps) : undefined }); }
     catch { const e = new Error("Pas de connexion"); e.status = 0; throw e; }
     if (!r.ok) { const e = new Error({ 401: "Jeton refusé ou expiré", 403: "Accès refusé par GitHub (droits du jeton ou quota)", 404: "Introuvable", 409: "Fichier modifié ailleurs", 422: "Fichier modifié ailleurs" }[r.status] || "Erreur GitHub " + r.status); e.status = r.status; throw e; }
     return r;
@@ -521,23 +615,26 @@ async function charger() {
   const c = GH.cfg;
   if (c?.jetonChiffre && !GH.jeton) { $("#verrou").classList.add("vu"); $("#v-pass").focus(); return; } // jeton protégé par un code
   if (c?.jeton) GH.jeton = c.jeton;
+  const rb = LS.lire("hub.robot", null); if (rb?.jeton) GH.jetonRobot = rb.jeton; // jeton qui relance le robot du marché
   S.demo = !GH.pret;
   await Promise.all(Object.keys(JEUX).map(chargerJeu));
   demarrer();
 }
 async function chargerJeu(n) {
   const J = JEUX[n]; let d = null; M[n] = { source: "absent", attente: false, erreur: "" };
-  if (!J.prive) { d = await recuperer(`data/${n}.json`); M[n].source = d ? "dépôt de l'app" : "absent"; if (!d && S.demo && DEMO?.[n]) { d = DEMO[n]; M[n].source = "démo"; } }
+  if (!J.prive) { d = await lireMarcheFrais(n); if (d) M[n].source = "dépôt de l'app (lecture directe)"; else { d = await recuperer(`data/${n}.json`); M[n].source = d ? "site de l'app" : "absent"; } if (!d && S.demo && DEMO?.[n]) { d = DEMO[n]; M[n].source = "démo"; } }
   else if (GH.pret) {
     try { const r = await GH.lire(`data/${n}.json`); if (r) { d = JSON.parse(r.texte); GH.shas[n] = r.sha; M[n].source = "dépôt privé"; LS.ecrire("hub.cache." + n, d); } else M[n].source = "nouveau fichier"; }
     catch (e) { M[n].erreur = e.message; d = LS.lire("hub.cache." + n, null); M[n].source = d ? "copie gardée sur cet appareil" : "absent"; } // hors ligne : dernière copie connue
     const br = LS.lire("hub.brouillon." + n, null); if (br) { d = br.d; M[n].attente = true; setTimeout(() => envoyer(n), 1500); } // modifications pas encore envoyées
   } else { d = DEMO?.[n] || null; M[n].source = d ? "démo" : "absent"; }
   D[n] = Object.assign(J.vide(), d && typeof d === "object" && !Array.isArray(d) ? d : {});
+  if (n === "market") normaliserMarche(D[n]);
+  if (n === "marche-perso" && !GH.pret) Object.assign(D[n], LS.lire("hub.marche-perso", {})); // démonstration : favoris et pages gardés sur cet appareil
 }
 $("#f-verrou").addEventListener("submit", async e => {
   e.preventDefault(); $("#v-err").textContent = "Vérification…";
-  try { GH.jeton = (await dechiffrer(GH.cfg.jetonChiffre, $("#v-pass").value)).jeton; $("#verrou").classList.remove("vu"); $("#v-pass").value = ""; $("#v-err").textContent = ""; charger(); }
+  try { GH.jeton = (await dechiffrer(GH.cfg.jetonChiffre, $("#v-pass").value)).jeton; const rb = LS.lire("hub.robot", null); if (rb?.jetonChiffre) GH.jetonRobot = (await dechiffrer(rb.jetonChiffre, $("#v-pass").value).catch(() => ({}))).jeton; $("#verrou").classList.remove("vu"); $("#v-pass").value = ""; $("#v-err").textContent = ""; charger(); }
   catch { $("#v-err").textContent = "Code incorrect."; }
 });
 /* Enregistrement : chaque modification part dans le dépôt privé (un commit), avec une copie locale tant que l'envoi n'a pas réussi */
@@ -645,7 +742,7 @@ function aller(id) {
   rendreNav(); RENDU[id]?.(); univActif(id === "univers");
 }
 addEventListener("hashchange", () => aller(location.hash.replace("#/", "")));
-function demarrer() { appliquerTheme(); aller(location.hash.replace("#/", "") || vuesVisibles()[0]); }
+function demarrer() { appliquerTheme(); aller(location.hash.replace("#/", "") || vuesVisibles()[0]); setTimeout(actualiserSiBesoin, 2500); addEventListener("visibilitychange", () => { if (!document.hidden) actualiserSiBesoin(); }); }
 
 /* Actions déclenchées par les boutons (attribut data-act) */
 const ACT = {
@@ -1813,7 +1910,7 @@ function repondre(q) {
   const res = scorer(q);
   // Recherche annexe : briefs, cours, contacts
   const dans = (txt) => mots.length && mots.every(m => norm(txt).includes(m));
-  const briefs = tab(D["morning-brief"]?.briefs).filter(b => dans([b.titre, b.resume, tab(b.tags).join(" "), tab(b.tickers).join(" "), tab(b.themes).join(" "), b.texte_indexe].join(" ")));
+  const briefs = [...tab(D["morning-brief"]?.briefs)].sort((a, b) => String(b.date).localeCompare(String(a.date))).filter(b => dans([texteBrief(b), b.titre, b.resume, tab(b.tags).join(" "), tab(b.tickers).join(" "), tab(b.themes).join(" "), b.texte_indexe].join(" ")));
   const cours = tab(D.courses?.cours).filter(c => dans([c.nom, c.resume, tab(c.notes).map(x => x.titre + " " + x.contenu).join(" ")].join(" ")));
   const annexes = `${briefs.length ? `<p style="margin-top:10px">Dans la bibliothèque : ${briefs.slice(0, 3).map(b => `« ${esc(b.titre)} » (${esc(fDate(b.date))})`).join(", ")}.</p><div class="rang"><button class="btn mini" data-act="aller" data-v="bibliotheque">Ouvrir la bibliothèque</button></div>` : ""}${cours.length ? `<p style="margin-top:10px">Dans la base de cours : ${cours.map(c => esc(c.nom)).join(", ")}.</p><div class="rang"><button class="btn mini" data-act="aller" data-v="cours">Ouvrir les cours</button></div>` : ""}`;
   if (!res.length) return annexes ? `Aucune fiche de projet ne correspond, mais j'ai trouvé ceci.${annexes}` : `Je n'ai rien trouvé dans les fiches pour « ${esc(q)} ». Essaie avec le nom d'un projet ou un mot-clé de ses tags. Cette version cherche par mots-clés, sans IA.`;
@@ -1835,50 +1932,423 @@ RENDU.agent = () => {
   $("#f-agent").onsubmit = e => { e.preventDefault(); demander($("#q-agent").value); };
   $("#fil").lastElementChild?.scrollIntoView({ block: "nearest" });
 };
-function demander(q) { q = q.trim(); if (!q) return; fil.push({ h: q }, { a: 1, h: repondre(q) }); RENDU.agent(); $("#q-agent").focus(); }
+async function demander(q) { q = q.trim(); if (!q) return; if (GH.pret && !TXT.donnees) await chargerTextes(); fil.push({ h: q }, { a: 1, h: repondre(q) }); RENDU.agent(); $("#q-agent").focus(); }
 ACT.demander = d => demander(d.q);
 
 /* ============================================================
-   10. Marché (lecture de data/market.json, jamais de temps réel)
+   10. Marché. Les cours viennent de data/market.json et de
+       data/heatmap.json, écrits par le robot (GitHub Actions).
+       Jamais de temps réel : des cours différés, rafraîchis à
+       chaque passage du robot. « Actualiser » (et l'ouverture
+       de l'application quand les cours ont plus d'une heure)
+       relance le robot, si un jeton le permet (Réglages).
+       Quatre onglets : vue d'ensemble (une page de panneaux
+       fixe), mes pages (pages de panneaux composées à la main,
+       enregistrées dans le dépôt privé), cartes, tableau.
    ============================================================ */
-const PERIODES = { "5j": 5, "1m": 21, "3m": 63 };
-const COLONNES = { cours: "Cours", jour: "Var. jour", periode: "Var. période", graph: "Tendance", haut: "Plus haut", bas: "Plus bas", devise: "Devise", groupe: "Catégorie" };
-function courbe(h, hausse) {
-  if (h.length < 2) return '<span class="doux">n.d.</span>';
-  const v = h.map(x => x.c), mn = Math.min(...v), mx = Math.max(...v), W = 120, H = 30, e = mx - mn || 1;
-  const pts = v.map((c, i) => `${(i / (v.length - 1) * (W - 6) + 3).toFixed(1)},${(H - 3 - (c - mn) / e * (H - 6)).toFixed(1)}`);
-  const [dx, dy] = pts[pts.length - 1].split(",");
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Tendance ${hausse ? "en hausse" : "en baisse"} sur la période"><polyline points="${pts.join(" ")}" fill="none" stroke="var(--${hausse ? "hausse" : "baisse"})" stroke-width="1.6" stroke-linejoin="round"/><circle cx="${dx}" cy="${dy}" r="2.4" fill="var(--${hausse ? "hausse" : "baisse"})"/></svg>`;
+const PERIODES_M = { "1J": "1 jour", "1S": "1 semaine", "1M": "1 mois", "3M": "3 mois", "YTD": "Depuis janv.", "1A": "1 an" };
+const PER_GRAPHE = { "1M": "1 mois", "3M": "3 mois", "6M": "6 mois", "YTD": "Depuis janv.", "1A": "1 an" };
+const per = () => PERIODES_M[R.marche.per] ? R.marche.per : "1J";
+/* Accepte l'ancien format (historique de 70 séances) et le nouveau (historique compact d'un an) */
+function normaliserMarche(m) {
+  tab(m?.tickers).forEach(t => {
+    if (t.h?.d0 && Array.isArray(t.h.j)) { const d0 = deIso(t.h.d0); t.serie = t.h.j.map((j, i) => { const d = new Date(d0); d.setDate(d0.getDate() + j); return { d: isoJour(d), c: t.h.c[i] }; }); }
+    else t.serie = tab(t.historique);
+    t.historique = t.serie.slice(-70);
+  });
+  return m;
 }
-RENDU.marche = () => {
-  const m = D.market || {}, T = tab(m.tickers), cfg = R.marche, n = PERIODES[cfg.periode] || 21, v = $("#v-marche");
-  const groupes = [...new Set(T.map(t => t.groupe).filter(Boolean))], motsM = jetons(cfg.q || "");
-  const visibles = T.filter(t => !cfg.masques.includes(t.symbole) && (!cfg.groupe || t.groupe === cfg.groupe) && motsM.every(w => norm(`${t.nom} ${t.symbole} ${t.sous_groupe || ""}`).includes(w))), age = joursDepuis(m.derniere_maj || "");
-  const mnt = new Date(), retard = age < 2 && mnt.getDay() >= 1 && mnt.getDay() <= 5 && mnt.getHours() >= 9 && mnt.getHours() < 22 && (mnt - new Date(m.derniere_maj)) / 36e5 > 3;
-  v.innerHTML = `<header><div class="sur">Marché · cours différés</div><h1>Les cours</h1>
-    <p>${m.derniere_maj ? `Dernière mise à jour : <b>${esc(fHeure(m.derniere_maj))}</b>${age >= 2 ? ` <span class="baisse">(il y a ${age} jours)</span>` : retard ? ' <span class="baisse">(le robot a plus de 3 heures de retard)</span>' : ""}.` : "Aucune mise à jour enregistrée."} Ce n'est pas du temps réel : les cours viennent de yfinance, en différé d'environ 15 minutes et sans garantie, et ne changent qu'aux passages du robot (un par heure en semaine, de 7 h à 22 h environ). Les taux varient en points de base (pb).</p></header>
-    ${m.exemple ? `<div class="bandeau"><span><b>Données d'exemple fictives.</b> Ce ne sont pas des cours réels : ils seront remplacés au premier passage du robot de mise à jour.</span></div>` : ""}
-    <div class="rang" style="margin-bottom:10px"><button class="puce" aria-pressed="${!cfg.groupe}" data-act="mGroupe" data-g="">Tous · ${T.length}</button>${groupes.map(g => `<button class="puce" aria-pressed="${cfg.groupe === g}" data-act="mGroupe" data-g="${esc(g)}">${esc(g)} · ${T.filter(t => t.groupe === g).length}</button>`).join("")}</div>
-    <div class="rang" style="margin-bottom:14px"><input class="saisie" style="max-width:230px" type="search" id="m-q" placeholder="Chercher une valeur" aria-label="Chercher une valeur" value="${esc(cfg.q || "")}">
-      <div class="seg" role="group" aria-label="Période">${Object.keys(PERIODES).map(p => `<button aria-pressed="${p === cfg.periode}" data-act="mPeriode" data-p="${p}">${p}</button>`).join("")}</div>
-      <details class="menu"><summary class="btn">Colonnes</summary><div>${Object.entries(COLONNES).map(([k, l]) => `<label class="coche"><input type="checkbox" data-col="${k}" ${cfg.colonnes.includes(k) ? "checked" : ""}>${l}</label>`).join("")}</div></details>
-      <details class="menu"><summary class="btn">Masquer des valeurs (${cfg.masques.length})</summary><div>${T.map(t => `<label class="coche"><input type="checkbox" data-tic="${esc(t.symbole)}" ${cfg.masques.includes(t.symbole) ? "" : "checked"}>${esc(t.nom || t.symbole)}</label>`).join("") || "Aucun ticker"}</div></details>
-    </div>
-    ${visibles.length ? `<div class="table-zone"><table><thead><tr><th>Valeur</th>${Object.keys(COLONNES).filter(k => cfg.colonnes.includes(k)).map(k => `<th>${COLONNES[k]}${k === "periode" ? " " + cfg.periode : ""}</th>`).join("")}</tr></thead><tbody>${visibles.map(t => {
-      const h = tab(t.historique).slice(-(n + 1)), c0 = h[0]?.c, c1 = h[h.length - 1]?.c, taux = t.devise === "%", vp = h.length > 1 ? (taux ? (c1 - c0) * 100 : (c1 / c0 - 1) * 100) : null, vals = h.map(x => x.c);
-      const vj = taux && t.cloture_precedente != null && t.cours != null ? (t.cours - t.cloture_precedente) * 100 : t.variation_pct, vieux = t.date_cours && m.derniere_maj && joursDepuis(t.date_cours) - age > 4;
-      const cel = { cours: `<span class="mono">${fNb(t.cours)}</span>`, jour: `<span class="mono">${(taux ? fPb : fPct)(vj)}</span>`, periode: `<span class="mono">${(taux ? fPb : fPct)(vp)}</span>`, graph: courbe(h, (vp ?? 0) >= 0), haut: `<span class="mono">${vals.length ? fNb(Math.max(...vals)) : "n.d."}</span>`, bas: `<span class="mono">${vals.length ? fNb(Math.min(...vals)) : "n.d."}</span>`, devise: esc(t.devise || ""), groupe: esc(t.sous_groupe || t.groupe || "") };
-      return `<tr><td><b>${esc(t.nom || t.symbole)}</b><span>${esc(t.symbole)}</span>${t.erreur ? `<span class="baisse"> · ${esc(t.erreur)}</span>` : ""}${vieux ? `<span class="baisse"> · cours du ${esc(fDate(t.date_cours))}</span>` : ""}</td>${Object.keys(COLONNES).filter(k => cfg.colonnes.includes(k)).map(k => `<td>${cel[k]}</td>`).join("")}</tr>`;
-    }).join("")}</tbody></table></div>` : `<div class="vide"><b>${T.length ? "Aucune valeur ne correspond" : "Aucune donnée de marché"}</b>${T.length ? "Change de classe d'actifs, de recherche, ou réaffiche des valeurs masquées." : "Le fichier data/market.json est vide ou absent. Il sera rempli par le script de mise à jour."}</div>`}`;
-  const cartes = cfg.onglet !== "tableau";
-  $("header", v).insertAdjacentHTML("afterend", `<div class="seg" id="m-onglets" style="margin-bottom:16px" role="group" aria-label="Affichage"><button aria-pressed="${cartes}" data-act="mOnglet" data-o="cartes">Cartes de marché</button><button aria-pressed="${!cartes}" data-act="mOnglet" data-o="tableau">Tableau et tendances</button></div><div id="m-carte"></div>`);
-  if (cartes) { $$(":scope > :not(header):not(#m-onglets):not(#m-carte)", v).forEach(e => e.remove()); rendreCarte(); return; }
-  $("#m-q").oninput = e => { cfg.q = e.target.value; const pos = e.target.selectionStart; RENDU.marche(); const i = $("#m-q"); i.focus(); i.setSelectionRange(pos, pos); };
-  $$("[data-col]", v).forEach(i => i.onchange = () => { cfg.colonnes = i.checked ? [...cfg.colonnes, i.dataset.col] : cfg.colonnes.filter(c => c !== i.dataset.col); sauverReglages(); RENDU.marche(); $$("details.menu", v)[0].open = true; });
-  $$("[data-tic]", v).forEach(i => i.onchange = () => { cfg.masques = i.checked ? cfg.masques.filter(c => c !== i.dataset.tic) : [...cfg.masques, i.dataset.tic]; sauverReglages(); RENDU.marche(); $$("details.menu", $("#v-marche"))[1].open = true; });
+const valeursM = () => tab(D.market?.tickers);
+function valeurM(s) {
+  const m = D.market; if (!m) return null;
+  if (!m._par) Object.defineProperty(m, "_par", { value: new Map(tab(m.tickers).map(t => [t.symbole, t])), enumerable: false });
+  return m._par.get(s) || null;
+}
+const estTaux = t => t?.devise === "%";
+function pointAu(S, iso) { for (let i = S.length - 1; i >= 0; i--) if (S[i].d <= iso) return i; return -1; }
+/* Date de référence d'une période (ISO) : la variation se mesure depuis la dernière clôture à cette date */
+function dateRef(S, p) {
+  if (S.length < 2) return null;
+  const d = deIso(S[S.length - 1].d);
+  if (p === "1J") return S[S.length - 2].d;
+  if (p === "YTD") return `${d.getFullYear() - 1}-12-31`;
+  if (p === "1S") d.setDate(d.getDate() - 7); else if (p === "1A") d.setFullYear(d.getFullYear() - 1); else d.setMonth(d.getMonth() - ({ "1M": 1, "3M": 3, "6M": 6 }[p] || 1));
+  return isoJour(d);
+}
+function indexRef(S, p) {
+  const iso = dateRef(S, p); if (!iso) return -1;
+  const i = pointAu(S, iso); if (i >= 0) return i;
+  return (deIso(S[0].d) - deIso(iso)) / 864e5 <= 7 ? 0 : -1; // historique un peu court : on tolère une semaine
+}
+/* Variation sur la période : en % pour un cours, en points de base pour un taux */
+function varP(t, p = per()) {
+  if (!t || t.cours == null) return null;
+  const S = tab(t.serie); let r;
+  if (p === "1J") r = t.cloture_precedente ?? S[S.length - 2]?.c;
+  else { const i = indexRef(S, p); r = i >= 0 ? S[i].c : null; }
+  if (r == null || (!estTaux(t) && !r)) return null;
+  return estTaux(t) ? (t.cours - r) * 100 : (t.cours / r - 1) * 100;
+}
+/* Points de la période (pour les courbes) ; « 1J » montre la dernière semaine */
+function fenetre(t, p) {
+  const S = tab(t?.serie); if (p === "1J") return S.slice(-6);
+  const i = indexRef(S, p); return i >= 0 ? S.slice(i) : S;
+}
+const fCours = t => t?.cours == null ? "n.d." : estTaux(t) ? Number(t.cours).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " %" : fNb(t.cours);
+const fVarT = (t, v) => estTaux(t) ? fPb(v) : fPct(v);
+const txtVar = (t, v) => v == null || isNaN(v) ? "n.d." : `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(estTaux(t) ? 1 : 2).replace(".", ",")} ${estTaux(t) ? "pb" : "%"}`;
+function mini(h, hausse, W = 96, H = 28) {
+  if (h.length < 2) return '<span class="doux petit">n.d.</span>';
+  const v = h.map(x => x.c), mn = Math.min(...v), mx = Math.max(...v), e = mx - mn || 1, c = `var(--${hausse ? "hausse" : "baisse"})`;
+  const pts = v.map((y, i) => `${(i / (v.length - 1) * (W - 5) + 2).toFixed(1)},${(H - 3 - (y - mn) / e * (H - 6)).toFixed(1)}`);
+  const [dx, dy] = pts[pts.length - 1].split(",");
+  return `<svg class="mini" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><polyline points="${pts.join(" ")}" fill="none" stroke="${c}" stroke-width="1.5" stroke-linejoin="round"/><circle cx="${dx}" cy="${dy}" r="2.2" fill="${c}"/></svg>`;
+}
+const courbe = (h, hausse) => mini(h, hausse, 120, 30); // ancienne petite courbe (tableau)
+
+/* ---------- Graphique détaillé, avec curseur au survol ou au doigt ---------- */
+const GRAPHES = new Map(), COULEURS_G = ["var(--encre)", "var(--or)", "#2B5FA8", "#C2452F", "#2E8B57", "#8A4F9E", "#2E7D9A"];
+function graphe(series, { hauteur = 230, base100 = series.length > 1, unite = "" } = {}) {
+  let S = series.filter(s => tab(s.pts).length > 1).map((s, i) => ({ ...s, coul: s.coul || COULEURS_G[i % COULEURS_G.length] }));
+  if (!S.length) return `<div class="vide" style="padding:18px"><b>Pas assez de données</b>L'historique de cette valeur est trop court.</div>`;
+  if (base100) S = S.map(s => ({ ...s, pts: s.pts.map(p => ({ d: p.d, c: p.c / s.pts[0].c * 100 })) }));
+  const dates = [...new Set(S.flatMap(s => s.pts.map(p => p.d)))].sort(), n = dates.length, ix = new Map(dates.map((d, i) => [d, i]));
+  const W = 640, H = hauteur, g = 8, dr = 56, ht = 10, b = 24, vals = S.flatMap(s => s.pts.map(p => p.c));
+  let mn = Math.min(...vals), mx = Math.max(...vals); const marge = (mx - mn || Math.abs(mx) * .02 || 1) * .08; mn -= marge; mx += marge;
+  const X = i => g + (n > 1 ? i / (n - 1) : .5) * (W - g - dr), Y = v => ht + (1 - (v - mn) / (mx - mn)) * (H - ht - b);
+  const pas = (mx - mn) / 4, fmt = v => base100 ? v.toFixed(0) : unite === "%" ? v.toFixed(2).replace(".", ",") : fNb(v);
+  let svg = "";
+  for (let k = 0; k <= 4; k++) { const v = mn + pas * k, y = Y(v); svg += `<line x1="${g}" x2="${W - dr}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" class="g-grille"/><text x="${W - dr + 6}" y="${(y + 4).toFixed(1)}" class="g-txt">${esc(fmt(v))}</text>`; }
+  if (base100 && mn < 100 && mx > 100) svg += `<line x1="${g}" x2="${W - dr}" y1="${Y(100).toFixed(1)}" y2="${Y(100).toFixed(1)}" class="g-base"/>`;
+  const long = (deIso(dates[n - 1]) - deIso(dates[0])) / 864e5 > 200;
+  [0, .33, .66, 1].forEach(f => { const i = Math.round(f * (n - 1)), d = deIso(dates[i]); svg += `<text x="${X(i).toFixed(1)}" y="${H - 6}" class="g-txt" text-anchor="${f === 0 ? "start" : f === 1 ? "end" : "middle"}">${esc(d.toLocaleDateString("fr-FR", long ? { month: "short", year: "2-digit" } : { day: "numeric", month: "short" }))}</text>`; });
+  S.forEach(s => { s.par = new Map(s.pts.map(p => [p.d, p.c])); svg += `<polyline points="${s.pts.map(p => `${X(ix.get(p.d)).toFixed(1)},${Y(p.c).toFixed(1)}`).join(" ")}" fill="none" stroke="${s.coul}" stroke-width="${S.length > 1 ? 1.7 : 2}" stroke-linejoin="round"/>`; const z = s.pts[s.pts.length - 1]; svg += `<circle cx="${X(ix.get(z.d)).toFixed(1)}" cy="${Y(z.c).toFixed(1)}" r="3" fill="${s.coul}"/>`; });
+  if (S.length === 1 && !base100) { const s = S[0], a = s.pts[0].c; svg = `<polygon points="${X(0)},${H - b} ${s.pts.map(p => `${X(ix.get(p.d)).toFixed(1)},${Y(p.c).toFixed(1)}`).join(" ")} ${X(n - 1)},${H - b}" fill="${s.pts[s.pts.length - 1].c >= a ? "var(--hausse)" : "var(--baisse)"}" opacity=".08"/>` + svg; }
+  const id = "g" + Math.random().toString(36).slice(2, 9);
+  GRAPHES.set(id, { dates, S, X, Y, W, n, fmt: v => base100 ? `${(v - 100 >= 0 ? "+" : "−")}${Math.abs(v - 100).toFixed(2).replace(".", ",")} %` : unite === "%" ? v.toFixed(2).replace(".", ",") + " %" : fNb(v) });
+  if (GRAPHES.size > 80) GRAPHES.delete(GRAPHES.keys().next().value);
+  return `<div class="graphe" data-g="${id}"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Graphique">${svg}<line class="g-curseur" y1="${ht}" y2="${H - b}" style="display:none"/></svg><div class="g-info" hidden></div>${S.length > 1 ? `<div class="g-leg">${S.map(s => `<span><i style="background:${s.coul}"></i>${esc(s.nom)}</span>`).join("")}</div>` : ""}</div>`;
+}
+function activerGraphes(racine) {
+  $$(".graphe[data-g]", racine).forEach(el => {
+    const G = GRAPHES.get(el.dataset.g); if (!G || el.dataset.ok) return; el.dataset.ok = "1";
+    const svg = $("svg", el), info = $(".g-info", el), ligne = $(".g-curseur", svg);
+    const bouge = e => {
+      const r = svg.getBoundingClientRect(), xv = (e.clientX - r.left) / r.width * G.W; let i = 0, mieux = Infinity;
+      for (let k = 0; k < G.n; k++) { const dx = Math.abs(G.X(k) - xv); if (dx < mieux) { mieux = dx; i = k; } }
+      const d = G.dates[i], x = G.X(i); ligne.setAttribute("x1", x); ligne.setAttribute("x2", x); ligne.style.display = "";
+      info.hidden = false; info.innerHTML = `<b>${esc(fDate(d))}</b>${G.S.map(s => s.par.has(d) ? `<span><i style="background:${s.coul}"></i>${G.S.length > 1 ? esc(s.nom) + " " : ""}<b class="mono">${esc(G.fmt(s.par.get(d)))}</b></span>` : "").join("")}`;
+      const gauche = x / G.W > .55; info.style.left = gauche ? "" : `calc(${(x / G.W * 100).toFixed(1)}% + 12px)`; info.style.right = gauche ? `calc(${(100 - x / G.W * 100).toFixed(1)}% + 12px)` : "";
+    };
+    svg.addEventListener("pointermove", bouge); svg.addEventListener("pointerdown", bouge);
+    svg.addEventListener("pointerleave", () => { ligne.style.display = "none"; info.hidden = true; });
+  });
+}
+/* Courbe des taux : maturités en abscisse (échelle racine carrée, pour lire le court terme), aujourd'hui et il y a un mois */
+function grapheCourbe(c) {
+  if (!c?.points?.length) return `<div class="vide" style="padding:16px"><b>Courbe indisponible</b>Elle apparaîtra au prochain passage du robot.</div>`;
+  const W = 400, H = 210, g = 10, dr = 44, ht = 12, b = 24, A = c.points.map(p => p.a), V = [...c.points, ...tab(c.points_mois)].map(p => p.v);
+  const amax = Math.max(...A), amin = Math.min(...A), mn = Math.min(...V) - .1, mx = Math.max(...V) + .1;
+  const X = a => g + (Math.sqrt(a) - Math.sqrt(amin)) / (Math.sqrt(amax) - Math.sqrt(amin)) * (W - g - dr), Y = v => ht + (1 - (v - mn) / (mx - mn)) * (H - ht - b);
+  let s = "";
+  for (let k = 0; k <= 4; k++) { const v = mn + (mx - mn) * k / 4; s += `<line x1="${g}" x2="${W - dr}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="g-grille"/><text x="${W - dr + 5}" y="${(Y(v) + 4).toFixed(1)}" class="g-txt">${v.toFixed(2).replace(".", ",")} %</text>`; }
+  c.points.filter(p => ["3M", "1A", "2A", "5A", "10A", "30A"].includes(p.m)).forEach(p => { s += `<text x="${X(p.a).toFixed(1)}" y="${H - 6}" class="g-txt" text-anchor="middle">${esc(p.m.replace("A", " a").replace("M", " m"))}</text>`; });
+  const ligne = (P, cl) => P.length ? `<polyline points="${P.map(p => `${X(p.a).toFixed(1)},${Y(p.v).toFixed(1)}`).join(" ")}" class="${cl}" fill="none"/>` + P.map(p => `<circle cx="${X(p.a).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="${cl === "g-auj" ? 3 : 2.2}" class="${cl}"><title>${esc(p.m)} : ${p.v.toFixed(2).replace(".", ",")} %</title></circle>`).join("") : "";
+  s += ligne(tab(c.points_mois), "g-mois") + ligne(c.points, "g-auj");
+  return `<svg viewBox="0 0 ${W} ${H}" class="g-courbe" role="img" aria-label="${esc(c.nom)}">${s}</svg><div class="g-leg"><span><i style="background:var(--encre)"></i>${esc(fDate(c.date))}</span>${c.date_mois ? `<span><i class="tiret"></i>${esc(fDate(c.date_mois))}</span>` : ""}</div>`;
+}
+function pente(c, a = "2A", b = "10A") { const v = (P, m) => tab(P).find(p => p.m === m)?.v; const x = v(c?.points, b) - v(c?.points, a), y = v(c?.points_mois, b) - v(c?.points_mois, a); return { auj: isNaN(x) ? null : x * 100, mois: isNaN(y) ? null : y * 100 }; }
+
+/* ---------- Favoris et pages, enregistrés dans le dépôt privé (sur cet appareil en démonstration) ---------- */
+const MP = () => D["marche-perso"] ??= { version: 1, favoris: [], pages: [] };
+const favoris = () => tab(MP().favoris);
+const estFavori = s => favoris().includes(s);
+function sauverMP() { if (GH.pret) sauver("marche-perso"); else LS.ecrire("hub.marche-perso", MP()); }
+const etoile = t => `<button class="etoile" data-act="mFavori" data-s="${esc(t.symbole)}" aria-pressed="${estFavori(t.symbole)}" title="${estFavori(t.symbole) ? "Retirer des favoris" : "Ajouter aux favoris"}" aria-label="${estFavori(t.symbole) ? "Retirer des favoris" : "Ajouter aux favoris"} : ${esc(t.nom || t.symbole)}">${estFavori(t.symbole) ? "★" : "☆"}</button>`;
+
+/* ---------- Panneaux ---------- */
+const TYPES_P = {
+  bandeau: { nom: "Bandeau de cours", aide: "Les chiffres clés en tuiles, avec leur courbe", choix: true },
+  liste: { nom: "Liste de valeurs", aide: "Cours, variation et tendance, valeur par valeur", choix: true },
+  perf: { nom: "Tableau des performances", aide: "Variations sur 1 jour, 1 semaine, 1 mois, 3 mois, depuis janvier et 1 an", choix: true },
+  graphique: { nom: "Graphique", aide: "Une valeur, ou plusieurs comparées en base 100 (6 au plus)", choix: true },
+  barres: { nom: "Classement en barres", aide: "De la plus forte hausse à la plus forte baisse", choix: true },
+  palmares: { nom: "Plus fortes hausses et baisses", aide: "Parmi toutes les valeurs suivies (hors taux)" },
+  courbe: { nom: "Courbes des taux", aide: "États-Unis et zone euro, aujourd'hui et il y a un mois" },
+  carte: { nom: "Carte de marché", aide: "Les valeurs d'un indice en cases colorées" }
 };
-ACT.mPeriode = d => { R.marche.periode = d.p; sauverReglages(); RENDU.marche(); };
-ACT.mGroupe = d => { R.marche.groupe = d.g; sauverReglages(); RENDU.marche(); };
+const APERCU = [
+  { type: "bandeau", titre: "", taille: 3, symboles: ["^FCHI", "^STOXX50E", "^GSPC", "^NDX", "^N225", "EURUSD=X", "^TNX", "EUR-AAA-10A", "BZ=F", "GC=F", "BTC-USD", "^VIX"] },
+  { type: "liste", titre: "Mes favoris", taille: 3, favoris: true },
+  { type: "perf", titre: "Actions dans le monde", taille: 2, groupe: "Indices actions" },
+  { type: "palmares", titre: "Plus fortes variations", taille: 1 },
+  { type: "barres", titre: "Secteurs américains", taille: 1, groupe: "Secteurs", sg: "États-Unis" },
+  { type: "barres", titre: "Secteurs européens", taille: 1, groupe: "Secteurs", sg: "Europe" },
+  { type: "barres", titre: "Styles et facteurs (États-Unis)", taille: 1, groupe: "Styles et facteurs" },
+  { type: "courbe", titre: "Courbes des taux", taille: 2 },
+  { type: "perf", titre: "Taux", taille: 1, groupe: "Taux et obligations", sg: ["Taux souverains US", "Taux zone euro"] },
+  { type: "graphique", titre: "Grands indices sur un an, base 100", taille: 2, symboles: ["^GSPC", "^STOXX50E", "^FCHI", "^N225"], periode: "1A" },
+  { type: "perf", titre: "Devises", taille: 1, groupe: "Devises" },
+  { type: "perf", titre: "Matières premières", taille: 2, groupe: "Matières premières" },
+  { type: "perf", titre: "Volatilité et crypto", taille: 1, groupe: "Volatilité et crypto" },
+  { type: "perf", titre: "Obligations et crédit (ETF)", taille: 3, groupe: "Taux et obligations", sg: ["Obligations d'État", "Crédit", "Agrégats"] }
+];
+function valeursPanneau(p) {
+  if (p.favoris) return favoris().map(valeurM).filter(Boolean);
+  if (tab(p.symboles).length) return p.symboles.map(valeurM).filter(Boolean);
+  const sg = p.sg ? [].concat(p.sg) : null;
+  return valeursM().filter(t => (!p.groupe || t.groupe === p.groupe) && (!sg || sg.includes(t.sous_groupe)));
+}
+const ECHELLES = { "1J": [2, 8], "1S": [4, 15], "1M": [6, 25], "3M": [10, 40], "6M": [15, 50], "YTD": [20, 60], "1A": [25, 80] };
+const fond = (t, v, p) => { if (v == null || isNaN(v)) return ""; const e = ECHELLES[p][estTaux(t) ? 1 : 0], f = Math.min(1, Math.abs(v) / e); return `background:color-mix(in srgb,var(--${v >= 0 ? "hausse" : "baisse"}) ${Math.round(6 + f * 34)}%,transparent)`; };
+const GPER = {}; // période choisie dans chaque graphique (le temps de la visite)
+function contenuPanneau(p, cle) {
+  const P = per(), L = TYPES_P[p.type]?.choix || p.type === "palmares" ? valeursPanneau(p) : [];
+  const nom = t => `<b>${esc(t.court && (p.type === "barres" || estTaux(t) || t.groupe === "Volatilité et crypto") ? t.court : t.nom || t.symbole)}</b>`;
+  if (TYPES_P[p.type]?.choix && !L.length) return p.favoris ? `<p class="doux petit">Touche l'étoile ☆ d'une valeur (dans une liste, le tableau ou sa fiche) pour la retrouver ici.</p>` : `<p class="doux petit">Aucune valeur : modifie ce panneau pour en choisir.</p>`;
+  switch (p.type) {
+    case "bandeau": return `<div class="bdx">${L.map(t => { const v = varP(t); return `<button class="bd" data-act="mFiche" data-s="${esc(t.symbole)}"><span class="sur">${esc(t.court || t.nom)}</span><b class="mono">${fCours(t)}</b><span class="mono petit">${fVarT(t, v)}</span>${mini(fenetre(t, P), (v ?? 0) >= 0, 120, 26)}</button>`; }).join("")}</div>`;
+    case "liste": return `<div class="table-zone sans-cadre"><table class="tm"><thead><tr><th style="text-align:left">Valeur</th><th>Cours</th><th>${esc(PERIODES_M[P])}</th><th>Tendance</th><th></th></tr></thead><tbody>${L.map(t => { const v = varP(t); return `<tr class="clic" data-act="mFiche" data-s="${esc(t.symbole)}"><td class="nom">${nom(t)}<span>${esc(t.symbole)}${t.erreur ? ` · <em class="baisse">${esc(t.erreur)}</em>` : ""}</span></td><td class="mono">${fCours(t)}</td><td class="mono">${fVarT(t, v)}</td><td>${mini(fenetre(t, P), (v ?? 0) >= 0)}</td><td>${etoile(t)}</td></tr>`; }).join("")}</tbody></table></div>`;
+    case "perf": { const garde = [P, P === "YTD" ? "1A" : "YTD"], cl = k => garde.includes(k) ? "" : " p-ext"; return `<div class="table-zone sans-cadre"><table class="tm perf"><thead><tr><th style="text-align:left">Valeur</th><th>Cours</th>${Object.keys(PERIODES_M).map(k => `<th class="${k === P ? "choisie" : ""}${cl(k)}">${esc(k === "YTD" ? "Janv." : k)}</th>`).join("")}</tr></thead><tbody>${L.map(t => `<tr class="clic" data-act="mFiche" data-s="${esc(t.symbole)}"><td class="nom">${nom(t)}</td><td class="mono">${fCours(t)}</td>${Object.keys(PERIODES_M).map(k => { const v = varP(t, k); return `<td class="mono cel${cl(k)}" style="${fond(t, v, k)}">${txtVar(t, v)}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>`; }
+    case "graphique": {
+      const gp = GPER[cle] || p.periode || "1A", S = L.slice(0, 6);
+      return `<div class="seg mini-seg" role="group" aria-label="Période du graphique">${Object.entries(PER_GRAPHE).map(([k, l]) => `<button aria-pressed="${k === gp}" data-act="mGPer" data-k="${esc(cle)}" data-p="${k}">${esc(k === "YTD" ? "Janv." : k)}</button>`).join("")}</div>${graphe(S.map(t => ({ nom: t.court || t.nom, pts: fenetre(t, gp) })), { base100: S.length > 1, unite: S.length === 1 && estTaux(S[0]) ? "%" : "" })}`;
+    }
+    case "barres": {
+      const B = L.map(t => ({ t, v: varP(t) })).filter(x => x.v != null).sort((a, b) => b.v - a.v), mx = Math.max(.01, ...B.map(x => Math.abs(x.v)));
+      return `<div class="barres">${B.map(({ t, v }) => `<button class="br" data-act="mFiche" data-s="${esc(t.symbole)}" title="${esc(t.nom)}"><span class="br-nom">${esc(t.court || t.nom)}</span><span class="br-zone"><i class="${v >= 0 ? "pos" : "neg"}" style="width:${(Math.abs(v) / mx * 50).toFixed(1)}%"></i></span><span class="mono ${v >= 0 ? "hausse" : "baisse"}">${txtVar(t, v)}</span></button>`).join("")}</div><p class="doux petit" style="margin-top:6px">Sur ${esc(PERIODES_M[P].toLowerCase())}.</p>`;
+    }
+    case "palmares": {
+      const B = valeursM().filter(t => !estTaux(t) && !t.erreur).map(t => ({ t, v: varP(t) })).filter(x => x.v != null).sort((a, b) => b.v - a.v);
+      const l = X => X.map(({ t, v }) => `<button class="pl" data-act="mFiche" data-s="${esc(t.symbole)}"><span>${esc(t.nom)}</span><b class="mono ${v >= 0 ? "hausse" : "baisse"}">${txtVar(t, v)}</b></button>`).join("");
+      return B.length ? `<div class="sur" style="margin:2px 0 6px">En hausse</div>${l(B.slice(0, 5))}<div class="sur" style="margin:12px 0 6px">En baisse</div>${l(B.slice(-5).reverse())}<p class="doux petit" style="margin-top:6px">Sur ${esc(PERIODES_M[P].toLowerCase())}, parmi ${B.length} valeurs.</p>` : `<p class="doux petit">Pas de données.</p>`;
+    }
+    case "courbe": {
+      const C = D.market?.courbes || {}, zones = p.zone && p.zone !== "les deux" ? [p.zone] : ["us", "eur"], pu = pente(C.us), pe = pente(C.eur), e10 = (C.us && C.eur) ? (tab(C.us.points).find(x => x.m === "10A")?.v - tab(C.eur.points).find(x => x.m === "10A")?.v) * 100 : null;
+      const pb = v => v == null || isNaN(v) ? "n.d." : `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(0)} pb`;
+      return `<div class="courbes">${zones.map(z => C[z] ? `<div><div class="sur" style="margin-bottom:4px">${esc(C[z].nom)}</div>${grapheCourbe(C[z])}</div>` : "").join("") || grapheCourbe(null)}</div>
+        <div class="rang petit" style="margin-top:8px;gap:14px">${C.us ? `<span>Pente US 2-10 ans <b class="mono">${pb(pu.auj)}</b> <span class="doux">(${pb(pu.mois)} il y a un mois)</span></span>` : ""}${C.eur ? `<span>Pente zone euro 2-10 ans <b class="mono">${pb(pe.auj)}</b> <span class="doux">(${pb(pe.mois)})</span></span>` : ""}${e10 != null && !isNaN(e10) ? `<span>Écart 10 ans US − zone euro <b class="mono">${pb(e10)}</b></span>` : ""}</div>
+        <p class="doux petit" style="margin-top:4px">Sources : Trésor américain et BCE (courbe des emprunts d'État notés AAA), publiés une fois par jour ouvré.</p>`;
+    }
+    case "carte": { const ind = cartes().find(i => i.id === p.indice) || cartes()[0]; return ind ? `<div class="hm-zone" data-carte="${esc(ind.id)}"><div class="hm-panneau"></div><p class="petit hm-info" style="margin-top:8px;color:var(--encre2)">${esc(ind.nom)} · variation sur 1 jour. Touche une case pour le détail.</p></div>` : `<p class="doux petit">Aucune carte disponible.</p>`; }
+  }
+  return "";
+}
+function panneau(p, i, page) {
+  const ed = page && MPV.edition, T = TYPES_P[p.type] || { nom: p.type };
+  const outils = ed ? `<span class="pan-outils"><button class="btn mini" data-act="mPanBouge" data-i="${i}" data-s="-1" aria-label="Monter" ${i === 0 ? "disabled" : ""}>↑</button><button class="btn mini" data-act="mPanBouge" data-i="${i}" data-s="1" aria-label="Descendre" ${i === page.panneaux.length - 1 ? "disabled" : ""}>↓</button><button class="btn mini" data-act="mPanTaille" data-i="${i}" title="Changer la largeur">${["", "⅓", "⅔", "Pleine"][p.taille || 1]}</button><button class="btn mini" data-act="mPanEditer" data-i="${i}">Modifier</button><button class="btn mini" data-act="mPanRetirer" data-i="${i}" aria-label="Retirer ce panneau">✕</button></span>` : "";
+  const titre = p.titre ?? T.nom;
+  return `<section class="pan t${p.taille || 1}" data-k="${esc((page ? page.id : "apercu") + ":" + i)}">${titre || outils ? `<div class="pan-tete"><h3>${esc(titre)}</h3>${outils}</div>` : ""}<div class="pan-corps">${contenuPanneau(p, (page ? page.id : "apercu") + ":" + i)}</div></section>`;
+}
+function rendrePanneaux(z, liste, page) {
+  z.innerHTML = `<div class="pans">${liste.map((p, i) => panneau(p, i, page)).join("")}</div>`;
+  activerGraphes(z);
+  $$(".hm-zone", z).forEach(el => { const ind = cartes().find(i => i.id === el.dataset.carte); if (ind) dessinerCarte(ind, $(".hm-panneau", el), { ...R.marche.carte, hauteurMax: 420 }); });
+}
+
+/* ---------- Relance du robot depuis l'application ---------- */
+const ROBOT = { etat: "", message: "" };
+const depotApp = () => { const p = location.pathname.split("/").filter(Boolean)[0]; return location.hostname.endsWith(".github.io") && p ? `${location.hostname.split(".")[0]}/${p}` : "Fayzzy11/Hub_Global"; };
+const jetonRobot = () => GH.jetonRobot || GH.jeton;
+const apiApp = (chemin, o = {}) => GH.api(chemin, { ...o, depot: depotApp(), jeton: jetonRobot() });
+async function lireMarcheFrais(n) { // lecture directe dans le dépôt de l'app : plus frais que le site, sans attendre sa publication
+  if (!jetonRobot()) return null;
+  try { return JSON.parse(await (await GH.api(`contents/data/${n}.json?ref=main`, { depot: depotApp(), jeton: jetonRobot(), brut: true })).text()); } catch { return null; }
+}
+const ageMarche = () => D.market?.derniere_maj ? (Date.now() - new Date(D.market.derniere_maj)) / 6e4 : Infinity; // en minutes
+async function actualiserMarche(auto = false) {
+  if (ROBOT.etat === "en cours") return;
+  if (!jetonRobot()) { if (!auto) aideRobot(); return; }
+  ROBOT.etat = "en cours"; ROBOT.message = "Mise à jour en cours : environ deux minutes."; LS.ecrire("hub.robot.dernier", Date.now()); majEtatRobot();
+  try {
+    const r = await (await apiApp("actions/workflows/update.yml/runs?per_page=1")).json(), run = r.workflow_runs?.[0];
+    if (!(run && run.status !== "completed" && Date.now() - new Date(run.created_at) < 15 * 6e4)) await apiApp("actions/workflows/update.yml/dispatches", { methode: "POST", corps: { ref: "main" } });
+  } catch (e) {
+    ROBOT.etat = ""; ROBOT.message = e.status === 403 || e.status === 404 ? "Le jeton ne permet pas de relancer le robot : il lui faut le droit « Actions » sur le dépôt de l'application (Réglages)." : "Relance impossible : " + e.message;
+    majEtatRobot(); if (!auto) toast("Relance du robot impossible"); return;
+  }
+  const avant = D.market?.derniere_maj;
+  for (let k = 0; k < 28; k++) {
+    await attendre(k < 4 ? 20000 : 12000);
+    const m = await lireMarcheFrais("market");
+    if (m && m.derniere_maj !== avant) { D.market = normaliserMarche(m); D.heatmap = (await lireMarcheFrais("heatmap")) || D.heatmap; ROBOT.etat = ""; ROBOT.message = ""; majEtatRobot(true); toast("Cours mis à jour"); return; }
+  }
+  ROBOT.etat = ""; ROBOT.message = "Le robot n'a pas encore fini : les cours apparaîtront à la prochaine ouverture."; majEtatRobot();
+}
+/* À l'ouverture : si les cours ont plus d'une heure, en semaine de 8 h à 23 h, on relance le robot (au plus une fois par demi-heure) */
+function actualiserSiBesoin() {
+  const n = new Date(), ouvre = n.getDay() >= 1 && n.getDay() <= 5 && n.getHours() >= 8 && n.getHours() < 23;
+  if (R.marche.auto === false || !GH.jetonRobot || S.demo || !ouvre || ageMarche() < 60 || Date.now() - LS.lire("hub.robot.dernier", 0) < 30 * 6e4) return;
+  actualiserMarche(true);
+}
+function majEtatRobot(donnees) { if (S.vue === "marche") { if (donnees) RENDU.marche(); else { const e = $("#m-etat"); if (e) e.innerHTML = etatMarcheHtml(); } } rendreNav(); }
+function etatMarcheHtml() {
+  const m = D.market || {}, age = ageMarche(), n = new Date(), ouvre = n.getDay() >= 1 && n.getDay() <= 5 && n.getHours() >= 9 && n.getHours() < 22;
+  return `<span>${m.derniere_maj ? `Dernière mise à jour : <b>${esc(fHeure(m.derniere_maj))}</b>${age > 2880 ? ` <span class="baisse">(il y a ${Math.floor(age / 1440)} jours)</span>` : age > 180 && ouvre ? ' <span class="baisse">(plus de 3 heures)</span>' : ""}.` : "Aucune mise à jour enregistrée."}</span>
+    <button class="btn mini ${ROBOT.etat ? "" : "plein"}" data-act="mActualiser" ${ROBOT.etat ? "disabled" : ""}>${ROBOT.etat ? '<span class="tourne" aria-hidden="true"></span>Mise à jour…' : "Actualiser"}</button>${ROBOT.message ? ` <span class="${ROBOT.etat ? "doux" : "baisse"} petit">${esc(ROBOT.message)}</span>` : ""}`;
+}
+function aideRobot() {
+  const dlg = $("#dlg");
+  dlg.innerHTML = `<h2>Actualiser les cours depuis l'application</h2>
+    <p class="petit" style="color:var(--encre2);margin:10px 0">GitHub lance mal les passages programmés du robot (souvent en retard, parfois jamais). L'application peut le relancer elle-même, à l'ouverture et avec le bouton « Actualiser », si tu lui donnes un jeton qui a ce droit. Une seule fois par appareil, comme le jeton du dépôt privé.</p>
+    <ol class="liste petit" style="padding-left:20px"><li>Ouvre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li><li>Nom : « Hub robot ». Expiration : la plus longue proposée.</li><li>Repository access : « Only select repositories », puis choisis <b>${esc(depotApp().split("/")[1])}</b>.</li><li>Permissions, Repository permissions : <b>Actions</b> sur « Read and write ». Rien d'autre.</li><li>« Generate token », copie-le, puis colle-le dans Réglages, carte « Robot du marché ».</li></ol>
+    <p class="doux petit" style="margin-top:10px">Ce jeton ne peut que relancer le robot : il ne lit ni ne modifie tes données ni le code de l'application.</p>
+    <div class="rang" style="justify-content:flex-end;margin-top:14px"><button class="btn" id="ar-fermer">Fermer</button><button class="btn plein" id="ar-aller">Ouvrir les réglages</button></div>`;
+  $("#ar-fermer").onclick = () => dlg.close(); $("#ar-aller").onclick = () => { dlg.close(); location.hash = "#/reglages"; setTimeout(() => $("#r-robot")?.scrollIntoView({ behavior: "smooth" }), 300); };
+  dlg.showModal();
+}
+
+/* ---------- La vue ---------- */
+const MPV = { edition: false };
+RENDU.marche = () => {
+  const m = D.market || {}, v = $("#v-marche"), cfg = R.marche, ong = ["apercu", "pages", "cartes", "tableau"].includes(cfg.onglet) ? cfg.onglet : "apercu", T = valeursM();
+  GRAPHES.clear();
+  v.innerHTML = `<header><div class="sur">Marché · cours différés</div><h1>Les marchés</h1><p id="m-etat" class="rang" style="gap:8px">${etatMarcheHtml()}</p></header>
+    ${m.exemple ? `<div class="bandeau"><span><b>Données d'exemple fictives.</b> Ce ne sont pas des cours réels : ils seront remplacés au premier passage du robot.</span></div>` : ""}
+    <div class="rang m-barre"><div class="seg" role="group" aria-label="Affichage">${[["apercu", "Vue d'ensemble"], ["pages", "Mes pages"], ["cartes", "Cartes"], ["tableau", "Tableau"]].map(([k, l]) => `<button aria-pressed="${ong === k}" data-act="mOnglet" data-o="${k}">${l}</button>`).join("")}</div>
+      ${ong !== "cartes" ? `<div class="seg" role="group" aria-label="Période des variations">${Object.entries(PERIODES_M).map(([k, l]) => `<button aria-pressed="${k === per()}" data-act="mPer" data-p="${k}" title="${esc(l)}">${esc(k === "YTD" ? "Janv." : k)}</button>`).join("")}</div>` : ""}
+      ${ong === "apercu" ? '<button class="btn mini" data-act="mPageNouvelle" data-de="apercu" title="Créer une page modifiable à partir de cette vue">Personnaliser</button>' : ""}<input class="saisie m-cherche" type="search" id="m-cherche" list="m-valeurs" placeholder="Chercher une valeur" aria-label="Chercher une valeur et ouvrir sa fiche"><datalist id="m-valeurs">${T.map(t => `<option value="${esc(t.nom)} · ${esc(t.symbole)}"></option>`).join("")}</datalist></div>
+    <div id="m-zone"></div>
+    <p class="doux petit" style="margin-top:18px">Cours différés d'environ 15 minutes (Yahoo Finance), taux officiels du Trésor américain et de la BCE. Données non garanties, à vérifier avant toute décision.</p>`;
+  const cherche = $("#m-cherche"); cherche.onchange = () => { const s = cherche.value.split(" · ").pop().trim(), t = valeurM(s) || T.find(x => norm(x.nom) === norm(cherche.value) || norm(x.symbole) === norm(cherche.value)); if (t) { cherche.value = ""; ficheValeur(t.symbole); } };
+  const z = $("#m-zone");
+  if (!T.length) { z.innerHTML = `<div class="vide"><b>Aucune donnée de marché</b>Le fichier data/market.json est vide ou absent. Il sera rempli au prochain passage du robot.</div>`; return; }
+  if (ong === "apercu") return rendrePanneaux(z, APERCU, null);
+  if (ong === "pages") return rendrePages(z);
+  if (ong === "cartes") { z.innerHTML = `<div id="m-carte"></div>`; rendreCarte(); return; }
+  rendreTableau(z);
+};
+function rendrePages(z) {
+  const P = tab(MP().pages), pg = P.find(p => p.id === R.marche.page) || P[0];
+  if (!pg) { z.innerHTML = `<div class="vide"><b>Compose tes propres pages</b>Comme un écran de terminal : tu choisis les panneaux (listes, graphiques, cartes, classements, courbes des taux) et les valeurs. Tes pages sont enregistrées dans ton dépôt privé et te suivent sur tous tes appareils.<br><br><span class="rang" style="justify-content:center"><button class="btn plein" data-act="mPageNouvelle" data-de="apercu">Partir de la vue d'ensemble</button><button class="btn" data-act="mPageNouvelle">Page vide</button></span></div>`; return; }
+  z.innerHTML = `<div class="rang" style="justify-content:space-between;margin-bottom:12px"><div class="rang">${P.map(p => `<button class="puce" aria-pressed="${p.id === pg.id}" data-act="mPage" data-id="${esc(p.id)}">${esc(p.nom)}</button>`).join("")}<button class="btn mini" data-act="mPageNouvelle">+ Nouvelle page</button></div>
+    <div class="rang"><button class="btn mini ${MPV.edition ? "plein" : ""}" data-act="mEdition">${MPV.edition ? "Terminer" : "Modifier la page"}</button>${MPV.edition ? `<button class="btn mini" data-act="mPanEditer">+ Ajouter un panneau</button><button class="btn mini" data-act="mPageRenommer">Renommer</button><button class="btn mini" data-act="mPageSupprimer">Supprimer la page</button>` : ""}</div></div><div id="m-page"></div>`;
+  const zp = $("#m-page");
+  if (!pg.panneaux.length) { zp.innerHTML = `<div class="vide"><b>Page vide</b>Ajoute un premier panneau.<br><br><button class="btn plein" data-act="mPanEditer">Ajouter un panneau</button></div>`; return; }
+  rendrePanneaux(zp, pg.panneaux, pg);
+}
+/* Panneau d'après sa clé « page:rang », pour le redessiner seul */
+const panneauDeCle = k => { const [pid, i] = k.split(":"); return (pid === "apercu" ? APERCU : tab(MP().pages).find(x => x.id === pid)?.panneaux || [])[+i]; };
+function majFavoris() { $$(".pan[data-k]").forEach(el => { const p = panneauDeCle(el.dataset.k); if (p?.favoris) { const c = $(".pan-corps", el); c.innerHTML = contenuPanneau(p, el.dataset.k); activerGraphes(c); } }); }
+const pageCourante = () => tab(MP().pages).find(p => p.id === R.marche.page) || tab(MP().pages)[0];
+/* Éditeur de panneau : type, titre, valeurs (cases à cocher par catégorie, ou une catégorie entière) */
+function editerPanneau(i) {
+  const pg = pageCourante(); if (!pg) return;
+  const neuf = i == null, p = neuf ? { type: "liste", titre: "", taille: 1, symboles: [] } : JSON.parse(JSON.stringify(pg.panneaux[i])), dlg = $("#dlg");
+  const groupes = [...new Set(valeursM().map(t => t.groupe))], choisis = new Set(tab(p.symboles));
+  let mode = p.favoris ? "favoris" : p.groupe ? "categorie" : "choix";
+  const peindre = () => {
+    const T = TYPES_P[p.type], sgs = g => [...new Set(valeursM().filter(t => t.groupe === g).map(t => t.sous_groupe))];
+    dlg.innerHTML = `<form method="dialog" class="ed-pan"><h2>${neuf ? "Nouveau panneau" : "Modifier le panneau"}</h2>
+      <div class="ed-types">${Object.entries(TYPES_P).map(([k, x]) => `<label class="ed-type${p.type === k ? " choisi" : ""}"><input type="radio" name="type" value="${k}" ${p.type === k ? "checked" : ""}><b>${esc(x.nom)}</b><span class="doux petit">${esc(x.aide)}</span></label>`).join("")}</div>
+      <label class="champ">Titre<input id="ep-titre" value="${esc(p.titre || "")}" placeholder="${esc(T.nom)}"></label>
+      <label class="champ">Largeur<select id="ep-taille">${[[1, "Un tiers"], [2, "Deux tiers"], [3, "Toute la largeur"]].map(([k, l]) => `<option value="${k}" ${(p.taille || 1) == k ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+      ${p.type === "graphique" ? `<label class="champ">Période par défaut<select id="ep-per">${Object.entries(PER_GRAPHE).map(([k, l]) => `<option value="${k}" ${(p.periode || "1A") === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></label>` : ""}
+      ${p.type === "carte" ? `<label class="champ">Carte<select id="ep-carte">${cartes().map(c => `<option value="${esc(c.id)}" ${p.indice === c.id ? "selected" : ""}>${esc(c.nom)}</option>`).join("")}</select></label>` : ""}
+      ${p.type === "courbe" ? `<label class="champ">Courbes<select id="ep-zone">${[["les deux", "États-Unis et zone euro"], ["us", "États-Unis"], ["eur", "Zone euro"]].map(([k, l]) => `<option value="${esc(k)}" ${(p.zone || "les deux") === k ? "selected" : ""}>${l}</option>`).join("")}</select></label>` : ""}
+      ${T.choix ? `<fieldset class="ed-choix"><legend>Valeurs</legend><div class="seg" role="group">${[["choix", "Je choisis"], ["categorie", "Toute une catégorie"], ["favoris", "Mes favoris"]].map(([k, l]) => `<button type="button" aria-pressed="${mode === k}" data-mode="${k}">${l}</button>`).join("")}</div>
+        ${mode === "categorie" ? `<label class="champ" style="margin-top:10px">Catégorie<select id="ep-cat">${groupes.flatMap(g => [`<option value="${esc(g)}|" ${p.groupe === g && !p.sg ? "selected" : ""}>${esc(g)} (tout)</option>`, ...sgs(g).map(s => `<option value="${esc(g)}|${esc(s)}" ${p.groupe === g && [].concat(p.sg || []).includes(s) && [].concat(p.sg).length === 1 ? "selected" : ""}>  ${esc(g)} · ${esc(s)}</option>`)]).join("")}</select></label>` : mode === "choix" ? `<input class="saisie" id="ep-q" type="search" placeholder="Filtrer (nom ou symbole)" style="margin:10px 0 6px"><p class="doux petit" id="ep-nb">${choisis.size} choisie${choisis.size > 1 ? "s" : ""}${p.type === "graphique" ? " (6 au plus sur un graphique)" : ""}</p><div class="ed-liste">${groupes.map(g => `<details ${valeursM().some(t => t.groupe === g && choisis.has(t.symbole)) ? "open" : ""}><summary>${esc(g)}</summary>${valeursM().filter(t => t.groupe === g).map(t => `<label class="coche" data-q="${esc(norm(t.nom + " " + t.symbole + " " + t.sous_groupe))}"><input type="checkbox" value="${esc(t.symbole)}" ${choisis.has(t.symbole) ? "checked" : ""}>${esc(t.nom)} <span class="doux mono petit">${esc(t.symbole)}</span></label>`).join("")}</details>`).join("")}</div>` : `<p class="doux petit" style="margin-top:10px">Le panneau suivra tes favoris (étoile ☆ sur chaque valeur).</p>`}</fieldset>` : ""}
+      <div class="rang" style="justify-content:flex-end;margin-top:8px"><button class="btn" type="button" id="ep-annuler">Annuler</button><button class="btn plein" type="submit">${neuf ? "Ajouter" : "Enregistrer"}</button></div></form>`;
+    $$("input[name=type]", dlg).forEach(r => r.onchange = () => { garder(); p.type = r.value; peindre(); });
+    $$("[data-mode]", dlg).forEach(b => b.onclick = () => { garder(); mode = b.dataset.mode; peindre(); });
+    $$(".ed-liste input", dlg).forEach(c => c.onchange = () => { if (c.checked) choisis.add(c.value); else choisis.delete(c.value); $("#ep-nb").textContent = `${choisis.size} choisie${choisis.size > 1 ? "s" : ""}`; });
+    const q = $("#ep-q", dlg); if (q) q.oninput = () => { const w = jetons(q.value); $$(".ed-liste label", dlg).forEach(l => { l.hidden = !w.every(m => l.dataset.q.includes(m)); }); $$(".ed-liste details", dlg).forEach(d => { if (w.length) d.open = true; }); };
+    $("#ep-annuler").onclick = () => dlg.close();
+    $("form", dlg).onsubmit = () => {
+      garder();
+      const r = { type: p.type, titre: p.titre, taille: p.taille };
+      if (p.type === "graphique") r.periode = p.periode || "1A";
+      if (p.type === "carte") r.indice = p.indice || cartes()[0]?.id;
+      if (p.type === "courbe") r.zone = p.zone || "les deux";
+      if (TYPES_P[p.type].choix) { if (mode === "favoris") r.favoris = true; else if (mode === "categorie") { r.groupe = p.groupe; if (p.sg) r.sg = p.sg; } else r.symboles = valeursM().map(t => t.symbole).filter(s => choisis.has(s)); }
+      if (neuf) pg.panneaux.push(r); else pg.panneaux[i] = r;
+      sauverMP(); MPV.edition = true; RENDU.marche();
+    };
+    dlg.showModal();
+  };
+  const garder = () => {
+    const ti = $("#ep-titre", dlg); if (ti) p.titre = ti.value.trim();
+    const ta = $("#ep-taille", dlg); if (ta) p.taille = +ta.value;
+    const pe = $("#ep-per", dlg); if (pe) p.periode = pe.value;
+    const ca = $("#ep-carte", dlg); if (ca) p.indice = ca.value;
+    const zo = $("#ep-zone", dlg); if (zo) p.zone = zo.value;
+    const ct = $("#ep-cat", dlg); if (ct) { const [g, s] = ct.value.split("|"); p.groupe = g; p.sg = s || undefined; }
+  };
+  peindre();
+}
+/* Fiche d'une valeur : graphique, performances, plus haut et plus bas sur un an, favori, ajout à une page */
+const FV = { s: "", p: "1A" };
+function ficheValeur(s) {
+  const t = valeurM(s); if (!t) return;
+  if (FV.s !== s) FV.p = "1A"; FV.s = s;
+  const dlg = $("#dlg"), S = tab(t.serie), an = S.filter(x => x.d >= dateRef(S, "1A")), hautA = an.length ? Math.max(...an.map(x => x.c)) : null, basA = an.length ? Math.min(...an.map(x => x.c)) : null;
+  const pos = hautA != null && hautA > basA ? (t.cours - basA) / (hautA - basA) * 100 : null, v1 = varP(t, "1J"), P = tab(MP().pages);
+  const fx = v => estTaux(t) ? Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " %" : fNb(v);
+  dlg.classList.add("fv");
+  dlg.innerHTML = `<div class="rang" style="justify-content:space-between;align-items:flex-start"><div><div class="sur">${esc(t.groupe || "")}${t.sous_groupe ? " · " + esc(t.sous_groupe) : ""}</div><h2 style="margin-top:4px">${esc(t.nom)}</h2><p class="doux petit mono">${esc(t.symbole)}${t.devise && !estTaux(t) ? " · " + esc(t.devise) : ""}${t.source ? " · source : " + esc(t.source) : ""}</p></div><span class="rang">${etoile(t)}<button class="btn mini" id="fv-fermer">Fermer</button></span></div>
+    <div class="rang" style="gap:14px;margin:10px 0 2px;align-items:baseline"><b class="mono" style="font-size:30px">${fCours(t)}</b><span class="mono" style="font-size:16px">${fVarT(t, v1)}</span><span class="doux petit">${t.date_cours ? "Cours du " + esc(fDate(t.date_cours)) + (t.heure_cours ? " à " + esc(t.heure_cours.slice(11, 16)) + " (heure locale de la place)" : "") : ""}${t.erreur ? ` · <span class="baisse">${esc(t.erreur)}</span>` : ""}</span></div>
+    <div class="seg mini-seg" role="group" aria-label="Période du graphique">${Object.entries(PER_GRAPHE).map(([k, l]) => `<button aria-pressed="${k === FV.p}" data-act="mFvPer" data-p="${k}">${esc(l)}</button>`).join("")}</div>
+    ${graphe([{ nom: t.nom, pts: fenetre(t, FV.p) }], { base100: false, unite: estTaux(t) ? "%" : "", hauteur: 250 })}
+    <div class="fv-perf">${Object.entries(PERIODES_M).map(([k, l]) => { const x = varP(t, k); return `<div style="${fond(t, x, k)}"><span class="sur">${esc(l)}</span><b class="mono ${x == null ? "" : x >= 0 ? "hausse" : "baisse"}">${txtVar(t, x)}</b></div>`; }).join("")}</div>
+    ${pos != null ? `<div class="fv-plage"><span class="petit">Plus bas 1 an <b class="mono">${fx(basA)}</b></span><span class="fv-jauge"><i style="left:${pos.toFixed(1)}%"></i></span><span class="petit">Plus haut 1 an <b class="mono">${fx(hautA)}</b></span></div>` : ""}
+    <div class="rang" style="justify-content:space-between;margin-top:16px"><span class="rang"><label class="rang petit">Ajouter à <select class="saisie" style="width:auto" id="fv-page">${P.map(p => `<option value="${esc(p.id)}">${esc(p.nom)}</option>`).join("")}<option value="">une nouvelle page</option></select></label><button class="btn mini" id="fv-ajout">Ajouter</button></span>${t.groupe ? `<button class="btn mini" id="fv-tableau">Voir sa catégorie dans le tableau</button>` : ""}</div>`;
+  $("#fv-fermer").onclick = () => dlg.close();
+  dlg.onclose = () => { dlg.classList.remove("fv"); dlg.onclose = null; };
+  $("#fv-ajout").onclick = () => {
+    let pg = P.find(p => p.id === $("#fv-page").value);
+    if (!pg) { pg = { id: uid("pg-"), nom: `Ma page ${P.length + 1}`, panneaux: [] }; (MP().pages ??= []).push(pg); }
+    let l = pg.panneaux.find(p => p.type === "liste" && tab(p.symboles).length);
+    if (!l) { l = { type: "liste", titre: "Ma liste", taille: 2, symboles: [] }; pg.panneaux.unshift(l); }
+    if (!l.symboles.includes(t.symbole)) l.symboles.push(t.symbole);
+    sauverMP(); toast(`Ajouté à « ${pg.nom} »`); if (S.vue === "marche" && R.marche.onglet === "pages") RENDU.marche();
+  };
+  const bt = $("#fv-tableau"); if (bt) bt.onclick = () => { dlg.close(); R.marche.onglet = "tableau"; R.marche.groupe = t.groupe; sauverReglages(); if (S.vue === "marche") RENDU.marche(); else location.hash = "#/marche"; };
+  if (!dlg.open) dlg.showModal();
+  activerGraphes(dlg);
+}
+/* Tableau complet : toutes les valeurs, par catégorie, colonnes au choix */
+const COLONNES = { cours: "Cours", jour: "Var. 1 jour", periode: "Var. période", graph: "Tendance", haut: "Plus haut 1 an", bas: "Plus bas 1 an", devise: "Devise", groupe: "Catégorie" };
+function rendreTableau(z) {
+  const T = valeursM(), cfg = R.marche, P = per(), groupes = [...new Set(T.map(t => t.groupe).filter(Boolean))], motsM = jetons(cfg.q || "");
+  if (cfg.groupe && !groupes.includes(cfg.groupe)) cfg.groupe = "";
+  const visibles = T.filter(t => !cfg.masques.includes(t.symbole) && (!cfg.groupe || t.groupe === cfg.groupe) && motsM.every(w => norm(`${t.nom} ${t.symbole} ${t.sous_groupe || ""}`).includes(w)));
+  const cols = Object.keys(COLONNES).filter(k => cfg.colonnes.includes(k));
+  z.innerHTML = `<div class="rang" style="margin-bottom:10px"><button class="puce" aria-pressed="${!cfg.groupe}" data-act="mGroupe" data-g="">Tous · ${T.length}</button>${groupes.map(g => `<button class="puce" aria-pressed="${cfg.groupe === g}" data-act="mGroupe" data-g="${esc(g)}">${esc(g)} · ${T.filter(t => t.groupe === g).length}</button>`).join("")}</div>
+    <div class="rang" style="margin-bottom:14px"><input class="saisie" style="max-width:230px" type="search" id="m-q" placeholder="Filtrer le tableau" aria-label="Filtrer le tableau" value="${esc(cfg.q || "")}">
+      <details class="menu"><summary class="btn">Colonnes</summary><div>${Object.entries(COLONNES).map(([k, l]) => `<label class="coche"><input type="checkbox" data-col="${k}" ${cfg.colonnes.includes(k) ? "checked" : ""}>${l}</label>`).join("")}</div></details>
+      <details class="menu"><summary class="btn">Masquer des valeurs (${cfg.masques.length})</summary><div>${T.map(t => `<label class="coche"><input type="checkbox" data-tic="${esc(t.symbole)}" ${cfg.masques.includes(t.symbole) ? "" : "checked"}>${esc(t.nom || t.symbole)}</label>`).join("")}</div></details></div>
+    ${visibles.length ? `<div class="table-zone"><table><thead><tr><th style="text-align:left">Valeur</th>${cols.map(k => `<th>${COLONNES[k]}${k === "periode" || k === "graph" ? " · " + esc(PERIODES_M[P]) : ""}</th>`).join("")}<th></th></tr></thead><tbody>${visibles.map(t => {
+      const h = fenetre(t, P), vp = varP(t, P), an = tab(t.serie).filter(x => x.d >= (dateRef(tab(t.serie), "1A") || "")).map(x => x.c);
+      const cel = { cours: `<span class="mono">${fCours(t)}</span>`, jour: `<span class="mono">${fVarT(t, varP(t, "1J"))}</span>`, periode: `<span class="mono">${fVarT(t, vp)}</span>`, graph: mini(h, (vp ?? 0) >= 0, 120, 30), haut: `<span class="mono">${an.length ? fNb(Math.max(...an)) : "n.d."}</span>`, bas: `<span class="mono">${an.length ? fNb(Math.min(...an)) : "n.d."}</span>`, devise: esc(t.devise || ""), groupe: esc(t.sous_groupe || t.groupe || "") };
+      return `<tr class="clic" data-act="mFiche" data-s="${esc(t.symbole)}"><td style="text-align:left"><b>${esc(t.nom || t.symbole)}</b><span>${esc(t.symbole)}</span>${t.erreur ? `<span class="baisse"> · ${esc(t.erreur)}</span>` : ""}</td>${cols.map(k => `<td>${cel[k]}</td>`).join("")}<td>${etoile(t)}</td></tr>`;
+    }).join("")}</tbody></table></div><p class="doux petit" style="margin-top:8px">Touche une ligne pour ouvrir la fiche de la valeur, l'étoile pour la suivre dans tes favoris.</p>` : `<div class="vide"><b>Aucune valeur ne correspond</b>Change de catégorie, de filtre, ou réaffiche des valeurs masquées.</div>`}`;
+  $("#m-q").oninput = e => { cfg.q = e.target.value; const pos = e.target.selectionStart; rendreTableau(z); const i = $("#m-q"); i.focus(); i.setSelectionRange(pos, pos); };
+  $$("[data-col]", z).forEach(i => i.onchange = () => { cfg.colonnes = i.checked ? [...cfg.colonnes, i.dataset.col] : cfg.colonnes.filter(c => c !== i.dataset.col); sauverReglages(); rendreTableau(z); $$("details.menu", z)[0].open = true; });
+  $$("[data-tic]", z).forEach(i => i.onchange = () => { cfg.masques = i.checked ? cfg.masques.filter(c => c !== i.dataset.tic) : [...cfg.masques, i.dataset.tic]; sauverReglages(); rendreTableau(z); $$("details.menu", z)[1].open = true; });
+}
+Object.assign(ACT, {
+  mOnglet: d => { R.marche.onglet = d.o; sauverReglages(); RENDU.marche(); },
+  mPer: d => { R.marche.per = d.p; sauverReglages(); RENDU.marche(); },
+  mGroupe: d => { R.marche.groupe = d.g; sauverReglages(); RENDU.marche(); },
+  mFiche: d => ficheValeur(d.s),
+  mFvPer: d => { FV.p = d.p; ficheValeur(FV.s); },
+  mGPer: (d, b) => { GPER[d.k] = d.p; const pan = b.closest(".pan-corps"), p = panneauDeCle(d.k); if (!pan || !p) return; pan.innerHTML = contenuPanneau(p, d.k); activerGraphes(pan); },
+  mFavori: d => { const f = MP().favoris ??= [], i = f.indexOf(d.s); if (i >= 0) f.splice(i, 1); else f.push(d.s); sauverMP(); $$(`.etoile[data-s="${CSS.escape(d.s)}"]`).forEach(b => { const on = estFavori(d.s); b.setAttribute("aria-pressed", on); b.textContent = on ? "★" : "☆"; b.title = on ? "Retirer des favoris" : "Ajouter aux favoris"; }); toast(estFavori(d.s) ? "Ajouté aux favoris" : "Retiré des favoris"); majFavoris(); },
+  mActualiser: () => actualiserMarche(false),
+  mPage: d => { R.marche.page = d.id; sauverReglages(); RENDU.marche(); },
+  mEdition: () => { MPV.edition = !MPV.edition; RENDU.marche(); },
+  mPageNouvelle: d => {
+    const nom = prompt("Nom de la page :", d.de === "apercu" ? "Ma vue d'ensemble" : `Ma page ${tab(MP().pages).length + 1}`); if (!nom?.trim()) return;
+    const pg = { id: uid("pg-"), nom: nom.trim(), panneaux: d.de === "apercu" ? JSON.parse(JSON.stringify(APERCU)) : [] };
+    (MP().pages ??= []).push(pg); R.marche.page = pg.id; R.marche.onglet = "pages"; MPV.edition = true; sauverReglages(); sauverMP(); RENDU.marche();
+  },
+  mPageRenommer: () => { const pg = pageCourante(), nom = prompt("Nouveau nom :", pg.nom); if (nom?.trim()) { pg.nom = nom.trim(); sauverMP(); RENDU.marche(); } },
+  mPageSupprimer: () => { const pg = pageCourante(); if (!confirm(`Supprimer la page « ${pg.nom} » ? Les valeurs et tes favoris ne sont pas touchés.`)) return; MP().pages = MP().pages.filter(p => p !== pg); R.marche.page = ""; MPV.edition = false; sauverMP(); sauverReglages(); RENDU.marche(); },
+  mPanEditer: d => editerPanneau(d.i == null ? null : +d.i),
+  mPanRetirer: d => { const pg = pageCourante(); pg.panneaux.splice(+d.i, 1); sauverMP(); RENDU.marche(); },
+  mPanBouge: d => { const pg = pageCourante(), i = +d.i, j = i + +d.s; [pg.panneaux[i], pg.panneaux[j]] = [pg.panneaux[j], pg.panneaux[i]]; sauverMP(); RENDU.marche(); },
+  mPanTaille: d => { const p = pageCourante().panneaux[+d.i]; p.taille = (p.taille || 1) % 3 + 1; sauverMP(); RENDU.marche(); }
+});
 
 /* Cartes de marché : chaque case est une valeur, sa surface suit son poids dans l'indice,
    sa couleur suit sa variation du jour. Lecture de data/heatmap.json. */
@@ -1898,7 +2368,7 @@ function carreler(items, x, y, w, h) { // algorithme « squarified treemap »
 }
 const fVar = v => v == null || isNaN(v) ? "n.d." : `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(2).replace(".", ",")} %`;
 function cartes() { // cartes par constituants (heatmap.json), puis une carte par classe d'actifs (market.json)
-  const T = tab(D.market?.tickers), val = (t, secteur) => ({ symbole: t.symbole, etiquette: t.nom || t.symbole, nom: t.nom || t.symbole, secteur, poids: 1, variation_pct: t.variation_pct });
+  const T = valeursM().filter(t => !estTaux(t)), val = (t, secteur) => ({ symbole: t.symbole, etiquette: t.court || t.nom || t.symbole, nom: t.nom || t.symbole, secteur, poids: 1, variation_pct: t.variation_pct });
   const groupes = [...new Set(T.map(t => t.groupe).filter(Boolean))];
   return [...tab(D.heatmap?.indices), ...(T.length ? [{ id: "classes", nom: "Tous les marchés, par classe d'actifs", valeurs: T.map(t => val(t, t.groupe || "Autres")) }] : []), ...groupes.map(g => ({ id: "g:" + g, nom: g, valeurs: T.filter(t => t.groupe === g).map(t => val(t, t.sous_groupe || g)) }))];
 }
@@ -1910,15 +2380,15 @@ function rendreCarte() {
     <div class="rang" style="margin-bottom:12px"><select class="saisie" style="width:auto" id="hm-indice" aria-label="Indice">${I.map(i => `<option value="${esc(i.id)}" ${i.id === ind.id ? "selected" : ""}>${esc(i.nom)}</option>`).join("")}</select>
       ${seg("taille", [["poids", "Par poids"], ["egale", "Cases égales"]])}${seg("secteurs", [[true, "Par secteur"], [false, "Sans secteur"]])}${seg("echelle", [[1, "±1 %"], [3, "±3 %"], [5, "±5 %"]])}
       <span class="hm-ech">−${c.echelle} %<i></i>+${c.echelle} %</span></div>
-    <div id="hm"></div>
-    <p class="petit" id="hm-info" style="margin-top:10px;color:var(--encre2)">${esc(ind.nom)}${ind.note ? " · " + esc(ind.note) : ""} · ${tab(ind.valeurs).length} valeurs · variation sur 1 jour. Touche une case pour le détail.</p>
+    <div class="hm-zone" data-carte="${esc(ind.id)}"><div id="hm"></div>
+    <p class="petit hm-info" style="margin-top:10px;color:var(--encre2)">${esc(ind.nom)}${ind.note ? " · " + esc(ind.note) : ""} · ${tab(ind.valeurs).length} valeurs · variation sur 1 jour. Touche une case pour le détail.</p></div>
     <p class="doux petit">Dernière mise à jour : ${H.derniere_maj ? esc(fHeure(H.derniere_maj)) : "inconnue"}. Cours différés, non garantis.</p>`;
   $("#hm-indice").onchange = e => { c.indice = e.target.value; sauverReglages(); rendreCarte(); };
   dessinerCarte(ind);
 }
-function dessinerCarte(ind) {
-  const z = $("#hm"), c = R.marche.carte, W = z.clientWidth, Ht = Math.round(Math.min(640, Math.max(400, W * .6))); if (!W) return;
-  z.style.height = Ht + "px";
+function dessinerCarte(ind, z = $("#hm"), c = R.marche.carte) {
+  const W = z.clientWidth, Ht = Math.round(Math.min(c.hauteurMax || 640, Math.max(c.hauteurMax ? 260 : 400, W * .6))); if (!W) return;
+  z.classList.add("hm"); z.style.height = Ht + "px";
   const vals = tab(ind.valeurs).map(a => ({ ...a, v: c.taille === "egale" ? 1 : Math.max(+a.poids || 0, .0001) })).sort((a, b) => b.v - a.v);
   let html = "";
   const cases = (items, x, y, w, h) => carreler(items, x, y, w, h).forEach(k => {
@@ -1936,38 +2406,133 @@ function dessinerCarte(ind) {
   z.innerHTML = html;
 }
 Object.assign(ACT, {
-  mOnglet: d => { R.marche.onglet = d.o; sauverReglages(); RENDU.marche(); },
   hRegler: d => { R.marche.carte[d.k] = d.k === "secteurs" ? d.val === "true" : d.k === "echelle" ? +d.val : d.val; sauverReglages(); rendreCarte(); },
-  hCase: d => { const I = cartes(), ind = I.find(i => i.id === R.marche.carte.indice) || I[0], a = ind.valeurs.find(x => x.symbole === d.s), tot = ind.valeurs.reduce((s, x) => s + (+x.poids || 0), 0);
-    $("#hm-info").innerHTML = `<b>${esc(a.nom)}</b> <span class="mono">${esc(a.symbole)}</span> · ${esc(a.secteur || "")} · <span class="mono ${a.variation_pct >= 0 ? "hausse" : "baisse"}">${a.variation_pct >= 0 ? "▲" : "▼"} ${fVar(+a.variation_pct)}</span> · ${(a.poids / tot * 100).toFixed(1).replace(".", ",")} % de la carte`; }
+  hCase: (d, b) => {
+    const zone = b.closest(".hm-zone"), ind = cartes().find(i => i.id === zone?.dataset.carte), a = ind?.valeurs.find(x => x.symbole === d.s); if (!a) return;
+    if (valeurM(d.s)) return ficheValeur(d.s); // carte par classe d'actifs : la fiche complète
+    const tot = ind.valeurs.reduce((s, x) => s + (+x.poids || 0), 0);
+    $(".hm-info", zone).innerHTML = `<b>${esc(a.nom)}</b> <span class="mono">${esc(a.symbole)}</span> · ${esc(a.secteur || "")} · <span class="mono ${a.variation_pct >= 0 ? "hausse" : "baisse"}">${a.variation_pct >= 0 ? "▲" : "▼"} ${fVar(+a.variation_pct)}</span> · ${(a.poids / tot * 100).toFixed(1).replace(".", ",")} % de la carte`;
+  }
 });
-let tRedim; addEventListener("resize", () => { clearTimeout(tRedim); tRedim = setTimeout(() => { if (S.vue === "marche" && R.marche.onglet !== "tableau" && $("#hm")) rendreCarte(); }, 150); });
+let tRedim, largeurM = innerWidth; addEventListener("resize", () => { clearTimeout(tRedim); tRedim = setTimeout(() => { if (innerWidth === largeurM || $("#dlg").open) return; largeurM = innerWidth; if (S.vue === "marche" && ["cartes", "apercu", "pages"].includes(R.marche.onglet)) RENDU.marche(); }, 250); }); // seulement si la largeur change (sur téléphone, la barre d'adresse change la hauteur en défilant)
 
 /* ============================================================
    11. Bibliothèque des morning brief
    ============================================================ */
-const filtreB = { q: "", du: "", au: "", tag: "", ticker: "", theme: "" };
+const filtreB = { q: "", du: "", au: "", tag: "", ticker: "", theme: "", tri: "date" };
+/* ---------- Texte des briefs : extrait des PDF, rangé à part dans data/briefs-texte.json
+   (un seul fichier, chargé seulement quand on cherche), pour chercher dans le contenu ---------- */
+const TXT = { donnees: null, promesse: null, cache: new Map() };
+function chargerTextes() {
+  if (TXT.donnees) return Promise.resolve(TXT.donnees);
+  if (!GH.pret) return Promise.resolve(TXT.donnees = { version: 1, textes: {} });
+  return TXT.promesse ??= GH.lire("data/briefs-texte.json").then(r => (TXT.donnees = r ? JSON.parse(r.texte) : { version: 1, textes: {} })).catch(() => { TXT.promesse = null; return { version: 1, textes: {} }; });
+}
+const texteBrief = b => b?.fichier_pdf ? TXT.donnees?.textes?.[cheminPdf(b)]?.texte || "" : "";
+async function enregistrerTextes(ajouts) { // { chemin du PDF : { date, texte } }, fusionné avec la version du dépôt
+  for (let essai = 0; essai < 3; essai++) {
+    const r = await GH.lire("data/briefs-texte.json"), base = r ? JSON.parse(r.texte) : { version: 1, textes: {} };
+    Object.assign(base.textes ??= {}, ajouts);
+    try { await GH.ecrire("data/briefs-texte.json", b64(new TextEncoder().encode(JSON.stringify(base))), r?.sha, `Hub : texte de ${Object.keys(ajouts).length} brief${Object.keys(ajouts).length > 1 ? "s" : ""} pour la recherche`); TXT.donnees = base; TXT.promesse = Promise.resolve(base); TXT.cache.clear(); return; }
+    catch (e) { if (![409, 422].includes(e.status)) throw e; await attendre(800); }
+  }
+}
+/* Lecture du texte d'un PDF dans le navigateur (pdf.js, embarqué dans assets/lib, chargé à la demande) */
+let PDFJS = null;
+function chargerPdfJs() {
+  return PDFJS ??= new Promise((ok, ko) => { const s = document.createElement("script"); s.src = "assets/lib/pdf.min.js"; s.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = "assets/lib/pdf.worker.min.js"; ok(window.pdfjsLib); }; s.onerror = () => { PDFJS = null; ko(new Error("Lecteur de PDF introuvable")); }; document.head.append(s); });
+}
+async function texteDuPdf(buf) {
+  const lib = await chargerPdfJs(), doc = await lib.getDocument({ data: new Uint8Array(buf) }).promise; let txt = "";
+  for (let i = 1; i <= Math.min(doc.numPages, 80); i++) { const c = await (await doc.getPage(i)).getTextContent(); txt += c.items.map(it => (it.str || "") + (it.hasEOL ? "\n" : "")).join("") + "\n\n"; }
+  doc.destroy();
+  return txt.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+/* Sociétés connues (cartes de marché) : « nvidia » trouve aussi « NVDA », et l'inverse */
+function societes() { const v = new Map(); tab(D.heatmap?.indices).forEach(i => tab(i.valeurs).forEach(x => { if (x.nom && x.symbole) v.set(x.symbole, x.nom); })); return [...v].map(([sym, nom]) => ({ sym, nom: norm(nom), court: norm(sym.split(".")[0]) })); }
+let ALIAS = null;
+function variantes(m) {
+  if (!ALIAS) { ALIAS = new Map(); societes().forEach(s => { if (s.court.length >= 3 && s.court !== s.nom) { ALIAS.set(s.court, [s.nom]); ALIAS.set(s.nom, [s.court]); } }); }
+  return [m, ...(ALIAS.get(m) || [])];
+}
+const compter = (foin, v) => { let n = 0, i = -1; while ((i = foin.indexOf(v, i + 1)) >= 0) n++; return n; };
+/* Résumé et sociétés citées, déduits du texte (le brief n'est pas modifié s'il a déjà un résumé) */
+function enrichirBrief(b, texte) {
+  if (!b.resume) { // le paragraphe « The big picture », jusqu'au titre suivant (ligne qui commence en capitales)
+    const res = []; let dedans = false;
+    for (const l of texte.split("\n")) {
+      if (!dedans) { const m = l.match(/T ?H ?E ?B ?I ?G ?P ?I ?C ?T ?U ?R ?E/i); if (m) { dedans = true; const reste = l.slice(m.index + m[0].length).trim(); if (reste) res.push(reste); } continue; }
+      if (!l.trim()) { if (res.length) break; continue; }
+      if (!/[a-zà-ÿ]/.test(l) || /(^|\s)[A-ZÀ-Þ’ʼ'·] [A-ZÀ-Þ](\s|$)/.test(l) || /^\s*(\d+\s+)?[A-ZÀ-Þ]{5,}\s/.test(l)) break; // titre suivant : capitales, ou lettres espacées
+      res.push(l.trim());
+    }
+    const r = res.join(" ").split(/\b(?:KEY |TODAY[’ʼ']?S )?TAKEAWAY\b/)[0].trim(); if (r.length >= 40) b.resume = r.length > 900 ? r.slice(0, 900).replace(/\s+\S*$/, "") + " …" : r;
+  }
+  const n = norm(texte), cites = societes().filter(s => s.nom.length >= 4 && (n.match(new RegExp(`\\b${s.nom.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g")) || []).length >= 2).map(s => s.sym);
+  if (cites.length) b.tickers = [...new Set([...tab(b.tickers), ...cites])];
+}
+/* Extraits autour des mots trouvés, avec les mots surlignés */
+function normIndex(s) { let n = "", idx = []; for (let i = 0; i < s.length; i++) for (const ch of norm(s[i])) { n += ch; idx.push(i); } return { n, idx }; }
+function extraits(texte, cles, max = 2) {
+  if (!texte || !cles.length) return [];
+  let N = TXT.cache.get(texte); if (!N) { N = normIndex(texte); TXT.cache.set(texte, N); if (TXT.cache.size > 400) TXT.cache.delete(TXT.cache.keys().next().value); }
+  const pos = []; cles.forEach(c => { let i = -1; while ((i = N.n.indexOf(c, i + 1)) >= 0) pos.push([i, i + c.length]); });
+  pos.sort((a, b) => a[0] - b[0]); const res = []; let fin = -1;
+  for (const [a] of pos) {
+    if (res.length >= max) break; if (a < fin) continue;
+    const o = N.idx[a], ligne = texte.lastIndexOf("\n", o) + 1, deb = o - ligne <= 150 ? ligne : texte.indexOf(" ", o - 120) + 1, stop = Math.min(texte.length, o + 180); fin = a + 300;
+    let morceau = esc(texte.slice(deb, stop).replace(/\s+/g, " ").trim());
+    const motif = new RegExp(cles.map(c => c.split("").map(ch => ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[\\u0300-\\u036f]?").join("")).join("|"), "gi");
+    morceau = morceau.normalize("NFD").replace(motif, x => `<mark>${x}</mark>`).normalize("NFC");
+    res.push(`${deb > 0 ? "… " : ""}${morceau}${stop < texte.length ? " …" : ""}`);
+  }
+  return res;
+}
 RENDU.bibliotheque = () => {
   const B = tab(D["morning-brief"]?.briefs), v = $("#v-bibliotheque"), uniq = k => [...new Set(B.flatMap(b => tab(b[k])))].sort();
   const sel = (k, l, opts) => `<label class="champ">${l}<select data-fb="${k}"><option value="">Tous</option>${opts.map(o => `<option ${filtreB[k] === o ? "selected" : ""}>${esc(o)}</option>`).join("")}</select></label>`;
-  v.innerHTML = `<header><div class="sur">Bibliothèque · morning brief</div><h1>Les briefs</h1><p>Recherche dans le titre, le résumé, les tags et le texte des briefs.</p>${boutonsClaude("bibliotheque")}</header>${bandeau("morning-brief")}
+  v.innerHTML = `<header><div class="sur">Bibliothèque · morning brief</div><h1>Les briefs</h1><p>Cherche un mot, une société ou un thème : la recherche lit le texte complet de chaque brief et te montre les passages qui en parlent.</p>${boutonsClaude("bibliotheque")}</header>${bandeau("morning-brief")}
     <div class="rang" style="margin-bottom:14px"><button class="btn plein" data-act="bPdfJour">Ajouter le PDF du jour</button><button class="btn" data-act="triChoisir" data-accept="application/pdf">Déposer plusieurs PDF</button><button class="btn" data-act="bEditer">Ajouter un brief à la main</button><span class="doux petit">${B.some(b => b.date === isoJour(new Date())) ? "Le brief d'aujourd'hui est en ligne (un nouvel envoi le remplace)." : "Pas encore de brief pour aujourd'hui."}</span></div>
     ${astuceDepot("Les PDF glissés ici deviennent des briefs, datés d'après leur nom.")}
-    <div class="carte" style="margin-bottom:18px"><label class="champ">Recherche plein texte<input type="search" data-fb="q" value="${esc(filtreB.q)}" placeholder="inflation, BCE, pétrole…"></label>
-    <div class="meta" style="margin-bottom:0"><label class="champ">Du<input type="date" data-fb="du" value="${esc(filtreB.du)}"></label><label class="champ">Au<input type="date" data-fb="au" value="${esc(filtreB.au)}"></label>${sel("tag", "Tag", uniq("tags"))}${sel("ticker", "Ticker", uniq("tickers"))}${sel("theme", "Thème", uniq("themes"))}</div></div>
-    <div id="res-b"></div>`;
+    <div class="carte" style="margin-bottom:18px"><label class="champ">Rechercher dans les briefs<input type="search" data-fb="q" value="${esc(filtreB.q)}" placeholder="nvidia, BCE, pétrole, inflation…"></label>
+    <div class="meta" style="margin-bottom:0"><label class="champ">Du<input type="date" data-fb="du" value="${esc(filtreB.du)}"></label><label class="champ">Au<input type="date" data-fb="au" value="${esc(filtreB.au)}"></label>${sel("tag", "Tag", uniq("tags"))}${sel("ticker", "Société", uniq("tickers"))}${sel("theme", "Thème", uniq("themes"))}<label class="champ">Ordre<select data-fb="tri"><option value="date" ${filtreB.tri !== "mentions" ? "selected" : ""}>Plus récents d'abord</option><option value="mentions" ${filtreB.tri === "mentions" ? "selected" : ""}>Plus de mentions d'abord</option></select></label></div></div>
+    <div id="b-index"></div><div id="res-b"></div>`;
   const lister = () => {
-    const mots = jetons(filtreB.q);
-    const res = B.filter(b => {
-      const foin = norm([b.titre, b.resume, tab(b.tags).join(" "), tab(b.tickers).join(" "), tab(b.themes).join(" "), b.texte_indexe].join(" "));
-      return mots.every(m => foin.includes(m)) && (!filtreB.du || b.date >= filtreB.du) && (!filtreB.au || b.date <= filtreB.au) && (!filtreB.tag || tab(b.tags).includes(filtreB.tag)) && (!filtreB.ticker || tab(b.tickers).includes(filtreB.ticker)) && (!filtreB.theme || tab(b.themes).includes(filtreB.theme));
-    }).sort((a, b) => String(b.date).localeCompare(String(a.date)));
-    $("#res-b").innerHTML = !B.length ? `<div class="vide"><b>La bibliothèque est vide</b>Clique sur « Ajouter le PDF du jour » et choisis ton fichier : il est rangé dans ton dépôt privé et apparaît ici.</div>` : !res.length ? `<div class="vide"><b>Aucun brief ne correspond</b>Élargis la recherche ou retire un filtre.</div>` : `<p class="doux petit">${res.length} brief${res.length > 1 ? "s" : ""}</p><div class="grille" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">${res.map(b => `<article class="carte"><div class="sur">${esc(fDate(b.date))}${tab(b.themes).length ? " · " + esc(b.themes.join(", ")) : ""}</div><h3 style="margin:6px 0 8px">${esc(b.titre)}</h3><p class="petit" style="white-space:pre-line;color:var(--encre2)">${esc(b.resume)}</p><div class="rang" style="margin:10px 0">${tab(b.tags).map(t => `<span class="puce">${esc(t)}</span>`).join("")}${tab(b.tickers).map(t => `<span class="puce or">${esc(t)}</span>`).join("")}</div><div class="rang">${b.fichier_pdf ? (GH.pret ? `<button class="btn mini plein" data-act="docOuvrir" data-p="${esc(cheminPdf(b))}">Ouvrir le PDF</button>` : `<a class="btn mini plein" href="pdf/${encodeURIComponent(b.fichier_pdf)}" target="_blank" rel="noopener">Ouvrir le PDF</a>`) : '<span class="doux petit">Pas de PDF associé</span>'}<button class="btn mini" data-act="bEditer" data-id="${esc(b.id)}">Modifier</button></div></article>`).join("")}</div>`;
+    const mots = jetons(filtreB.q), V = mots.map(variantes), zone = $("#res-b"); if (!zone) return;
+    if (mots.length && !TXT.donnees) { zone.innerHTML = `<p class="doux petit"><span class="tourne" aria-hidden="true"></span>Lecture du texte des briefs…</p>`; chargerTextes().then(() => { if ($("#res-b") === zone) lister(); }); return; }
+    const res = B.map(b => {
+      const meta = norm([b.titre, b.resume, tab(b.tags).join(" "), tab(b.tickers).join(" "), tab(b.themes).join(" "), b.texte_indexe].join(" ")), corps = norm(texteBrief(b));
+      const ok = V.every(vs => vs.some(x => meta.includes(x) || corps.includes(x))), n = mots.length ? V.flat().reduce((s, x) => s + compter(corps, x), 0) : 0;
+      return { b, ok, n };
+    }).filter(({ b, ok }) => ok && (!filtreB.du || b.date >= filtreB.du) && (!filtreB.au || b.date <= filtreB.au) && (!filtreB.tag || tab(b.tags).includes(filtreB.tag)) && (!filtreB.ticker || tab(b.tickers).includes(filtreB.ticker)) && (!filtreB.theme || tab(b.themes).includes(filtreB.theme)))
+      .sort((x, y) => (filtreB.tri === "mentions" && mots.length ? y.n - x.n : 0) || String(y.b.date).localeCompare(String(x.b.date)));
+    zone.innerHTML = !B.length ? `<div class="vide"><b>La bibliothèque est vide</b>Clique sur « Ajouter le PDF du jour » et choisis ton fichier : il est rangé dans ton dépôt privé et apparaît ici.</div>` : !res.length ? `<div class="vide"><b>Aucun brief ne correspond</b>${mots.length ? "Aucun brief ne contient ces mots. Essaie un autre mot ou retire un filtre." : "Élargis la recherche ou retire un filtre."}</div>`
+      : `<p class="doux petit">${res.length} brief${res.length > 1 ? "s" : ""}${mots.length ? ` · ${res.reduce((s, r) => s + r.n, 0)} mention${res.reduce((s, r) => s + r.n, 0) > 1 ? "s" : ""} dans le texte` : ""}</p><div class="grille" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">${res.map(({ b, n }) => {
+        const ex = mots.length ? extraits(texteBrief(b), V.flat(), 2) : [];
+        return `<article class="carte"><div class="rang" style="justify-content:space-between"><span class="sur">${esc(fDate(b.date))}${tab(b.themes).length ? " · " + esc(b.themes.join(", ")) : ""}</span>${n ? `<span class="puce or">${n} mention${n > 1 ? "s" : ""}</span>` : ""}</div><h3 style="margin:6px 0 8px">${esc(b.titre)}</h3>${ex.length ? `<div class="extraits">${ex.map(e => `<p>${e}</p>`).join("")}</div>` : `<p class="petit" style="white-space:pre-line;color:var(--encre2);display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden">${esc(b.resume)}</p>`}<div class="rang" style="margin:10px 0">${tab(b.tags).map(t => `<span class="puce">${esc(t)}</span>`).join("")}${tab(b.tickers).slice(0, 8).map(t => `<button class="puce or" data-act="bTicker" data-t="${esc(t)}" title="Voir les briefs qui citent ${esc(t)}">${esc(t)}</button>`).join("")}</div><div class="rang">${b.fichier_pdf ? (GH.pret ? `<button class="btn mini plein" data-act="docOuvrir" data-p="${esc(cheminPdf(b))}">Ouvrir le PDF</button>` : `<a class="btn mini plein" href="pdf/${encodeURIComponent(b.fichier_pdf)}" target="_blank" rel="noopener">Ouvrir le PDF</a>`) : '<span class="doux petit">Pas de PDF associé</span>'}<button class="btn mini" data-act="bEditer" data-id="${esc(b.id)}">Modifier</button></div></article>`;
+      }).join("")}</div>`;
   };
+  // Briefs dont le texte n'est pas encore lu : proposition de les indexer
+  const signaler = () => { const z = $("#b-index"); if (!z || !GH.pret) return; const sans = B.filter(b => b.fichier_pdf && !texteBrief(b)); z.innerHTML = sans.length ? `<div class="bandeau"><span>${sans.length} brief${sans.length > 1 ? "s ne sont" : " n'est"} pas encore lisible${sans.length > 1 ? "s" : ""} par la recherche.</span><button class="btn mini plein" data-act="bIndexer">Lire leur texte</button></div>` : ""; };
   $$("[data-fb]", v).forEach(i => i.oninput = () => { filtreB[i.dataset.fb] = i.value; lister(); });
-  lister();
+  lister(); if (GH.pret) chargerTextes().then(signaler);
 };
-
+async function indexerBriefs(L, surProgres = () => {}) { // L : [{ b, buf? }] ; lit le texte, l'enregistre, complète résumé et sociétés
+  const ajouts = {}; let k = 0, erreurs = 0;
+  for (const { b, buf } of L) {
+    try { const donnees = buf ? (buf.arrayBuffer ? await buf.arrayBuffer() : buf) : await (await GH.api(GH.u(cheminPdf(b)) + GH.ref(), { brut: true })).arrayBuffer(), texte = await texteDuPdf(donnees); if (texte) { ajouts[cheminPdf(b)] = { date: b.date, texte }; enrichirBrief(b, texte); } } catch { erreurs++; }
+    surProgres(++k);
+  }
+  if (Object.keys(ajouts).length) { await enregistrerTextes(ajouts); await sauver("morning-brief"); }
+  return { lus: Object.keys(ajouts).length, erreurs };
+}
+ACT.bIndexer = async (d, btn) => {
+  const sans = tab(D["morning-brief"].briefs).filter(b => b.fichier_pdf && !texteBrief(b)); btn.disabled = true;
+  try { const r = await indexerBriefs(sans.map(b => ({ b })), k => { btn.textContent = `Lecture ${k} sur ${sans.length}…`; }); toast(`${r.lus} brief${r.lus > 1 ? "s" : ""} ajouté${r.lus > 1 ? "s" : ""} à la recherche${r.erreurs ? ` (${r.erreurs} illisible${r.erreurs > 1 ? "s" : ""})` : ""}`); }
+  catch (e) { alert("Lecture impossible : " + e.message); }
+  RENDU.bibliotheque();
+};
+ACT.bTicker = d => { filtreB.ticker = d.t; filtreB.q = ""; RENDU.bibliotheque(); };
 /* Les PDF envoyés par « Ajouter le PDF du jour » sont dans documents/briefs/ (chemin complet) ; les anciens dans pdf/ (nom seul) */
 const cheminPdf = b => String(b.fichier_pdf).includes("/") ? b.fichier_pdf : "pdf/" + b.fichier_pdf;
 ACT.bPdfJour = () => {
@@ -1979,6 +2544,7 @@ ACT.bPdfJour = () => {
       toast("Envoi du PDF…");
       const chemin = await televerser(new File([f], `${jour}.pdf`, { type: "application/pdf" }), "documents/briefs"), b = L.find(x => x.date === jour);
       if (b) b.fichier_pdf = chemin; else L.push({ id: uid("b-"), titre: `Morning brief du ${fDate(jour)}`, date: jour, tags: [], tickers: [], themes: [], resume: "", fichier_pdf: chemin, texte_indexe: "" });
+      try { toast("Lecture du texte pour la recherche…"); await indexerBriefs([{ b: b || L[L.length - 1], buf: await f.arrayBuffer() }]); } catch {} // la recherche dans le texte est un plus : un échec ne bloque pas l'envoi
       DOCS.items = null; await sauver("morning-brief"); RENDU.bibliotheque(); toast(b ? "PDF du jour remplacé" : "Brief du jour ajouté");
     } catch (e) { alert("Envoi impossible : " + e.message); }
   }, "application/pdf");
@@ -2247,6 +2813,7 @@ function ouvrirTri(L) {
     const B = D["morning-brief"].briefs ??= []; let nb = 0, nc = 0;
     OK.filter(x => x.dest === "brief" && ext(x.chemin) === "pdf").forEach(x => { const b = B.find(o => o.date === x.date && (!o.fichier_pdf || o.fichier_pdf === x.chemin)); if (b) b.fichier_pdf = x.chemin; else B.push({ id: uid("b-"), titre: /brief/i.test(x.f.name) && !dateDansNom(x.f.name) ? sansExt(x.f.name) : `Morning brief du ${fDate(x.date)}`, date: x.date, tags: [], tickers: [], themes: [], resume: "", fichier_pdf: x.chemin, texte_indexe: "" }); nb++; });
     OK.filter(x => x.dest.startsWith("cours:")).forEach(x => { const c = coursTous().find(o => o.id === x.dest.slice(6)); if (!c) return; c.documents = tab(c.documents).filter(o => o.fichier !== x.chemin); c.documents.push({ id: uid("d-"), titre: sansExt(x.f.name), type: typeDoc(x.f.name), origine: "fourni par SKEMA", date: auj, fichier: x.chemin }); c.derniere_maj = auj; nc++; });
+    if (nb) { try { etat.innerHTML = "Lecture du texte des briefs pour la recherche…"; await indexerBriefs(OK.filter(x => x.dest === "brief" && ext(x.chemin) === "pdf").map(x => ({ b: B.find(o => o.fichier_pdf === x.chemin), buf: x.f })).filter(y => y.b)); } catch {} }
     if (nb) await sauver("morning-brief"); if (nc) await sauver("courses");
     DOCS.items = null;
     const np = OK.filter(x => x.dest.startsWith("projet:")).length, nd = OK.filter(x => x.dest.startsWith("dossier:")).length, tri = OK.filter(x => x.dest === "dossier:documents/à trier").length;
@@ -2477,6 +3044,9 @@ RENDU.reglages = () => {
       <label class="champ">Jeton d'accès (fine-grained)<input id="g-jeton" type="password" required autocomplete="off" placeholder="github_pat_…"></label><label class="champ">Code de protection sur cet appareil (conseillé)<input id="g-code" type="password" autocomplete="new-password" placeholder="Laisser vide pour ne pas en mettre"></label>
       <p class="baisse petit" id="g-err" role="alert"></p><button class="btn plein" type="submit">Connecter</button></form>
       <p class="doux petit" style="margin-top:10px">Créer le jeton : <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>. Accès limité au dépôt privé, droit « Contents : lecture et écriture ».</p>`}</div>
+    <div class="carte" id="r-robot"><h2>Robot du marché</h2><p class="petit" style="color:var(--encre2);margin:8px 0 10px">GitHub lance mal les passages programmés du robot. Avec un jeton dédié, l'application le relance elle-même : bouton « Actualiser » du Marché, et tout seul à l'ouverture quand les cours ont plus d'une heure (en semaine, de 8 h à 23 h).</p>
+      ${GH.jetonRobot ? `<p class="petit"><b>Jeton enregistré sur cet appareil.</b></p><label class="coche" style="margin:8px 0"><input type="checkbox" id="r-auto" ${R.marche.auto === false ? "" : "checked"}>Actualiser automatiquement à l'ouverture</label><div class="rang"><button class="btn" data-act="mActualiser">Actualiser maintenant</button><button class="btn" data-act="rRobotOublier">Retirer le jeton</button></div>`
+      : `<form id="f-robot" style="display:grid;gap:10px"><label class="champ">Jeton « Hub robot » (droit Actions sur ${esc(depotApp())})<input id="rb-jeton" type="password" required autocomplete="off" placeholder="github_pat_…"></label>${GH.cfg?.jetonChiffre ? '<label class="champ">Ton code de protection (le même que pour le dépôt privé)<input id="rb-code" type="password" required autocomplete="off"></label>' : ""}<p class="baisse petit" id="rb-err" role="alert"></p><div class="rang"><button class="btn plein" type="submit">Enregistrer</button><button class="btn" type="button" data-act="rRobotAide">Comment créer ce jeton</button></div></form>`}</div>
     <div class="carte"><h2>Apparence</h2><div style="display:grid;gap:12px;margin-top:12px">
       <label class="champ">Thème<select id="r-theme">${opt("clair", "Jour", R.theme)}${opt("nuit", "Nuit", R.theme)}${opt("auto", "Selon l'appareil", R.theme)}</select></label>
       <label class="champ">Décor de l'univers 3D<select id="r-scene">${opt("reseau", "Réseau de neurones", R.scene3d)}${opt("quartier", "Quartier de La Défense", R.scene3d)}</select></label>
@@ -2500,6 +3070,16 @@ RENDU.reglages = () => {
   $$("[data-coul]", v).forEach(i => i.onchange = () => { R.couleurs[i.dataset.coul] = i.value; sauverReglages(); });
   $$("[data-vis]", v).forEach(i => i.onchange = () => { R.masquees = i.checked ? R.masquees.filter(x => x !== i.dataset.vis) : [...R.masquees, i.dataset.vis]; sauverReglages(); rendreNav(); });
   $("#r-fichier").onchange = async e => { try { const o = JSON.parse(await e.target.files[0].text()); R = Object.assign({}, REGLAGES_DEFAUT, o); sauverReglages(); location.reload(); } catch { alert("Fichier de réglages illisible."); } };
+  const ra = $("#r-auto"); if (ra) ra.onchange = () => { R.marche.auto = ra.checked; sauverReglages(); };
+  const fr = $("#f-robot"); if (fr) fr.onsubmit = async e => {
+    e.preventDefault(); const err = $("#rb-err"), jeton = $("#rb-jeton").value.trim(), code = $("#rb-code")?.value; err.textContent = "Vérification…";
+    try {
+      await GH.api("actions/workflows", { depot: depotApp(), jeton });
+      if (GH.cfg?.jetonChiffre) { try { await dechiffrer(GH.cfg.jetonChiffre, code); } catch { throw new Error("Code de protection incorrect."); } LS.ecrire("hub.robot", { jetonChiffre: await chiffrer({ jeton }, code) }); }
+      else LS.ecrire("hub.robot", { jeton });
+      GH.jetonRobot = jeton; toast("Jeton du robot enregistré"); RENDU.reglages();
+    } catch (x) { err.textContent = x.status === 401 ? "Jeton refusé : vérifie qu'il est copié en entier." : x.status === 403 || x.status === 404 ? `Ce jeton n'a pas accès aux Actions de ${depotApp()} : choisis ce dépôt et le droit « Actions : Read and write ».` : x.message; }
+  };
   const f = $("#f-depot"); if (f) f.onsubmit = async e => {
     e.preventDefault(); const err = $("#g-err"); err.textContent = "Vérification…";
     const cfg = { proprietaire: $("#g-prop").value.trim(), depot: $("#g-depot").value.trim(), branche: $("#g-branche").value.trim() || "main" }, jeton = $("#g-jeton").value.trim(), code = $("#g-code").value, avant = [GH.cfg, GH.jeton];
@@ -2512,7 +3092,9 @@ RENDU.reglages = () => {
 };
 Object.assign(ACT, {
   rOrdre: d => { const i = R.ordre.indexOf(d.id), j = i + +d.s; [R.ordre[i], R.ordre[j]] = [R.ordre[j], R.ordre[i]]; sauverReglages(); RENDU.reglages(); rendreNav(); },
-  oublierJeton: () => { if (confirm("Retirer le jeton de cet appareil ? Tes données restent intactes dans le dépôt privé.")) { LS.oter("hub.depot"); Object.keys(JEUX).forEach(n => { LS.oter("hub.cache." + n); LS.oter("hub.brouillon." + n); }); location.reload(); } },
+  rRobotAide: () => aideRobot(),
+  rRobotOublier: () => { if (confirm("Retirer le jeton du robot de cet appareil ?")) { LS.oter("hub.robot"); GH.jetonRobot = null; RENDU.reglages(); } },
+  oublierJeton: () => { if (confirm("Retirer le jeton de cet appareil ? Tes données restent intactes dans le dépôt privé.")) { LS.oter("hub.depot"); LS.oter("hub.robot"); Object.keys(JEUX).forEach(n => { LS.oter("hub.cache." + n); LS.oter("hub.brouillon." + n); }); location.reload(); } },
   rInstaller: async () => { if (invite) { invite.prompt(); await invite.userChoice; invite = null; RENDU.reglages(); } },
   rExport: () => telecharger("hub-reglages.json", JSON.stringify(R, null, 2)),
   rImport: () => $("#r-fichier").click(),
