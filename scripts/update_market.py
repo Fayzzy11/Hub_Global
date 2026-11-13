@@ -69,10 +69,17 @@ def serie(symbole, periode):
             quand = dt.datetime.fromtimestamp(quand, ZoneInfo(meta.get("exchangeTimezoneName") or "UTC"))
         if quand is not None and prix is not None and math.isfinite(float(prix)) and float(prix) > 0:
             jour, heure = quand.date().isoformat(), quand.isoformat(timespec="minutes")
-            points = [p for p in points if p[0] < jour] + [(jour, float(prix))]
+            if points and jour < points[-1][0]:  # dernier cours affiché plus ancien que l'historique : l'historique fait foi
+                print(f"{symbole} : dernier cours affiché daté du {jour}, plus ancien que l'historique ({points[-1][0]}) ; historique utilisé", file=sys.stderr)
+                heure = None
+            else:
+                points = [p for p in points if p[0] < jour] + [(jour, float(prix))]
     except (TypeError, ValueError, KeyError) as e:
         print(f"{symbole} : dernier cours illisible ({e}), historique seul utilisé", file=sys.stderr)
-    return (points, heure) if len(points) >= 2 else None
+    if len(points) < 2:
+        print(f"{symbole} : réponse vide ou trop courte ({len(points)} point)", file=sys.stderr)
+        return None
+    return points, heure
 
 
 def lire_valeur(symbole, secours, periode):
