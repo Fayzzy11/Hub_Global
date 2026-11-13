@@ -53,6 +53,10 @@ Tableau de bord personnel sous forme d'application installable : quartier financ
 
 Les cours sont différés (environ 15 minutes) et non garantis. Les fichiers livrés au départ sont des exemples fictifs, signalés dans l'interface, remplacés au premier passage du robot.
 
+## Déposer beaucoup de fichiers
+
+Glisse des fichiers ou des dossiers entiers n'importe où dans la fenêtre (ou utilise « Ajouter des fichiers » / « Ajouter un dossier entier »). Une fenêtre propose une place pour chaque fichier d'après son nom et son dossier : brief (PDF daté), cours, projet, dossier courant, sinon `documents/à trier`. Tu corriges si besoin, puis tout part en un seul enregistrement. Ce rangement suit des règles simples, sans IA. Limite : 50 Mo par fichier.
+
 ## Organisation du dépôt privé
 
 ```
@@ -62,6 +66,9 @@ data/courses.json         base de cours
 data/morning-brief.json   index des briefs
 documents/briefs/         PDF des briefs envoyés par « Ajouter le PDF du jour » (AAAA-MM-JJ.pdf)
 pdf/                      PDF des briefs ajoutés à la main (ancien emplacement)
+documents/cours/<cours>/   fichiers d'un cours
+documents/projets/<fiche>/ fichiers d'un projet (bouton « Documents du projet » de la fiche)
+documents/à trier/        fichiers sans place reconnue
 documents/                tous les autres fichiers, par dossier
 ```
 
