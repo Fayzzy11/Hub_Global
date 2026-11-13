@@ -43,14 +43,17 @@ def ecrire(chemin, objet):
     os.replace(tmp, cible)
 
 
-def serie(symbole, periode):
-    """Renvoie ([(date ISO, clôture), ...], heure ISO du dernier cours), ou None si Yahoo ne répond pas."""
+def serie(symbole, jours):
+    """Renvoie ([(date ISO, clôture), ...], heure ISO du dernier cours), ou None si Yahoo ne répond pas.
+    « jours » : profondeur demandée, en jours calendaires (une date de début passe partout, alors que
+    certaines valeurs refusent les périodes toutes faites comme « 6mo »)."""
     import yfinance as yf
 
+    debut = (dt.date.today() - dt.timedelta(days=jours)).isoformat()
     for essai in (1, 2):
         try:
             valeur = yf.Ticker(symbole)
-            histo = valeur.history(period=periode, interval="1d", auto_adjust=False)
+            histo = valeur.history(start=debut, interval="1d", auto_adjust=False)
             meta = valeur.history_metadata or {}
             break
         except Exception as e:  # réseau, quota : un second essai, puis on abandonne cette valeur
@@ -82,10 +85,10 @@ def serie(symbole, periode):
     return points, heure
 
 
-def lire_valeur(symbole, secours, periode):
+def lire_valeur(symbole, secours, jours):
     """Essaie le symbole, puis ses symboles de secours. Renvoie (points, heure, symbole qui a répondu) ou None."""
     for s in [symbole, *secours]:
-        r = serie(s, periode)
+        r = serie(s, jours)
         if r:
             return r[0], r[1], s
     return None
@@ -148,7 +151,7 @@ def main():
     for t in suivis:
         s = t["symbole"]
         base = {k: t.get(k, "") for k in ("symbole", "nom", "devise", "groupe", "sous_groupe")}
-        r = lire_valeur(s, t.get("secours", []), "6mo")
+        r = lire_valeur(s, t.get("secours", []), 190)
         if r:
             pts, heure, source = r
             pts = pts[-garde:]
@@ -177,7 +180,7 @@ def main():
     symboles = sorted({v["symbole"] for i in indices for v in i.get("valeurs", [])})
     jour = {}
     for s in symboles:
-        r = serie(s, "5d")
+        r = serie(s, 12)
         if r:
             jour[s] = r[0]
     if symboles and not jour:
