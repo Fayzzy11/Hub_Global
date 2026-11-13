@@ -125,6 +125,10 @@ label.coche input{width:17px;height:17px;accent-color:var(--or)}
 .u-noeud.vif b .n,.u-noeud:hover b .n{color:#fff}
 .u-noeud.attenue{opacity:.22}
 .u-noeud .pt{display:inline-block;width:6px;height:6px;border-radius:50%;background:#F0B93A;margin-left:7px;vertical-align:1px;box-shadow:0 0 8px #F0B93A}
+/* Fiche ouverte : le titre s'efface pour laisser toute la scène au neurone choisi */
+.u-tete{transition:opacity .35s}
+body:has(#fiche.ouverte) #v-univers:not(.plan) .u-tete{opacity:0;pointer-events:none}
+body:has(#fiche.ouverte) #v-univers:not(.plan) .u-tete>*{pointer-events:none}
 #u-bulle{position:absolute;left:0;top:0;width:264px;background:var(--papier);border:1px solid var(--trait);border-radius:12px;padding:12px 14px;box-shadow:var(--ombre);font-size:13px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:999999}
 #u-bulle.vu{opacity:1} #u-bulle b{font:500 16px/1.15 var(--titre)} #u-bulle p{margin:8px 0 0;color:var(--encre2)}
 .tuile{--c:var(--encre);position:relative;flex:none;width:54px;height:54px;border-radius:15px;background:linear-gradient(145deg,color-mix(in srgb,var(--c) 74%,#fff),var(--c));border:1.5px solid color-mix(in srgb,var(--c) 80%,#000);color:#fff;display:grid;place-items:center;box-shadow:0 10px 20px -12px rgba(10,14,22,.8);font:600 19px/1 var(--titre)}
@@ -245,7 +249,7 @@ dialog form{display:grid;gap:12px}
       <div id="u-liste"></div>
       <div class="u-tete">
         <div class="sur" id="u-date"></div>
-        <h1>Tout ton hub,<br> <em>une seule place.</em></h1>
+        <h1>Tout ton hub,<br> <em id="u-titre">un seul réseau.</em></h1>
         <p class="petit" id="u-sous"></p>
         <div class="u-hud" id="u-hud"></div>
         <div class="u-recents" id="u-recents"></div>
@@ -346,7 +350,7 @@ const VUES = [
   { id: "bot", nom: "Bot" }, { id: "reglages", nom: "Réglages" }
 ];
 const REGLAGES_DEFAUT = {
-  theme: "clair", mode3d: "auto", ordre: VUES.map(v => v.id), masquees: [],
+  theme: "clair", mode3d: "auto", scene3d: "reseau", ordre: VUES.map(v => v.id), masquees: [],
   couleurs: { "projet Claude": "#27457A", outil: "#A87B1E", site: "#28734F", bot: "#B2452F" },
   marche: { colonnes: ["cours", "jour", "periode", "graph", "devise"], periode: "1m", masques: [], onglet: "cartes", carte: { indice: "", taille: "poids", secteurs: true, echelle: 3 } }
 };
@@ -765,16 +769,17 @@ function univInit() {
       U.compo.addPass(U.etalon);
     } catch { U.compo = null; }
   }
+  if (reseau3d()) rxInit();
   const zone = $("#u-scene");
-  new ResizeObserver(() => { const w = zone.clientWidth, h = zone.clientHeight; if (!w || !h) return; U.r.setSize(w, h, false); U.compo?.setPixelRatio(U.pr); U.compo?.setSize(w, h); U.cam.aspect = w / h; U.cam.fov = w < h ? 42 : 32; U.cam.updateProjectionMatrix(); U.w = w; U.h = h; if (!U.orb.d) U.orb.d = U.cons.d = distDefaut(); }).observe(zone);
+  new ResizeObserver(() => { const w = zone.clientWidth, h = zone.clientHeight; if (!w || !h) return; U.r.setSize(w, h, false); U.compo?.setPixelRatio(U.pr); U.compo?.setSize(w, h); U.cam.aspect = w / h; U.cam.fov = w < h ? 42 : 32; U.cam.updateProjectionMatrix(); U.w = w; U.h = h; if (!U.orb.d) U.orb.d = U.cons.d = reseau3d() ? rxDist() : distDefaut(); if (reseau3d() && U.noeuds.length && RX.portrait !== (w < h)) univConstruire(); }).observe(zone);
   // Commandes : glisser pour tourner, molette ou pincement pour zoomer, clic sur une tour pour ouvrir sa fiche
   const pts = new Map(); let ecart = 0, bouge = 0;
   const viser = e => { const r = zone.getBoundingClientRect(); U.souris = { x: e.clientX - r.left, y: e.clientY - r.top }; U.sourisBouge = true; };
-  const zoomer = k => { U.dAvant = null; U.cons.d = Math.min(260, Math.max(30, U.cons.d * k)); };
+  const zoomer = k => { U.dAvant = null; U.cons.d = Math.min(260, Math.max(U.dMin ?? 30, U.cons.d * k)); };
   zone.addEventListener("pointerdown", e => { U.repos = 0; if (e.target.closest(".u-noeud")) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); bouge = 0; zone.setPointerCapture(e.pointerId); });
   zone.addEventListener("pointermove", e => {
     viser(e); const p = pts.get(e.pointerId); if (!p) return; const dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY; bouge += Math.abs(dx) + Math.abs(dy); U.repos = 0;
-    if (pts.size === 1) { U.cons.th -= dx * .006; U.cons.ph = Math.min(1.5, Math.max(.3, U.cons.ph - dy * .005)); }
+    if (pts.size === 1) { U.cons.th -= dx * .006; U.cons.ph = Math.min(U.phMax ?? 1.5, Math.max(U.phMin ?? .3, U.cons.ph - dy * .005)); }
     else if (pts.size === 2) { const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y); if (ecart) zoomer(ecart / d); ecart = d; }
   });
   const fin = e => {
@@ -796,6 +801,7 @@ function viserNoeud() {
 /* La caméra vole vers la tour dont la fiche est ouverte, puis revient à la vue d'ensemble */
 function univViser(n) {
   if (!U.pret || !U.vise) return;
+  if (reseau3d()) return rxViser(n);
   const tour = a => ((a - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; // plus court chemin angulaire
   if (n && !n.centre) { U.dAvant ??= U.cons.d; U.phAvant ??= U.cons.ph; U.viseCible.set(n.sol.x, Math.min(9, n.sommet.y * .55), n.sol.z); U.cons.d = U.w < U.h ? 92 : 58; U.cons.ph = Math.min(U.cons.ph, 1.08); U.cons.th += tour(n.th); } // la caméra s'élève pour dégager la tour de ses voisines
   else { U.viseCible.set(...Q.CENTRE); if (U.dAvant) U.cons.d = U.dAvant; if (U.phAvant) U.cons.ph = U.phAvant; U.dAvant = U.phAvant = null; }
@@ -911,6 +917,7 @@ function textureQuartier(nuit, large, tours, voisins, lampes) {
 function univConstruire() {
   rendreListeUnivers();
   if (!U.pret) return;
+  if (reseau3d()) return rxConstruire();
   // Nettoyage de la scène précédente
   U.grp.traverse(o => { if (!o.geometry?.userData.garde) o.geometry?.dispose(); [].concat(o.material || []).forEach(m => { m.map?.dispose(); m.emissiveMap?.dispose(); m.normalMap?.dispose(); m.dispose(); }); });
   while (U.grp.children.length) U.grp.remove(U.grp.children[0]);
@@ -1180,6 +1187,7 @@ function univConstruire() {
 function appliquerEtat(force) {
   const choisi = U.noeuds.find(n => n.p && n.p.id === S.projet) || null, sv = U.survol, cle = [sv?.p?.id ?? (sv ? "centre" : ""), choisi?.p.id ?? "", U.filtre ?? ""].join("|");
   if (!force && cle === U.etat) return; U.etat = cle;
+  if (reseau3d()) rxEtat(sv, choisi); else {
   const lie = (a, b) => a === b || tab(a.p?.liens_projets).includes(b.p?.id) || tab(b.p?.liens_projets).includes(a.p?.id), nuit = estNuit();
   U.noeuds.forEach(n => {
     const vif = (!U.filtre || n.centre || n.p.type === U.filtre) && (!sv || sv.centre || n.centre || lie(n, sv)), actif = n === sv || n === choisi;
@@ -1187,18 +1195,26 @@ function appliquerEtat(force) {
     n.mats.forEach(m => { m.emissiveIntensity = actif ? (m.userData.vif ?? m.userData.base * (nuit ? 1.7 : 4.5)) : m.userData.base; }); // la tour visée s'illumine
   });
   const foyer = sv && !sv.centre ? sv : choisi; U.liens.forEach(l => { l.arc.visible = !!foyer && (l.a === foyer || l.b === foyer); }); // les liens n'apparaissent que pour la tour visée
-  const marque = sv && !sv.centre ? sv : choisi; U.selection.visible = !!marque; if (marque) U.selection.position.set(marque.sol.x, .11, marque.sol.z);
+  const marque = sv && !sv.centre ? sv : choisi; U.selection.visible = !!marque; if (marque) U.selection.position.set(marque.sol.x, .11, marque.sol.z); }
   $("#u-scene").style.cursor = sv ? "pointer" : "";
   const b = $("#u-bulle"); if (!b) return;
   if (sv && !sv.centre && sv !== choisi) { const p = sv.p, i = infoEcran(p); b.innerHTML = `<div class="rang" style="flex-wrap:nowrap;gap:10px">${tuile(p, "petite")}<div><b>${esc(p.nom)}</b><span class="sur" style="display:block;margin-top:3px">${esc(p.type)} · ${esc(fDate(p.derniere_maj))}</span></div></div>${p.objectif ? `<p>${esc(p.objectif)}</p>` : ""}<p><span class="sur">${p.vue ? "En ce moment" : "Prochaine action"}</span><br>${esc(p.vue ? `${i.valeur} · ${i.detail}` : (tab(p.prochaines_actions)[0] || "Aucune action notée"))}</p><p class="doux">Clique pour ouvrir la fiche</p>`; b.classList.add("vu"); }
-  else if (sv && sv.centre) { b.innerHTML = `<b>Agent global</b><p>La Grande Arche. Clique pour interroger l'agent sur tous tes projets.</p>`; b.classList.add("vu"); }
+  else if (sv && sv.centre) { b.innerHTML = `<b>Agent global</b><p>${reseau3d() ? "Le neurone central, relié à toutes tes fiches" : "La Grande Arche"}. Clique pour interroger l'agent sur tous tes projets.</p>`; b.classList.add("vu"); }
   else b.classList.remove("vu");
 }
 const rebond = x => { x = Math.min(1, Math.max(0, x)); const c = 1.4; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); }; // arrivée avec léger dépassement
 let tPrec = 0, image = 0;
+/* Qualité automatique : la définition baisse si l'affichage peine, et remonte quand il respire */
+function qualiteAuto(brut, intro) {
+  if (R.mode3d !== "auto" || intro || brut >= 250) return;
+    U.ms = (U.ms || 16) * .92 + brut * .08;
+    if (image % 50 === 0) { const regler = pr => { U.pr = pr; U.r.setPixelRatio(pr); U.r.setSize(U.w, U.h, false); U.compo?.setPixelRatio?.(pr); U.compo?.setSize(U.w, U.h); };
+      if (U.ms > 27 && U.pr > .75) { regler(U.pr - .25); U.bons = 0; } else if (U.ms < 14 && U.pr < U.prMax) { if ((U.bons = (U.bons || 0) + 1) > 3) { U.bons = 0; regler(U.pr + .25); } } else U.bons = 0; }
+}
 function univBoucle(t) {
   if (!U.actif) return; requestAnimationFrame(univBoucle);
   if (document.hidden || !U.w) return;
+  if (reseau3d()) return rxBoucle(t);
   image++; if (modeLeger() && (image & 1)) return; // mode léger : une image sur deux
   const brut = t - tPrec, dt = Math.min(.05, brut / 1000 || 0); tPrec = t;
   const o = U.orb, v = new THREE.Vector3(), anime = !mouvementReduit, k = 1 - Math.exp(-dt * 3.4), nuit = estNuit();
@@ -1217,11 +1233,7 @@ function univBoucle(t) {
   const ti = (t - U.tIntro) / 1000, intro = ti < 5, poser = intro || !U.introFini; U.introFini = !intro;
   if (poser) { U.ville.scale.y = Math.max(.001, rebond(ti / 1.1)); U.r.shadowMap.needsUpdate = true; }
   // Qualité automatique : la définition baisse si l'affichage peine, et remonte quand il respire
-  if (R.mode3d === "auto" && !intro && brut < 250) {
-    U.ms = (U.ms || 16) * .92 + brut * .08;
-    if (image % 50 === 0) { const regler = pr => { U.pr = pr; U.r.setPixelRatio(pr); U.r.setSize(U.w, U.h, false); U.compo?.setPixelRatio?.(pr); U.compo?.setSize(U.w, U.h); };
-      if (U.ms > 27 && U.pr > .75) { regler(U.pr - .25); U.bons = 0; } else if (U.ms < 14 && U.pr < U.prMax) { if ((U.bons = (U.bons || 0) + 1) > 3) { U.bons = 0; regler(U.pr + .25); } } else U.bons = 0; }
-  }
+  qualiteAuto(brut, intro);
   if (anime) {
     U.balises.forEach(b => { b.s.material.opacity = Math.sin(t / 520 + b.phase) > .55 ? 1 : .12; });
     if (U.selection.visible) U.selection.rotation.z += dt * .5;
@@ -1270,21 +1282,381 @@ function rendreHud() {
     + (ex ? carte("cours", "Prochain examen", `J-${-joursDepuis(ex.examen.date)} <small>${esc(ex.nom)}</small>`, "alerte") : "")
     + carte("bibliotheque", "Morning brief", `${B.length} <small>en bibliothèque</small>`);
 }
+/* ============================================================
+   4 bis. L'univers en réseau de neurones
+      Chaque fiche est un neurone : un corps cellulaire qui porte
+      son logo, des dendrites qui partent vers les fiches reliées,
+      et l'agent global au centre, relié à tout le monde.
+      Les formes sont calculées dans le navigateur : un champ de
+      distances (corps + racines des branches, fondus ensemble)
+      est transformé en maillage lisse, puis prolongé par des
+      tubes effilés. Aucun fichier 3D à télécharger.
+      Rendu : matière translucide éclairée par la tranche, halo,
+      arrière-plan flou (profondeur de champ), signaux lumineux
+      qui circulent le long des liaisons.
+   ============================================================ */
+const reseau3d = () => R.scene3d !== "quartier";
+const RX = { geos: new Map(), uT: { value: 0 } };
+const rxDist = () => (U.w && U.w < U.h ? 128 : 90) * (RX.ech || 1);
+const rxDir = h => { const z = 2 * h() - 1, a = 6.28319 * h(), r = Math.sqrt(1 - z * z); return new THREE.Vector3(Math.cos(a) * r, Math.sin(a) * r, z); };
+const rxVif = c => { const k = new THREE.Color(c), o = {}; k.getHSL(o); return new THREE.Color().setHSL(o.h, Math.min(1, o.s * 1.25 + .22), .62); }; // la couleur de la fiche, éclaircie pour ressortir sur le noir
+const rxAccu = () => ({ p: [], n: [], s: [], u: [], c: [], i: [] });
+function rxGeo(G) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(G.p, 3)); g.setAttribute("normal", new THREE.Float32BufferAttribute(G.n, 3));
+  g.setAttribute("aS", new THREE.Float32BufferAttribute(G.s, 1)); g.setAttribute("aU", new THREE.Float32BufferAttribute(G.u, 1)); g.setAttribute("aC", new THREE.Float32BufferAttribute(G.c, 1));
+  g.setIndex(G.i); return g;
+}
+/* Tube effilé le long d'une suite de points régulièrement espacés ; ray(k) donne le rayon au point k.
+   s : distance parcourue (pour les signaux), u : avancement de 0 à 1 (pour la pousse), c : mélange des deux couleurs. */
+function rxTube(G, pts, ray, cotes, s0, sPas, uDe, uA, cDe, cA) {
+  const m = pts.length, base = G.p.length / 3, T = new THREE.Vector3(), N = new THREE.Vector3(), B = new THREE.Vector3(), Tp = new THREE.Vector3(), q = new THREE.Quaternion(), v = new THREE.Vector3();
+  for (let k = 0; k < m; k++) {
+    T.subVectors(pts[Math.min(m - 1, k + 1)], pts[Math.max(0, k - 1)]).normalize();
+    if (k === 0) { v.set(Math.abs(T.y) < .9 ? 0 : 1, Math.abs(T.y) < .9 ? 1 : 0, 0); N.crossVectors(T, v).normalize(); }
+    else { q.setFromUnitVectors(Tp, T); N.applyQuaternion(q).normalize(); } // le repère suit la courbe sans vriller
+    Tp.copy(T); B.crossVectors(T, N);
+    const r = ray(k), f = m > 1 ? k / (m - 1) : 0;
+    for (let j = 0; j < cotes; j++) {
+      const a = j / cotes * 6.28319, ca = Math.cos(a), sa = Math.sin(a); v.set(N.x * ca + B.x * sa, N.y * ca + B.y * sa, N.z * ca + B.z * sa);
+      G.p.push(pts[k].x + v.x * r, pts[k].y + v.y * r, pts[k].z + v.z * r); G.n.push(v.x, v.y, v.z); G.s.push(s0 + k * sPas); G.u.push(uDe + (uA - uDe) * f); G.c.push(cDe + (cA - cDe) * f);
+    }
+    if (k) for (let j = 0; j < cotes; j++) { const a = base + (k - 1) * cotes + j, b = base + (k - 1) * cotes + (j + 1) % cotes, c = a + cotes, d = b + cotes; G.i.push(a, b, c, b, d, c); }
+  }
+}
+/* Peau du neurone : champ de distances (sphère bosselée + branches, réunies par un minimum adouci qui arrondit
+   les raccords), puis extraction de la surface (« surface nets » : un sommet par cellule traversée). */
+const RX_EA = [0, 2, 4, 6, 0, 1, 4, 5, 0, 1, 2, 3], RX_EB = [1, 3, 5, 7, 2, 3, 6, 7, 4, 5, 6, 7];
+function rxPeau(G, Rs, demi, n, branches, graine) {
+  const pas = 2 * demi / (n - 1), n2 = n * n, F = new Float32Array(n * n2), Tm = new Float32Array(n * n2), h = alea(graine), ph = [h() * 6.28, h() * 6.28, h() * 6.28];
+  let q = 0;
+  for (let z = 0; z < n; z++) { const pz = -demi + z * pas; for (let y = 0; y < n; y++) { const py = -demi + y * pas; for (let x = 0; x < n; x++, q++) {
+    const px = -demi + x * pas, d = Math.sqrt(px * px + py * py + pz * pz) || 1e-6, ux = px / d, uy = py / d, uz = pz / d;
+    F[q] = d - Rs * (1 + .07 * Math.sin(2.3 * ux + ph[0]) * Math.sin(2.9 * uy + ph[1]) + .05 * Math.sin(3.4 * uz + ph[2] + 1.7 * ux));
+  } } }
+  const kL = Rs * .4, ind = v => Math.min(n - 1, Math.max(0, v));
+  branches.forEach(br => {
+    const m = br.pts.length; let x0 = n, y0 = n, z0 = n, x1 = -1, y1 = -1, z1 = -1; const boites = [];
+    for (let k = 0; k < m - 1; k++) { const A = br.pts[k], B = br.pts[k + 1], r = Math.max(br.ray[k], br.ray[k + 1]) + kL + pas;
+      const b = [ind(Math.floor((Math.min(A.x, B.x) - r + demi) / pas)), ind(Math.ceil((Math.max(A.x, B.x) + r + demi) / pas)), ind(Math.floor((Math.min(A.y, B.y) - r + demi) / pas)), ind(Math.ceil((Math.max(A.y, B.y) + r + demi) / pas)), ind(Math.floor((Math.min(A.z, B.z) - r + demi) / pas)), ind(Math.ceil((Math.max(A.z, B.z) + r + demi) / pas))];
+      boites.push(b); x0 = Math.min(x0, b[0]); x1 = Math.max(x1, b[1]); y0 = Math.min(y0, b[2]); y1 = Math.max(y1, b[3]); z0 = Math.min(z0, b[4]); z1 = Math.max(z1, b[5]); }
+    for (let z = z0; z <= z1; z++) for (let y = y0; y <= y1; y++) Tm.fill(1e9, x0 + n * y + n2 * z, x1 + 1 + n * y + n2 * z);
+    for (let k = 0; k < m - 1; k++) { // distance à chaque tronçon (cône arrondi), on garde la plus petite
+      const A = br.pts[k], B = br.pts[k + 1], rA = br.ray[k], rB = br.ray[k + 1], bx = B.x - A.x, by = B.y - A.y, bz = B.z - A.z, l2 = bx * bx + by * by + bz * bz || 1e-9, b = boites[k];
+      for (let z = b[4]; z <= b[5]; z++) { const pz = -demi + z * pas - A.z; for (let y = b[2]; y <= b[3]; y++) { const py = -demi + y * pas - A.y; let o = b[0] + n * y + n2 * z; for (let x = b[0]; x <= b[1]; x++, o++) {
+        const px = -demi + x * pas - A.x, t = Math.min(1, Math.max(0, (px * bx + py * by + pz * bz) / l2)), dx = px - bx * t, dy = py - by * t, dz = pz - bz * t, d = Math.sqrt(dx * dx + dy * dy + dz * dz) - (rA + (rB - rA) * t);
+        if (d < Tm[o]) Tm[o] = d; } } }
+    }
+    for (let z = z0; z <= z1; z++) for (let y = y0; y <= y1; y++) { let o = x0 + n * y + n2 * z; for (let x = x0; x <= x1; x++, o++) { const a = F[o], b = Tm[o], e = Math.max(kL - Math.abs(a - b), 0) / kL; F[o] = Math.min(a, b) - e * e * kL * .25; } }
+  });
+  // Extraction : un sommet par cellule où la surface passe, placé à la moyenne des points de passage sur ses arêtes
+  const idx = new Int32Array(n * n2).fill(-1), P = [], Gr = [], g8 = new Float32Array(8);
+  for (let z = 0; z < n - 1; z++) for (let y = 0; y < n - 1; y++) for (let x = 0; x < n - 1; x++) {
+    const o = x + n * y + n2 * z; let m = 0;
+    for (let c = 0; c < 8; c++) { const v = F[o + (c & 1) + n * ((c >> 1) & 1) + n2 * (c >> 2)]; g8[c] = v; if (v < 0) m |= 1 << c; }
+    if (m === 0 || m === 255) continue;
+    let sx = 0, sy = 0, sz = 0, k = 0;
+    for (let e = 0; e < 12; e++) { const a = RX_EA[e], b = RX_EB[e]; if ((g8[a] < 0) === (g8[b] < 0)) continue; const t = g8[a] / (g8[a] - g8[b]);
+      sx += (a & 1) + ((b & 1) - (a & 1)) * t; sy += ((a >> 1) & 1) + (((b >> 1) & 1) - ((a >> 1) & 1)) * t; sz += (a >> 2) + ((b >> 2) - (a >> 2)) * t; k++; }
+    idx[o] = P.length / 3; P.push(-demi + (x + sx / k) * pas, -demi + (y + sy / k) * pas, -demi + (z + sz / k) * pas);
+    Gr.push(g8[1] + g8[3] + g8[5] + g8[7] - g8[0] - g8[2] - g8[4] - g8[6], g8[2] + g8[3] + g8[6] + g8[7] - g8[0] - g8[1] - g8[4] - g8[5], g8[4] + g8[5] + g8[6] + g8[7] - g8[0] - g8[1] - g8[2] - g8[3]);
+  }
+  const I = [], nv = P.length / 3, Nn = new Float32Array(nv * 3);
+  const quad = (a, b, c, d) => { // quatre cellules autour d'une arête traversée ; le sens est fixé pour que la face regarde vers l'extérieur
+    if (a < 0 || b < 0 || c < 0 || d < 0) return;
+    const ax = P[a * 3], ay = P[a * 3 + 1], az = P[a * 3 + 2], ux = P[b * 3] - ax, uy = P[b * 3 + 1] - ay, uz = P[b * 3 + 2] - az, vx = P[d * 3] - ax, vy = P[d * 3 + 1] - ay, vz = P[d * 3 + 2] - az;
+    const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    if (nx * Gr[a * 3] + ny * Gr[a * 3 + 1] + nz * Gr[a * 3 + 2] >= 0) I.push(a, b, c, a, c, d); else I.push(a, c, b, a, d, c);
+  };
+  for (let z = 1; z < n - 1; z++) for (let y = 1; y < n - 1; y++) for (let x = 1; x < n - 1; x++) {
+    const o = x + n * y + n2 * z, a = F[o] < 0;
+    if ((F[o + 1] < 0) !== a) quad(idx[o - n - n2], idx[o - n2], idx[o], idx[o - n]);
+    if ((F[o + n] < 0) !== a) quad(idx[o - 1 - n2], idx[o - n2], idx[o], idx[o - 1]);
+    if ((F[o + n2] < 0) !== a) quad(idx[o - 1 - n], idx[o - n], idx[o], idx[o - 1]);
+  }
+  for (let t = 0; t < I.length; t += 3) { // normales lissées : somme des normales des faces voisines
+    const a = I[t] * 3, b = I[t + 1] * 3, c = I[t + 2] * 3, ux = P[b] - P[a], uy = P[b + 1] - P[a + 1], uz = P[b + 2] - P[a + 2], vx = P[c] - P[a], vy = P[c + 1] - P[a + 1], vz = P[c + 2] - P[a + 2];
+    const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    for (const k of [a, b, c]) { Nn[k] += nx; Nn[k + 1] += ny; Nn[k + 2] += nz; }
+  }
+  const base = G.p.length / 3;
+  for (let k = 0; k < nv; k++) { const x = P[k * 3], y = P[k * 3 + 1], z = P[k * 3 + 2], l = Math.hypot(Nn[k * 3], Nn[k * 3 + 1], Nn[k * 3 + 2]) || 1;
+    G.p.push(x, y, z); G.n.push(Nn[k * 3] / l, Nn[k * 3 + 1] / l, Nn[k * 3 + 2] / l); G.s.push(Math.hypot(x, y, z)); G.u.push(0); G.c.push(0); }
+  for (let t = 0; t < I.length; t++) G.i.push(base + I[t]);
+}
+/* Un neurone complet : corps, racines des liaisons (stubs, dans le repère du neurone), dendrites libres et leurs fourches */
+function rxNeurone(Rs, stubs, graine, grille, nLibres, portee, allonge) {
+  const G = rxAccu(), h = alea(graine), demi = (portee + .4) * Rs, cell = 2 * demi / (grille - 1), rT = Math.max(.1 * Rs, 1.15 * cell), nb = stubs.length + nLibres, rRac = Rs * Math.min(.5, Math.max(.3, .62 - .03 * nb)), Ls = portee * Rs;
+  const evase = s => (rRac - rT) * Math.exp(-s / (.55 * Rs)); // la branche s'élargit en rejoignant le corps
+  const fond = s => { const t = Math.min(1, Math.max(0, (s - 1.25 * Rs) / (Ls - 1.25 * Rs))); return 1 - t * t * (3 - 2 * t); }; // la racine s'efface dans le tube qui la prolonge : pas de marche au raccord
+  const branches = stubs.map(st => ({ pts: st.pts, ray: st.pts.map((_, i) => (rT + evase(i * st.pas)) * fond(i * st.pas)) }));
+  const dirs = stubs.map(st => st.pts[Math.min(st.pts.length - 1, 3)].clone().normalize()), tubes = [];
+  for (let k = 0; k < nLibres; k++) {
+    let dir = null, bs = -9; for (let e = 0; e < 16; e++) { const d = rxDir(h); let s = 2; dirs.forEach(o => { s = Math.min(s, 1 - d.dot(o)); }); if (s > bs) { bs = s; dir = d; } } dirs.push(dir); // direction la plus dégagée
+    const Lf = Rs * (5 + 4 * h()) * allonge, lat = () => rxDir(h).cross(dir).normalize().multiplyScalar(Lf * (.1 + .16 * h()));
+    const c = new THREE.CubicBezierCurve3(new THREE.Vector3(), dir.clone().multiplyScalar(Lf * .33), dir.clone().multiplyScalar(Lf * .68).add(lat()), dir.clone().multiplyScalar(Lf).add(lat()));
+    const lg = c.getLength(), M = Math.ceil(lg / (Rs * .2)), pts = c.getSpacedPoints(M), pr = lg / M, kS = Math.max(2, Math.min(M - 2, Math.round(Ls / pr))), kT = Math.max(1, Math.round(Rs / pr));
+    const ray = i => { const s = i * pr; return Math.max(.012 * Rs, rT * Math.pow(Math.max(0, 1 - Math.max(0, s - Ls) / (lg - Ls)), .65)) + evase(s); };
+    branches.push({ pts: pts.slice(0, kS + 1), ray: pts.slice(0, kS + 1).map((_, i) => ray(i) * fond(i * pr)) });
+    tubes.push(() => rxTube(G, pts.slice(kT), i => ray(i + kT) - evase((i + kT) * pr), 6, kT * pr, pr, 0, 0, 0, 0));
+    for (let f = 0, nf = 1 + (h() < .55 ? 1 : 0); f < nf; f++) { // fourches
+      const i0 = Math.min(M - 2, Math.max(kS + 1, Math.round(M * (.38 + .3 * h())))), t = pts[i0 + 1].clone().sub(pts[i0 - 1]).normalize(), d2 = t.clone().multiplyScalar(.75).addScaledVector(rxDir(h).cross(t).normalize(), .66).normalize(), L2 = Lf * (.3 + .3 * h());
+      const c2 = new THREE.QuadraticBezierCurve3(pts[i0], pts[i0].clone().addScaledVector(d2, L2 * .5), pts[i0].clone().addScaledVector(d2, L2).add(rxDir(h).multiplyScalar(L2 * .22))), l2 = c2.getLength(), M2 = Math.max(6, Math.ceil(l2 / (Rs * .2))), p2 = c2.getSpacedPoints(M2), r0 = ray(i0) * .92;
+      tubes.push(() => rxTube(G, p2, i => Math.max(.01 * Rs, r0 * Math.pow(1 - i / M2, .7)), 5, i0 * pr, l2 / M2, 0, 0, 0, 0));
+    }
+  }
+  rxPeau(G, Rs, demi, grille, branches, graine + 5);
+  tubes.forEach(f => f());
+  const g = rxGeo(G); g.userData.garde = true; g.userData.rT = rT; return g;
+}
+/* Matière : translucide, sombre au centre, bleu glacé puis presque blanc sur la tranche, marbrée à la couleur de la fiche */
+const RX_VS = `attribute float aS, aU, aC; uniform float uT, uSouffle, uPhase; varying vec3 vN, vV, vP; varying float vS, vU, vC, vProf;
+void main(){
+  vec3 p = position + normal * uSouffle * sin(uT * 1.1 + uPhase + position.y * .55 + position.x * .35);
+  #ifdef USE_INSTANCING
+    vec4 mv = modelViewMatrix * instanceMatrix * vec4(p, 1.); vN = normalize(normalMatrix * mat3(instanceMatrix) * normal);
+  #else
+    vec4 mv = modelViewMatrix * vec4(p, 1.); vN = normalize(normalMatrix * normal);
+  #endif
+  vV = -mv.xyz; vP = position; vS = aS; vU = aU; vC = aC; vProf = -mv.z; gl_Position = projectionMatrix * mv;
+}`;
+const RX_FS = `uniform vec3 uA, uB, uFond, uGlace; uniform vec2 uBr; uniform float uT, uVif, uAtt, uPousse, uPhase, uSignal, uPres, uLoin, uMarbre;
+varying vec3 vN, vV, vP; varying float vS, vU, vC, vProf;
+float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+float h3(vec3 p){ p = fract(p * .3183099 + .1); p *= 17.; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+float bruit(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. * f);
+  return mix(mix(mix(h3(i), h3(i + vec3(1, 0, 0)), f.x), mix(h3(i + vec3(0, 1, 0)), h3(i + vec3(1, 1, 0)), f.x), f.y),
+             mix(mix(h3(i + vec3(0, 0, 1)), h3(i + vec3(1, 0, 1)), f.x), mix(h3(i + vec3(0, 1, 1)), h3(i + vec3(1, 1, 1)), f.x), f.y), f.z); }
+void main(){
+  if (min(vU, 1. - vU) * 2. > uPousse) discard;
+  float pres = smoothstep(uPres * .4, uPres, vProf); if (pres < .999 && pres < h21(gl_FragCoord.xy)) discard;                   // ce qui frôle l'objectif se dissout                                       // les liaisons poussent depuis leurs deux bouts
+  vec3 N = normalize(vN); float f = 1. - abs(dot(N, normalize(vV)));
+  float corps = pow(f, 1.05), lisere = pow(f, 3.6);
+  vec3 acc = mix(uA, uB, smoothstep(.15, .85, vC));
+  float marbre = smoothstep(.4, .74, bruit(vP * .5 + uPhase * 3.) * .7 + bruit(vP * 1.3 - uPhase) * .3) * (.25 + .75 * corps);
+  vec3 c = mix(uFond, uGlace, corps);                                                  // cœur sombre, bord bleu glacé
+  c = mix(c, acc * (.4 + .55 * corps), marbre * uMarbre);                             // marbrures à la couleur de la fiche
+  c += vec3(.74, .93, 1.) * lisere * 1.15 + uGlace * .16;                                               // liseré presque blanc
+  c *= .8 + .3 * N.y;                                                                  // un peu plus clair par le dessus
+  float w = fract(vS * .05 - uT * .16 + uPhase);
+  c += mix(vec3(.45, .82, 1.), acc, .45) * exp(-pow((w - .5) * 8., 2.)) * uSignal * (.35 + f); // signal qui parcourt la branche
+  c *= uAtt * (1. + uVif * .8);
+  c *= mix(1., uLoin, smoothstep(uBr.x, uBr.y, vProf)); // s'éteint au loin
+  gl_FragColor = vec4(c, 1.);
+}`;
+function rxMat(a, b, o = {}) {
+  return new THREE.ShaderMaterial({ vertexShader: RX_VS, fragmentShader: RX_FS, uniforms: {
+    uA: { value: a }, uB: { value: b }, uFond: { value: RX.cFond }, uGlace: { value: RX.cGlace }, uBr: o.loin ? RX.uBrLoin : RX.uBr, uT: RX.uT,
+    uVif: { value: 0 }, uAtt: { value: o.att ?? 1 }, uPousse: { value: 1 }, uPhase: { value: o.phase || 0 }, uSignal: { value: o.signal ?? .5 }, uPres: { value: o.pres ?? 11 }, uLoin: { value: o.loin ? .18 : .42 }, uMarbre: { value: o.marbre ?? .75 }, uSouffle: { value: o.souffle || 0 } } });
+}
+/* Noyau du neurone : le logo de la fiche (image fournie, pictogramme ou monogramme) dans un disque sombre cerclé de sa couleur */
+function rxNoyau(def, coul) {
+  const c = document.createElement("canvas"); c.width = c.height = 256; const x = c.getContext("2d"), t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = U.aniso || 1;
+  const fond = clair => {
+    x.clearRect(0, 0, 256, 256); x.save(); x.shadowColor = coul; x.shadowBlur = 20;
+    x.beginPath(); x.arc(128, 128, 96, 0, 6.2832); const g = x.createRadialGradient(128, 108, 10, 128, 128, 98); g.addColorStop(0, clair ? "#FFFFFF" : "rgba(10,20,44,.9)"); g.addColorStop(1, clair ? "#EDF1F7" : "rgba(2,6,16,.78)"); x.fillStyle = g; x.fill();
+    x.lineWidth = 5; x.strokeStyle = coul; x.stroke(); x.restore();
+    x.beginPath(); x.arc(128, 128, 88, 0, 6.2832); x.lineWidth = 1.5; x.strokeStyle = clair ? "rgba(10,20,44,.18)" : "rgba(255,255,255,.2)"; x.stroke();
+  };
+  const pastille = () => { if (def.neuf) { x.save(); x.shadowColor = "#F0B93A"; x.shadowBlur = 14; x.beginPath(); x.arc(197, 58, 13, 0, 6.2832); x.fillStyle = "#F0B93A"; x.fill(); x.restore(); } t.needsUpdate = true; };
+  fond(false); x.fillStyle = def.texte || "#fff"; x.font = `600 ${def.mono && def.mono.length > 1 ? 84 : 104}px ${cssVar("--titre") || "serif"}`; x.textAlign = "center"; x.textBaseline = "middle";
+  if (!def.picto) x.fillText(def.mono, 128, 134); pastille();
+  const image = (src, apres) => { const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => { try { apres(im); } catch {} }; im.src = src; };
+  if (def.picto) image("data:image/svg+xml;charset=utf-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="128" height="128" fill="none" stroke="#fff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${def.picto === "agent" ? '<circle cx="12" cy="12" r="2.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.9 2.9M15.5 15.5l2.9 2.9M18.4 5.6l-2.9 2.9M8.5 15.5l-2.9 2.9"/>' : PICTOS[def.picto]}</svg>`), im => { x.drawImage(im, 64, 64, 128, 128); pastille(); });
+  if (def.logo) image(def.logo, im => { fond(true); x.save(); x.beginPath(); x.arc(128, 128, 86, 0, 6.2832); x.clip(); const k = Math.min(128 / im.width, 128 / im.height); x.drawImage(im, 128 - im.width * k / 2, 128 - im.height * k / 2, im.width * k, im.height * k); x.restore(); pastille(); });
+  return t;
+}
+/* Mise en place propre au réseau : cadrage, arrière-plan flou (rendu à part, en demi-définition, puis flouté) */
+function rxInit() {
+  Object.assign(U.orb, { th: .55, ph: 1.46 }); Object.assign(U.cons, { th: .55, ph: 1.46 }); U.phMin = .22; U.phMax = 2.92; U.dMin = 24; U.vise.set(0, 0, 0); U.viseCible.set(0, 0, 0);
+  RX.uBr = { value: new THREE.Vector2(80, 170) }; RX.uBrLoin = { value: new THREE.Vector2(70, 210) }; RX.noir = new THREE.Color(0x02040b);
+  RX.v = new THREE.Vector3(); RX.cFond = new THREE.Color(0x061a44); RX.cGlace = new THREE.Color(0x4aa8ff);
+  RX.sphere = new THREE.SphereGeometry(1, 16, 12); RX.plan = new THREE.PlaneGeometry(1, 1); RX.anneau = new THREE.RingGeometry(.93, 1, 72); [RX.sphere, RX.plan, RX.anneau].forEach(g => { g.userData.garde = true; });
+  if (!U.compo) return;
+  try {
+    RX.rtA = new THREE.WebGLRenderTarget(4, 4); RX.rtB = new THREE.WebGLRenderTarget(4, 4);
+    RX.flou = new THREE.Pass.FullScreenQuad(new THREE.ShaderMaterial({ uniforms: { tDiffuse: { value: null }, uDir: { value: new THREE.Vector2() } }, depthTest: false, depthWrite: false,
+      vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }",
+      fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 uDir; varying vec2 vUv;
+        void main(){ vec4 c = texture2D(tDiffuse, vUv) * .2270270;
+          c += (texture2D(tDiffuse, vUv + uDir * 1.3846154) + texture2D(tDiffuse, vUv - uDir * 1.3846154)) * .3162162;
+          c += (texture2D(tDiffuse, vUv + uDir * 3.2307692) + texture2D(tDiffuse, vUv - uDir * 3.2307692)) * .0702703; gl_FragColor = c; }` }));
+    RX.fond = new THREE.ShaderPass({ uniforms: { tDiffuse: { value: null }, tLoin: { value: RX.rtA.texture }, uC: { value: new THREE.Vector2(.5, .5) }, uAsp: { value: 1 } },
+      vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }",
+      fragmentShader: `uniform sampler2D tDiffuse, tLoin; uniform vec2 uC; uniform float uAsp; varying vec2 vUv;
+        void main(){ vec4 m = texture2D(tDiffuse, vUv); vec3 l = texture2D(tLoin, vUv).rgb;
+          vec2 d = (vUv - uC) * vec2(uAsp, 1.); vec3 fond = mix(vec3(.006, .011, .028), vec3(.02, .055, .135), exp(-dot(d, d) * 2.4)); // lueur bleue derrière le réseau
+          gl_FragColor = vec4(mix(fond + l * 1.2, m.rgb, clamp(m.a, 0., 1.)), 1.); }` });
+    U.compo.insertPass(RX.fond, 1);
+    const p = U.compo.passes[0]; p.clearColor = new THREE.Color(0); p.clearAlpha = 0; // le premier plan est rendu sur fond transparent, puis posé sur l'arrière-plan flou
+  } catch { RX.fond = RX.flou = null; }
+}
+function rxConstruire() {
+  const leger = modeLeger(), portrait = (U.w || innerWidth) < (U.h || innerHeight), L = projets(), V = (x, y, z) => new THREE.Vector3(x, y, z), h = alea(4242);
+  U.grp.traverse(o => { if (!o.geometry?.userData.garde) o.geometry?.dispose(); [].concat(o.material || []).forEach(m => { m.map?.dispose(); m.dispose(); }); });
+  while (U.grp.children.length) U.grp.remove(U.grp.children[0]);
+  const zoneLogos = $("#u-labels"); zoneLogos.innerHTML = `<div id="u-bulle"></div>`;
+  Object.assign(U, { noeuds: [], liens: [], cibles: [], survol: null, etat: "" }); RX.portrait = portrait;
+  if (U.tIntro === undefined) U.tIntro = mouvementReduit ? -1e9 : performance.now();
+  U.scene.fog = null; U.scene.environment = null; U.ciel.visible = U.soleil.visible = false; U.r.shadowMap.enabled = false; U.r.toneMapping = THREE.NoToneMapping;
+  if (U.halo) { U.halo.strength = .78; U.halo.radius = .72; U.halo.threshold = .52; const u = U.etalon.uniforms; u.uVig.value = .72; u.uSat.value = 1.14; u.uCon.value = 1.05; u.uGrain.value = .03; u.uOmbres.value.set(.93, .98, 1.1); u.uClairs.value.set(1.02, 1, 1); }
+
+  // ---------- 1. Disposition : l'agent au centre, les fiches autour, celles qui sont reliées se rapprochent ----------
+  const N = L.length, ech = RX.ech = Math.max(1, Math.cbrt(N / 11)), E = (portrait ? [14, 27, 13] : [35, 15.5, 18]).map(x => x * ech), grand = portrait ? 1 : 0;
+  const pos = L.map((p, i) => { const y = 1 - 2 * (i + .5) / Math.max(1, N), r = Math.sqrt(1 - y * y), a = i * 2.39996 + .9, k = .74 + .26 * h(), q = [Math.cos(a) * r, Math.sin(a) * r]; // points répartis le long du grand axe
+    return grand ? V(q[0] * E[0] * k, y * E[1] * k, q[1] * E[2] * k) : V(y * E[0] * k, q[0] * E[1] * k, q[1] * E[2] * k); });
+  const rang = new Map(L.map((p, i) => [p.id, i])), paires = [];
+  L.forEach((p, i) => tab(p.liens_projets).forEach(q => { const j = rang.get(q); if (j !== undefined && j !== i && !paires.some(([a, b]) => (a === i && b === j) || (a === j && b === i))) paires.push([i, j]); }));
+  for (let it = 0; it < 90; it++) {
+    for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) { const d = pos[j].clone().sub(pos[i]), l = d.length() || .01, m = 17.5 * ech; if (l < m) { d.multiplyScalar((m - l) / l * .5); pos[j].add(d); pos[i].sub(d); } }
+    paires.forEach(([i, j]) => { const d = pos[j].clone().sub(pos[i]), l = d.length(); if (l > 24 * ech) { d.multiplyScalar((l - 24 * ech) / l * .06); pos[i].add(d); pos[j].sub(d); } });
+    pos.forEach(p => { const e = Math.hypot(p.x / E[0], p.y / E[1], p.z / E[2]); if (e > 1) p.multiplyScalar(1 / e); const l = p.length() || .01; if (l < 14) p.multiplyScalar(14 / l); });
+  }
+  const nC = { centre: true, pos: V(0, 0, 0), R: 3.3, ordre: 0, phase: 0, ech: 1, liens: [], th: .55 };
+  const noeuds = [nC, ...L.map((p, i) => ({ p, pos: pos[i], R: 1.85 + .95 * fraicheur(p), ordre: i + 1, phase: h() * 6.28, ech: 1, liens: [], th: Math.atan2(pos[i].x, pos[i].z) }))];
+
+  // ---------- 2. Liaisons : l'agent vers chaque fiche, puis les fiches reliées entre elles ----------
+  U.liens = [...L.map((p, i) => [0, i + 1]), ...paires.map(([i, j]) => [i + 1, j + 1])].map(([ia, ib], k) => {
+    const a = noeuds[ia], b = noeuds[ib], hl = alea(977 + (ia * 131 + ib) * 31), d = b.pos.clone().sub(a.pos), lg0 = d.length(), u = d.clone().normalize(), lat = () => rxDir(hl).cross(u).normalize().multiplyScalar(lg0 * (.09 + .14 * hl()));
+    const c = new THREE.CubicBezierCurve3(a.pos, a.pos.clone().addScaledVector(u, lg0 * .3).add(lat()), b.pos.clone().addScaledVector(u, -lg0 * .3).add(lat()), b.pos), lg = c.getLength(), M = Math.max(14, Math.ceil(lg / .5));
+    const l = { a, b, pts: c.getSpacedPoints(M), M, pas: lg / M, lg, cle: [ia, ib, ...a.pos.toArray(), ...b.pos.toArray()].map(v => Math.round(v * 10)).join(",") }; a.liens.push(l); b.liens.push(l); return l; });
+
+  // ---------- 3. Les neurones ----------
+  const grille = leger ? 44 : (innerWidth < 820 ? 56 : 76), utiles = new Set();
+  noeuds.forEach((n, i) => {
+    const stubs = n.liens.map(l => { const dep = l.a === n, k = Math.max(3, Math.round(Math.min(2.1 * n.R, .42 * l.lg) / l.pas)), pts = []; if (dep) l.ka = k; else l.kb = k; for (let j = 0; j <= k; j++) pts.push(l.pts[dep ? j : l.M - j].clone().sub(n.pos)); return { pts, pas: l.pas }; });
+    const cle = [n.centre ? "centre" : n.p.id, n.R.toFixed(2), grille, ...n.liens.map(l => l.cle)].join("|"); utiles.add(cle);
+    let geo = RX.geos.get(cle); if (!geo) { geo = rxNeurone(n.R, stubs, 100 + i * 17, grille, n.centre ? 3 : 4, 2.1, 1); RX.geos.set(cle, geo); }
+    n.rT = geo.userData.rT; n.acc = n.centre ? new THREE.Color(0xff5c93) : rxVif(couleurDe(n.p)); n.vAtt = 1; n.vVif = 0;
+    n.mat = rxMat(n.acc, n.acc, { souffle: n.R * .016, phase: n.phase, signal: .45 });
+    n.groupe = new THREE.Mesh(geo, n.mat); n.groupe.position.copy(n.pos); U.grp.add(n.groupe);
+    const zone = new THREE.Mesh(RX.sphere, new THREE.MeshBasicMaterial({ visible: false })); zone.position.copy(n.pos); zone.scale.setScalar(n.R * 1.25); zone.userData.noeud = n; U.grp.add(zone); U.cibles.push(zone);
+    const coul = "#" + n.acc.getHexString(), def = n.centre ? { picto: "agent" } : { mono: monogramme(n.p.nom), picto: n.p.logo ? null : pictoDe(n.p), logo: n.p.logo, neuf: recent(n.p) };
+    n.signe = new THREE.Mesh(RX.plan, new THREE.MeshBasicMaterial({ map: rxNoyau(def, coul), transparent: true, depthTest: false, depthWrite: false, toneMapped: false })); n.signe.renderOrder = 5; n.taille = n.R * 1.28; n.signe.position.copy(n.pos); U.grp.add(n.signe);
+    const lab = document.createElement("button"); lab.className = "u-noeud"; lab.style.setProperty("--c", coul); { const inf = n.centre ? null : infoEcran(n.p), info = n.centre ? "Interroger tous tes projets" : [inf.valeur, inf.detail].filter(Boolean).join(" · ");
+      lab.innerHTML = `<b><span><i class="n">${String(n.ordre).padStart(2, "0")}</i>${esc(n.centre ? "Agent global" : n.p.nom)}${!n.centre && recent(n.p) ? '<i class="pt"></i>' : ""}</span>${info ? `<small>${esc(info)}</small>` : ""}</b>`; }
+    lab.onclick = () => activer(n); lab.onmouseenter = lab.onfocus = () => { U.puce = n; }; lab.onmouseleave = lab.onblur = () => { U.puce = null; };
+    zoneLogos.append(lab); n.lab = lab;
+  });
+  [...RX.geos.keys()].forEach(k => { if (!utiles.has(k)) { RX.geos.get(k).dispose(); RX.geos.delete(k); } }); // les formes qui ne servent plus sont libérées
+  U.liens.forEach((l, k) => {
+    const G = rxAccu(), k0 = Math.max(1, Math.round(l.a.R / l.pas)), k1 = l.M - Math.max(1, Math.round(l.b.R / l.pas)), seg = l.pts.slice(k0, k1 + 1), m = seg.length - 1;
+    rxTube(G, seg, i => { const f = i / m; return (l.a.rT + (l.b.rT - l.a.rT) * f) * (1 - .5 * Math.sin(Math.PI * f)); }, leger ? 5 : 7, k0 * l.pas, l.pas, k0 / l.M, k1 / l.M, k0 / l.M, k1 / l.M);
+    l.vAtt = 1; l.vVif = 0; l.mat = rxMat(l.a.acc, l.b.acc, { phase: h() * 6.28, signal: 1, marbre: .55 }); l.mesh = new THREE.Mesh(rxGeo(G), l.mat); U.grp.add(l.mesh);
+  });
+  U.noeuds = noeuds;
+
+  // ---------- 4. Arrière-plan : d'autres neurones, au loin, rendus flous ----------
+  RX.decor ??= [0, 1, 2].map(k => rxNeurone(1, [], 900 + k * 7, 34, 6, 1.5, 1.55));
+  { const hd = alea(99), o3 = U.o3, nd = leger ? 6 : 15, teintes = [0xff5c93, 0x7c8cff, 0x39c6ff];
+    RX.decor.forEach((geo, k) => { const t = new THREE.Color(teintes[k]), im = new THREE.InstancedMesh(geo, rxMat(t, t, { loin: true, phase: k * 2.1, signal: .7, pres: 30, att: leger ? .5 : 1.25, marbre: .7 }), nd);
+      for (let i = 0; i < nd; i++) { const d = rxDir(hd); d.y *= .75; o3.position.copy(d.normalize().multiplyScalar((46 + 72 * hd()) * ech)); o3.rotation.set(hd() * 6.28, hd() * 6.28, hd() * 6.28); o3.scale.setScalar(1.7 + 2.8 * hd()); o3.updateMatrix(); im.setMatrixAt(i, o3.matrix); }
+      im.layers.set(1); im.frustumCulled = false; U.grp.add(im); }); }
+
+  // ---------- 5. Signaux qui circulent sur les liaisons, poussières en suspension ----------
+  const matPoints = () => new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { uEch: RX.uEch ??= { value: 800 } },
+    vertexShader: "attribute float aT; attribute vec3 aCoul; uniform float uEch; varying vec3 vC; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); gl_PointSize = aT * uEch / -mv.z; gl_Position = projectionMatrix * mv; vC = aCoul; }",
+    fragmentShader: "varying vec3 vC; void main(){ float d = length(gl_PointCoord - .5) * 2.; if (d > 1.) discard; float a = exp(-d * d * 4.5); gl_FragColor = vec4(vC * a, a); }" });
+  const nuage = (nb, remplir) => { const g = new THREE.BufferGeometry(), P = new Float32Array(nb * 3), C = new Float32Array(nb * 3), T = new Float32Array(nb); for (let i = 0; i < nb; i++) remplir(i, P, C, T);
+    g.setAttribute("position", new THREE.BufferAttribute(P, 3)); g.setAttribute("aCoul", new THREE.BufferAttribute(C, 3)); g.setAttribute("aT", new THREE.BufferAttribute(T, 1)); const pts = new THREE.Points(g, matPoints()); pts.frustumCulled = false; U.grp.add(pts); return pts; };
+  const nImp = U.liens.length ? (leger ? 26 : 64) : 0;
+  RX.imp = Array.from({ length: nImp }, (_, i) => ({ l: U.liens[i % U.liens.length], u: h(), v: 5 + 6 * h(), sens: h() < .5 ? 1 : -1 }));
+  RX.impPts = nImp ? nuage(nImp, (i, P, C, T) => { T[i] = .55 + .5 * h(); }) : null;
+  const poussiere = (nb, ray, t0, t1, lum) => nuage(nb, (i, P, C, T) => { const d = rxDir(h).multiplyScalar(ray * Math.cbrt(h())); P.set([d.x * 1.5, d.y * .8, d.z], i * 3); const l = lum * (.4 + .6 * h()); C.set([.45 * l, .75 * l, l], i * 3); T[i] = t0 + (t1 - t0) * h() * h(); });
+  poussiere(leger ? 90 : 240, 46 * ech, .1, .34, .55);
+  if (!leger) poussiere(260, 120 * ech, .5, 2.6, .8).layers.set(1); // celles du fond passent dans le flou : de grosses taches douces
+
+  U.selection = new THREE.Mesh(RX.anneau, new THREE.MeshBasicMaterial({ color: 0xbfe6ff, transparent: true, opacity: .9, depthTest: false, depthWrite: false, toneMapped: false, side: THREE.DoubleSide })); U.selection.renderOrder = 6; U.selection.visible = false; U.grp.add(U.selection);
+  appliquerEtat(true); if (S.projet) rxViser(U.noeuds.find(n => n.p && n.p.id === S.projet));
+}
+function rxEtat(sv, choisi) {
+  const lie = (a, b) => a === b || tab(a.p?.liens_projets).includes(b.p?.id) || tab(b.p?.liens_projets).includes(a.p?.id), foyer = sv || choisi;
+  U.noeuds.forEach(n => {
+    const vif = (!U.filtre || n.centre || n.p.type === U.filtre) && (!sv || sv.centre || n.centre || lie(n, sv)), actif = n === sv || n === choisi;
+    n.vAtt = vif ? 1 : .3; n.vVif = actif ? 1 : 0; n.op = vif ? 1 : .28; n.lab.classList.toggle("attenue", !vif); n.lab.classList.toggle("vif", actif); n.cible = actif ? 1.16 : 1;
+  });
+  U.liens.forEach(l => { const touche = !!foyer && (l.a === foyer || l.b === foyer), net = l.a.vAtt === 1 && l.b.vAtt === 1; l.vVif = touche ? 1 : 0; l.vAtt = touche ? 1 : (foyer && !foyer.centre ? .3 : (net ? 1 : .3)); }); // les liaisons du neurone visé s'allument
+  RX.choisi = choisi; U.selection.visible = !!choisi;
+}
+function rxViser(n) {
+  if (!U.pret || !U.vise) return;
+  const tour = a => ((a - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+  if (n && !n.centre) { U.dAvant ??= U.cons.d; U.viseCible.copy(n.pos); U.cons.d = U.w < U.h ? 80 : 58; U.cons.th += tour(n.th); } // la caméra vient se placer devant le neurone choisi
+  else { U.viseCible.set(0, 0, 0); if (U.dAvant) U.cons.d = U.dAvant; U.dAvant = null; }
+}
+function rxBoucle(t) {
+  const leger = modeLeger(); image++; if (leger && (image & 1)) return;
+  const brut = t - tPrec, dt = Math.min(.05, brut / 1000 || 0); tPrec = t;
+  const o = U.orb, v = RX.v, anime = !mouvementReduit, k = 1 - Math.exp(-dt * 3.2), kk = 1 - Math.exp(-dt * 8);
+  // Caméra : lente rotation au repos, inertie, vol vers le neurone choisi, cadrage décalé pour laisser la place au titre ou à la fiche
+  U.repos += dt; if (anime && !U.pause && !U.survol && U.repos > 5) U.cons.th += dt * .032;
+  U.vise.lerp(U.viseCible, k);
+  const kc = 1 - Math.exp(-dt * 7); o.th += (U.cons.th - o.th) * kc; o.ph += (U.cons.ph - o.ph) * kc; o.d += (U.cons.d - o.d) * kc;
+  const ouverte = !!S.projet, cx = ouverte && U.w >= 700 ? Math.min(230, U.w * .2) : (U.w >= 900 ? -U.w * .15 : 0), cy = ouverte && U.w < 700 ? U.h * .3 : (U.w < 700 ? -U.h * .15 : -U.h * .03);
+  U.decal.x += (cx - U.decal.x) * k; U.decal.y += (cy - U.decal.y) * k;
+  const ph = o.ph + (anime ? Math.sin(t / 9000) * .035 : 0);
+  U.cam.position.set(U.vise.x + o.d * Math.sin(ph) * Math.sin(o.th), U.vise.y + o.d * Math.cos(ph), U.vise.z + o.d * Math.sin(ph) * Math.cos(o.th)); U.cam.lookAt(U.vise);
+  U.cam.setViewOffset(U.w, U.h, U.decal.x, U.decal.y, U.w, U.h); U.cam.updateMatrixWorld();
+  if (U.puce) U.survol = U.puce; else if (!U.souris) U.survol = null; else if (U.sourisBouge || (image & 7) === 0) { U.survol = viserNoeud(); U.sourisBouge = false; }
+  appliquerEtat();
+  const ti = (t - U.tIntro) / 1000, intro = ti < 6;
+  qualiteAuto(brut, intro);
+  RX.uT.value = anime ? t / 1000 : 0; RX.uBr.value.set(o.d * .85, o.d * 1.75);
+  const focale = (U.h / 2) / Math.tan(U.cam.fov * Math.PI / 360), base = rxDist(); if (RX.uEch) RX.uEch.value = focale * U.pr;
+  // Les neurones : ils éclosent l'un après l'autre, celui qui est visé s'illumine ; les logos font face à la caméra
+  U.noeuds.forEach(n => { n.dist = n.pos.distanceTo(U.cam.position); v.copy(n.pos).project(U.cam); n.z = v.z; n.sx = (v.x + 1) / 2 * U.w; n.sy = (1 - v.y) / 2 * U.h; });
+  U.noeuds.forEach(n => {
+    const leve = intro ? Math.max(.001, rebond((ti - .15 - n.ordre * .1) / 1.1)) : 1, u = n.mat.uniforms;
+    n.ech += ((n.cible || 1) - n.ech) * Math.min(1, dt * 9); u.uVif.value += (n.vVif - u.uVif.value) * kk; u.uAtt.value += (n.vAtt - u.uAtt.value) * kk;
+    n.groupe.scale.setScalar(leve * (1 + (n.ech - 1) * .45));
+    const rpx = n.taille * n.ech * .5 * focale / n.dist; let op = n.op ?? 1;
+    U.noeuds.forEach(m => { if (m === n || m.dist >= n.dist) return; const e = (Math.hypot(m.sx - n.sx, m.sy - n.sy) - m.R * focale / m.dist - rpx * .1) / (rpx * .9); op = Math.min(op, Math.min(1, Math.max(0, e))); }); // un logo passé derrière un autre neurone s'efface
+    const mo = n.signe.material; mo.opacity += (op * Math.min(1, leve) - mo.opacity) * Math.min(1, dt * 12);
+    n.signe.quaternion.copy(U.cam.quaternion); n.signe.scale.setScalar(Math.max(.001, n.taille * n.ech * Math.min(1, leve)));
+    const echL = Math.min(1.12, Math.max(.74, base / n.dist * (U.w < 600 ? .82 : 1)));
+    n.lab.style.transform = `translate(${(n.sx + rpx + 8).toFixed(1)}px,${n.sy.toFixed(1)}px) translate(0,-50%) scale(${echL.toFixed(3)})`;
+    n.lab.style.display = n.z > 1 || leve < .6 || mo.opacity < .4 ? "none" : ""; n.lab.style.zIndex = Math.round((1 - n.z) * 100000);
+  });
+  U.liens.forEach(l => { const u = l.mat.uniforms; u.uVif.value += (l.vVif - u.uVif.value) * kk; u.uAtt.value += (l.vAtt - u.uAtt.value) * kk; u.uPousse.value = intro ? Math.min(1, Math.max(0, (ti - .8 - Math.max(l.a.ordre, l.b.ordre) * .1) / 1.5)) : 1; });
+  if (RX.choisi && U.selection.visible) { const n = RX.choisi; U.selection.position.copy(n.pos); U.selection.quaternion.copy(U.cam.quaternion); U.selection.rotateZ(t / 2600); U.selection.scale.setScalar(n.taille * n.ech * .45); }
+  if (RX.impPts) { // signaux : des points lumineux qui vont d'un neurone à l'autre
+    const P = RX.impPts.geometry.attributes.position, C = RX.impPts.geometry.attributes.aCoul;
+    RX.imp.forEach((s, i) => {
+      s.u += s.sens * s.v * (anime ? dt : 0) * (1 + s.l.vVif * .8) / s.l.lg;
+      if (s.u < 0 || s.u > 1) { const actifs = U.liens.filter(l => l.vVif); s.l = (actifs.length && i % 3 ? actifs : U.liens)[Math.floor(Math.random() * (actifs.length && i % 3 ? actifs.length : U.liens.length))]; s.sens = Math.random() < .5 ? 1 : -1; s.u = s.sens > 0 ? 0 : 1; }
+      const f = s.u * s.l.M, a = Math.min(s.l.M - 1, Math.floor(f)), pa = s.l.pts[a], pb = s.l.pts[a + 1], g = f - a, lum = (.5 + s.l.vVif * .9) * s.l.mat.uniforms.uAtt.value * (s.l.mat.uniforms.uPousse.value >= 1 ? 1 : 0), c = s.sens > 0 ? s.l.a.acc : s.l.b.acc;
+      P.setXYZ(i, pa.x + (pb.x - pa.x) * g, pa.y + (pb.y - pa.y) * g, pa.z + (pb.z - pa.z) * g); C.setXYZ(i, (.55 + .45 * c.r) * lum, (.75 + .25 * c.g) * lum, (.9 + .1 * c.b) * lum);
+    });
+    P.needsUpdate = C.needsUpdate = true;
+  }
+  const b = $("#u-bulle"); if (U.survol && b) { const x = Math.min(U.w - 276, Math.max(8, U.survol.sx + 26)), y = Math.min(U.h - 200, Math.max(8, U.survol.sy + 18)); b.style.transform = `translate(${x.toFixed(0)}px,${y.toFixed(0)}px)`; }
+  // Rendu : l'arrière-plan d'abord, en petite définition et flouté, puis le premier plan net par-dessus, puis halo et étalonnage
+  if (U.compo && RX.fond && !(U.pr <= .75 && U.ms > 34)) {
+    const w = Math.max(2, Math.round(U.w * U.pr / 2)), hh = Math.max(2, Math.round(U.h * U.pr / 2)); if (RX.rtA.width !== w || RX.rtA.height !== hh) { RX.rtA.setSize(w, hh); RX.rtB.setSize(w, hh); }
+    U.scene.background = null; U.cam.layers.set(1); U.r.setRenderTarget(RX.rtA); U.r.setClearColor(0x000000, 0); U.r.clear(); U.r.render(U.scene, U.cam); U.cam.layers.set(0);
+    const fm = RX.flou.material.uniforms; for (const e of [1, 2.2, 3.6]) { fm.tDiffuse.value = RX.rtA.texture; fm.uDir.value.set(e / w, 0); U.r.setRenderTarget(RX.rtB); RX.flou.render(U.r); fm.tDiffuse.value = RX.rtB.texture; fm.uDir.value.set(0, e / hh); U.r.setRenderTarget(RX.rtA); RX.flou.render(U.r); }
+    U.r.setRenderTarget(null);
+    const fu = RX.fond.uniforms; fu.uAsp.value = U.w / U.h; fu.uC.value.set(.5 - U.decal.x / U.w, .5 + U.decal.y / U.h);
+    U.etalon.uniforms.uT.value = t / 1000; U.compo.render();
+  } else { U.scene.background = RX.noir; U.cam.layers.enable(1); U.r.setRenderTarget(null); U.r.render(U.scene, U.cam); U.cam.layers.set(0); }
+}
+
 RENDU.univers = () => {
   if (R.mode3d !== "2d") univInit();
   univConstruire(); rendreHud();
   const L = projets();
+  $("#u-titre").textContent = reseau3d() ? "un seul réseau." : "une seule place.";
   $("#u-date").textContent = "01 — Univers · " + new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  $("#u-sous").innerHTML = L.length ? `${L.length} tours reliées au hub, ${L.filter(recent).length} mises à jour ces trois derniers jours.${U.echec && R.mode3d !== "2d" ? " La 3D n'est pas disponible sur cet appareil : vue liste affichée." : ""}${S.demo ? " <b>Mode démonstration.</b>" : ""}` : "Aucune fiche chargée.";
+  $("#u-sous").innerHTML = L.length ? `${L.length} ${reseau3d() ? "neurones reliés" : "tours reliées"} au hub, ${L.filter(recent).length} mises à jour ces trois derniers jours.${U.echec && R.mode3d !== "2d" ? " La 3D n'est pas disponible sur cet appareil : vue liste affichée." : ""}${S.demo ? " <b>Mode démonstration.</b>" : ""}` : "Aucune fiche chargée.";
   $("#u-recents").innerHTML = [...L].sort((a, b) => String(b.derniere_maj).localeCompare(String(a.derniere_maj))).slice(0, 4).map(p => `<button data-act="fiche" data-id="${esc(p.id)}"><span class="mono">${esc(fDate(p.derniere_maj))}</span> · ${esc(p.nom)}</button>`).join("");
-  $("#u-legende").innerHTML = TYPES.filter(t => L.some(p => p.type === t)).map(t => `<button class="puce" aria-pressed="${U.filtre === t}" data-act="uFiltre" data-t="${esc(t)}"><i style="background:${esc(R.couleurs[t])}"></i>${esc(t)}</button>`).join("") + `<span class="u-aide">Glisse pour tourner · molette ou pincement pour zoomer · clique une tour ou la Grande Arche. Plus la tour est haute, plus la fiche est récente.</span>`;
+  $("#u-legende").innerHTML = TYPES.filter(t => L.some(p => p.type === t)).map(t => `<button class="puce" aria-pressed="${U.filtre === t}" data-act="uFiltre" data-t="${esc(t)}"><i style="background:${esc(R.couleurs[t])}"></i>${esc(t)}</button>`).join("") + `<span class="u-aide">${reseau3d() ? "Glisse pour tourner · molette ou pincement pour zoomer · clique un neurone. Plus il est gros, plus la fiche est récente." : "Glisse pour tourner · molette ou pincement pour zoomer · clique une tour ou la Grande Arche. Plus la tour est haute, plus la fiche est récente."}</span>`;
   const plan = R.mode3d === "2d" || U.echec || S.plan;
   $("#u-bascule").textContent = plan ? "Vue 3D" : "Vue liste";
   $("#u-bascule").disabled = U.echec || R.mode3d === "2d";
   $("#u-theme").textContent = estNuit() ? "Jour" : "Nuit";
 };
 Object.assign(ACT, {
-  uRecentrer: () => { fermerFiche(); const d = ((.85 - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; Object.assign(U.cons, { th: U.cons.th + d, ph: 1.37, d: distDefaut() }); U.dAvant = U.phAvant = null; U.viseCible?.set(...Q.CENTRE); U.repos = 0; },
+  uRecentrer: () => { fermerFiche(); if (reseau3d()) { const d = ((.55 - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; Object.assign(U.cons, { th: U.cons.th + d, ph: 1.46, d: rxDist() }); U.dAvant = null; U.viseCible?.set(0, 0, 0); U.repos = 0; return; } const d = ((.85 - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; Object.assign(U.cons, { th: U.cons.th + d, ph: 1.37, d: distDefaut() }); U.dAvant = U.phAvant = null; U.viseCible?.set(...Q.CENTRE); U.repos = 0; },
   uBascule: () => { S.plan = !S.plan; univActif(true); RENDU.univers(); },
   uFiltre: d => { U.filtre = U.filtre === d.t ? null : d.t; $$("#u-legende .puce").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === U.filtre)); appliquerEtat(true); },
   uTheme: () => { R.theme = estNuit() ? "clair" : "nuit"; sauverReglages(); appliquerTheme(); RENDU.univers(); }
@@ -1644,7 +2016,8 @@ RENDU.reglages = () => {
       <p class="doux petit" style="margin-top:10px">Créer le jeton : <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>. Accès limité au dépôt privé, droit « Contents : lecture et écriture ».</p>`}</div>
     <div class="carte"><h2>Apparence</h2><div style="display:grid;gap:12px;margin-top:12px">
       <label class="champ">Thème<select id="r-theme">${opt("clair", "Jour", R.theme)}${opt("nuit", "Nuit", R.theme)}${opt("auto", "Selon l'appareil", R.theme)}</select></label>
-      <label class="champ">Qualité du quartier 3D<select id="r-3d">${opt("auto", "Automatique (s'adapte à la fluidité)", R.mode3d)}${opt("complet", "Maximale (ombres, reflets, halo)", R.mode3d)}${opt("leger", "Allégée (appareils modestes)", R.mode3d)}${opt("2d", "Toujours en liste (sans 3D)", R.mode3d)}</select></label>
+      <label class="champ">Décor de l'univers 3D<select id="r-scene">${opt("reseau", "Réseau de neurones", R.scene3d)}${opt("quartier", "Quartier de La Défense", R.scene3d)}</select></label>
+      <label class="champ">Qualité de la 3D<select id="r-3d">${opt("auto", "Automatique (s'adapte à la fluidité)", R.mode3d)}${opt("complet", "Maximale (halo, flou d'arrière-plan, ombres)", R.mode3d)}${opt("leger", "Allégée (appareils modestes)", R.mode3d)}${opt("2d", "Toujours en liste (sans 3D)", R.mode3d)}</select></label>
       <div><span class="petit" style="color:var(--encre2)">Couleurs par type (tours sans couleur propre)</span><div class="rang" style="margin-top:6px">${TYPES.map(t => `<label class="coche"><input type="color" data-coul="${esc(t)}" value="${esc(R.couleurs[t])}" style="width:34px;height:30px;padding:0;border:1px solid var(--trait);border-radius:6px;background:none">${esc(t)}</label>`).join("")}</div></div>
     </div></div>
     <div class="carte"><h2>Vues et ordre</h2><p class="doux petit">Décoche une vue pour la masquer, utilise les flèches pour changer l'ordre du menu.</p>
@@ -1657,6 +2030,7 @@ RENDU.reglages = () => {
       <input type="file" id="r-fichier" accept="application/json" hidden></div>
   </div>`;
   $("#r-theme").onchange = e => { R.theme = e.target.value; sauverReglages(); appliquerTheme(); };
+  $("#r-scene").onchange = e => { R.scene3d = e.target.value; sauverReglages(); location.reload(); };
   $("#r-3d").onchange = e => { R.mode3d = e.target.value; sauverReglages(); location.reload(); };
   $$("[data-coul]", v).forEach(i => i.onchange = () => { R.couleurs[i.dataset.coul] = i.value; sauverReglages(); });
   $$("[data-vis]", v).forEach(i => i.onchange = () => { R.masquees = i.checked ? R.masquees.filter(x => x !== i.dataset.vis) : [...R.masquees, i.dataset.vis]; sauverReglages(); rendreNav(); });
