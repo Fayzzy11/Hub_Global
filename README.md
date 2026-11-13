@@ -26,6 +26,14 @@ Tableau de bord personnel sous forme d'application installable : quartier financ
 - Tout est calculé dans le navigateur avec three.js (embarqué dans `assets/lib/`) : aucune image ni modèle à télécharger pour cette vue.
 - Réglages > Décor de l'univers 3D permet de revenir au quartier de La Défense. Réglages > Qualité de la 3D : « Allégée » pour les appareils modestes, « Toujours en liste » pour désactiver la 3D.
 
+## Calendrier
+
+- La vue Calendrier permet d'ajouter, modifier et supprimer des événements directement dans l'app. Ils sont enregistrés dans le dépôt privé (`data/calendrier.json`, créé au premier enregistrement).
+- Trois affichages : jour, semaine (grille horaire) et mois. Un clic dans une colonne crée un événement à cette heure.
+- « Importer un emploi du temps SKEMA » : colle le texte de la page My Calendar, les séances sont ajoutées sans doublon.
+- Chaque événement a une catégorie (couleur et pictogramme, modifiables), un rappel et une répétition éventuelle. Les examens de la base de cours et les relances du carnet réseau s'affichent automatiquement.
+- Rappels : une app sans serveur ne peut pas notifier quand elle est fermée. Le bouton « Ajouter à mon agenda » envoie l'événement et son alarme dans l'agenda du téléphone ou de l'ordinateur (fichier `.ics`), qui se charge de la notification. Rien n'est publié dans le dépôt public.
+
 ## Quartier 3D (décor optionnel)
 
 - Le quartier s'affiche avec three.js (embarqué dans `assets/lib/`, aucune dépendance à un serveur tiers).

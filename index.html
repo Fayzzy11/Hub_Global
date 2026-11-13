@@ -173,6 +173,56 @@ body:has(#fiche.ouverte) #v-univers:not(.plan) .u-tete>*{pointer-events:none}
   .u-hud{flex-wrap:nowrap;gap:22px;margin-top:16px;overflow-x:auto;scrollbar-width:none}.u-hud button{flex:none;padding-top:10px;gap:7px}.u-hud b{font-size:19px}.u-hud b small{font-size:11px}#u-liste{padding-top:120px}
   .u-voile{background:linear-gradient(180deg,rgba(6,9,16,.82) 0,rgba(6,9,16,.5) 24%,rgba(6,9,16,0) 46%,rgba(6,9,16,0) 72%,rgba(6,9,16,.66) 100%)}.u-noeud b small{display:none}}
 
+/* ---------- Calendrier ---------- */
+.cal-barre{justify-content:space-between;margin-bottom:12px}
+.cal-corps{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.cal-grille{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--trait);border-radius:12px;overflow:hidden;background:var(--papier);box-shadow:var(--ombre)}
+.cal-tete{padding:9px 8px;font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--doux);border-bottom:1px solid var(--trait)}
+.cal-jour{min-height:104px;padding:6px 6px 8px;border-right:1px solid var(--trait);border-bottom:1px solid var(--trait);cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:0}
+.cal-jour:nth-child(7n){border-right:0} .cal-jour:hover{background:color-mix(in srgb,var(--or-doux) 55%,transparent)}
+.cal-jour:focus-visible{outline:2px solid var(--or);outline-offset:-2px}
+.cal-jour.hors{background:color-mix(in srgb,var(--fond) 60%,transparent)} .cal-jour.hors .num{color:var(--doux);opacity:.6}
+.cal-jour .num{font:500 13px/1 var(--mono);width:24px;height:24px;display:grid;place-items:center;border-radius:50%}
+.cal-jour.auj .num{background:var(--encre);color:var(--fond)} .cal-jour.choisi{box-shadow:inset 0 0 0 2px var(--or)}
+.cal-evs{display:flex;flex-direction:column;gap:3px;min-width:0}
+.cal-ev{display:flex;align-items:center;gap:5px;min-width:0;padding:3px 6px;border-radius:6px;font-size:12px;line-height:1.2;background:color-mix(in srgb,var(--c) 16%,var(--papier));border-left:3px solid var(--c);color:var(--encre);cursor:pointer}
+.cal-ev:hover{background:color-mix(in srgb,var(--c) 30%,var(--papier))}
+.cal-ev svg{flex:none;width:13px;height:13px;fill:none;stroke:var(--c);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cal-ev i{font:500 10.5px/1 var(--mono);font-style:normal;color:var(--encre2)} .cal-ev b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-plus{font:500 11px/1 var(--mono);color:var(--doux);padding-left:6px}
+.cal-cote{display:grid;gap:16px}
+.cal-ligne{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--trait)} .cal-cote .carte .cal-ligne:first-of-type{border-top:0}
+.cal-ligne>div{min-width:0;display:flex;flex-direction:column;gap:2px}
+.cal-tuile{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(145deg,color-mix(in srgb,var(--c) 76%,#fff),var(--c));color:#fff}
+.cal-tuile svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cal-vues{display:inline-flex;border:1px solid var(--trait);border-radius:8px;overflow:hidden;background:var(--papier)}
+.cal-vues button{border:0;background:none;padding:0 13px;min-height:36px;font-size:14px;font-weight:500;color:var(--encre2);cursor:pointer} .cal-vues button+button{border-left:1px solid var(--trait)}
+.cal-vues button[aria-pressed="true"]{background:var(--encre);color:var(--fond)}
+.cal-sem{border:1px solid var(--trait);border-radius:12px;overflow:hidden;background:var(--papier);box-shadow:var(--ombre);min-width:0}
+.cal-sem-tete,.cal-sem-jour,.cal-sem-corps{display:grid;grid-template-columns:52px repeat(var(--n),minmax(0,1fr))}
+.cal-sem-tete{border-bottom:1px solid var(--trait)}
+.cal-sem-tete button{border:0;border-left:1px solid var(--trait);background:none;padding:9px 4px;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--doux);cursor:pointer;display:flex;gap:7px;align-items:center;justify-content:center}
+.cal-sem-tete b{font:500 13px/1 var(--mono);letter-spacing:0;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;color:var(--encre)}
+.cal-sem-tete .auj b{background:var(--encre);color:var(--fond)} .cal-sem-tete .choisi{box-shadow:inset 0 -2px 0 var(--or)}
+.cal-sem-jour{border-bottom:1px solid var(--trait);min-height:30px} .cal-sem-jour>div{border-left:1px solid var(--trait);padding:3px;display:flex;flex-direction:column;gap:3px;min-width:0;cursor:pointer}
+.cal-h{font:500 10.5px/1 var(--mono);color:var(--doux);padding:5px 6px 0 0;text-align:right}
+.cal-sem-corps{position:relative} .cal-heures{position:relative} .cal-heures .cal-h{position:absolute;right:0;transform:translateY(-1px)}
+.cal-col{position:relative;border-left:1px solid var(--trait);cursor:cell;background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--hh) - 1px),var(--trait) calc(var(--hh) - 1px),var(--trait) var(--hh))}
+.cal-col.auj{background-color:color-mix(in srgb,var(--or-doux) 45%,transparent)}
+.cal-bloc{position:absolute;overflow:hidden;border-radius:6px;padding:4px 7px;background:var(--c);color:#fff;font-size:12px;line-height:1.25;cursor:pointer;display:flex;flex-direction:column;gap:1px;box-shadow:0 1px 0 rgba(0,0,0,.12)}
+.cal-bloc:hover{filter:brightness(1.1)} .cal-bloc .h{font:500 10.5px/1.2 var(--mono);opacity:.92;display:flex;gap:4px;align-items:center;white-space:nowrap}
+.cal-bloc .h svg{flex:none;width:12px;height:12px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cal-bloc b{font-weight:600} .cal-bloc .l{opacity:.85;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-bloc.court{flex-direction:row;gap:6px;align-items:center;padding:1px 7px} .cal-bloc.court b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .cal-bloc.court .l{display:none}
+.cal-maint{position:absolute;left:0;right:0;height:2px;background:var(--baisse);pointer-events:none} .cal-maint::before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--baisse)}
+#v-calendrier .puce[aria-pressed="false"]{opacity:.45;text-decoration:line-through}
+@media (max-width:1100px){.cal-corps{grid-template-columns:1fr}}
+@media (max-width:700px){.cal-jour{min-height:58px;padding:4px 2px 6px;align-items:center}.cal-evs{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:3px}
+  .cal-ev{padding:0;width:8px;height:8px;border-radius:50%;border:0;background:var(--c)}.cal-ev svg,.cal-ev i,.cal-ev b{display:none}.cal-plus{font-size:9px;padding:0}.cal-tete{padding:8px 0;text-align:center;letter-spacing:.04em}
+  .cal-barre h2{font-size:19px}#v-calendrier>header p{display:none}
+  .cal-sem-tete,.cal-sem-jour,.cal-sem-corps{grid-template-columns:34px repeat(var(--n),minmax(0,1fr))}.cal-h{font-size:9px;padding-right:3px}.cal-sem-tete button{flex-direction:column;gap:3px;letter-spacing:.02em;padding:7px 0}
+  .cal-sem[style*="--n:7"] .cal-bloc{padding:2px 3px;font-size:9.5px;line-height:1.15}.cal-sem[style*="--n:7"] .cal-bloc .h,.cal-sem[style*="--n:7"] .cal-bloc .l{display:none}.cal-sem[style*="--n:7"] .cal-bloc b{font-weight:500;overflow-wrap:anywhere}.cal-sem[style*="--n:7"] .cal-sem-jour .cal-ev{margin:auto}}
+
 /* ---------- Fiche (panneau latéral) ---------- */
 #fiche{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--papier);border-left:1px solid var(--trait);box-shadow:var(--ombre);transform:translateX(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);z-index:30;overflow:auto;padding:24px 24px 40px}
 #fiche.ouverte{transform:none}
@@ -266,6 +316,7 @@ dialog form{display:grid;gap:12px}
     <section class="vue" id="v-bibliotheque"></section>
     <section class="vue" id="v-cours"></section>
     <section class="vue" id="v-documents"></section>
+    <section class="vue" id="v-calendrier"></section>
     <section class="vue" id="v-reseau"></section>
     <section class="vue" id="v-bot"></section>
     <section class="vue" id="v-reglages"></section>
@@ -346,7 +397,7 @@ function telecharger(nom, texte) {
    ============================================================ */
 const VUES = [
   { id: "univers", nom: "Univers" }, { id: "agent", nom: "Agent" }, { id: "marche", nom: "Marché" },
-  { id: "bibliotheque", nom: "Bibliothèque" }, { id: "cours", nom: "Cours" }, { id: "documents", nom: "Documents" }, { id: "reseau", nom: "Réseau" },
+  { id: "bibliotheque", nom: "Bibliothèque" }, { id: "cours", nom: "Cours" }, { id: "documents", nom: "Documents" }, { id: "calendrier", nom: "Calendrier" }, { id: "reseau", nom: "Réseau" },
   { id: "bot", nom: "Bot" }, { id: "reglages", nom: "Réglages" }
 ];
 const REGLAGES_DEFAUT = {
@@ -358,7 +409,7 @@ let R = Object.assign({}, REGLAGES_DEFAUT, LS.lire("hub.reglages", {}));
 R.couleurs = Object.assign({}, REGLAGES_DEFAUT.couleurs, R.couleurs);
 R.marche = Object.assign({}, REGLAGES_DEFAUT.marche, R.marche);
 R.marche.carte = Object.assign({}, REGLAGES_DEFAUT.marche.carte, R.marche.carte);
-VUES.forEach(v => { if (!R.ordre.includes(v.id)) R.ordre.push(v.id); });
+VUES.forEach(v => { if (R.ordre.includes(v.id)) return; const i = R.ordre.indexOf("reseau"); if (i < 0) R.ordre.push(v.id); else R.ordre.splice(i, 0, v.id); }); // une vue ajoutée par une mise à jour prend place avant le carnet réseau
 const sauverReglages = () => LS.ecrire("hub.reglages", R);
 function appliquerTheme() {
   const t = R.theme === "auto" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "nuit" : "clair") : R.theme;
@@ -406,6 +457,7 @@ const JEUX = {
   projects: { prive: true, vide: () => ({ version: 1, projets: [] }), nom: "Fiches projets" },
   networking: { prive: true, vide: () => ({ version: 1, contacts: [], modeles: [] }), nom: "Carnet réseau" },
   courses: { prive: true, vide: () => ({ version: 1, cours: [] }), nom: "Base de cours" },
+  calendrier: { prive: true, vide: () => ({ version: 1, evenements: [], categories: [] }), nom: "Calendrier" },
   "morning-brief": { prive: true, vide: () => ({ version: 1, briefs: [] }), nom: "Morning brief" },
   market: { prive: false, vide: () => ({ tickers: [] }), nom: "Marché" },
   heatmap: { prive: false, vide: () => ({ indices: [] }), nom: "Cartes de marché" }
@@ -592,7 +644,7 @@ const CHAMPS_FICHE = [
   { k: "decisions", l: "Décisions prises", t: "liste" }, { k: "points_ouverts", l: "Points ouverts", t: "liste" },
   { k: "prochaines_actions", l: "Prochaines actions", t: "liste" }, { k: "fichiers_cles", l: "Fichiers clés", t: "liste" },
   { k: "liens.projet_claude", l: "URL du projet Claude", t: "url" }, { k: "liens.depot", l: "URL du dépôt GitHub", t: "url" },
-  { k: "liens.site", l: "URL du site", t: "url" }, { k: "logo", l: "Logo (chemin de l'image, ex. assets/logos/ledger.png)" }, { k: "icone", l: "Pictogramme de l'enseigne (si pas de logo)", t: "choix", get o() { return ICONES; } }, { k: "couleur", l: "Couleur de la tour", t: "color" }, { k: "liens.discord", l: "URL du salon Discord (bot)", t: "url" },
+  { k: "liens.site", l: "URL du site", t: "url" }, { k: "logo", l: "Logo (chemin de l'image, ex. assets/logos/ledger.png)" }, { k: "icone", l: "Pictogramme de l'enseigne (si pas de logo)", t: "choix", get o() { return ICONES; } }, { k: "couleur", l: "Couleur", t: "color" }, { k: "liens.discord", l: "URL du salon Discord (bot)", t: "url" },
   { k: "tags", l: "Tags (mots-clés utilisés par l'agent)", t: "tags" }, { k: "liens_projets", l: "Liens avec d'autres projets (identifiants)", t: "tags" },
   { k: "derniere_maj", l: "Dernière mise à jour", t: "date" }
 ];
@@ -694,6 +746,14 @@ const PICTOS = {
   calendrier: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
   camembert: '<path d="M11 4a8.5 8.5 0 108.5 8.5H11z"/><path d="M14.5 3.5a7 7 0 016 6h-6z"/>',
   livre: '<path d="M4 5c3-1 6-1 8 1 2-2 5-2 8-1v14c-3-1-6-1-8 1-2-2-5-2-8-1z"/><path d="M12 6v14"/>',
+  horloge: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  coeur: '<path d="M12 20s-7-4.4-7-9.6A4 4 0 0112 8a4 4 0 017 2.4C19 15.6 12 20 12 20z"/>',
+  telephone: '<path d="M6 3h4l1.5 4.5-2 1.5a12 12 0 005.5 5.5l1.5-2L21 14v4a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z"/>',
+  avion: '<path d="M3 12l18-8-6 17-3.5-7z"/><path d="M11.5 14L21 4"/>',
+  sport: '<path d="M4 9v6M7 6.5v11M17 6.5v11M20 9v6M7 12h10"/>',
+  etoile: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.8z"/>',
+  stylo: '<path d="M4 20l1-4.5L16.5 4a2.1 2.1 0 013 3L8 18.5z"/><path d="M14.5 6l3.5 3.5"/>',
+  cadeau: '<rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13M12 7c-1.5-4-6-3.5-5-1 .6 1.4 3 1 5 1zm0 0c1.5-4 6-3.5 5-1-.6 1.4-3 1-5 1z"/>',
   bougies: '<path d="M7 3v4M7 15v6M17 2v5M17 13v8"/><rect x="5" y="7" width="4" height="8"/><rect x="15" y="7" width="4" height="6"/>'
 };
 const ICONES = ["auto", ...Object.keys(PICTOS)];
@@ -1278,6 +1338,7 @@ function rendreHud() {
   const ex = tab(D.courses?.cours).filter(c => c.examen?.date && joursDepuis(c.examen.date) <= 0).sort((a, b) => a.examen.date.localeCompare(b.examen.date))[0];
   const carte = (vue, titre, valeur, classe = "") => `<button data-act="aller" data-v="${vue}"><span class="sur">${esc(titre)}</span><b class="${classe}">${valeur}</b></button>`;
   $("#u-hud").innerHTML = (t0 ? carte("marche", t0.nom || t0.symbole, `${t0.variation_pct >= 0 ? "▲ +" : "▼ −"}${Math.abs(+t0.variation_pct || 0).toFixed(2).replace(".", ",")} %`, t0.variation_pct >= 0 ? "hausse" : "baisse") : "")
+    + (() => { const f = new Date(); f.setDate(f.getDate() + 30); const o = occurrences(isoJour(new Date()), isoJour(f)).find(x => !x.e.lie); return o ? carte("calendrier", "Prochain rendez-vous", `${esc(deIso(o.date).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric" }))}${o.e.debut ? " · " + esc(o.e.debut) : ""} <small>${esc(o.e.titre)}</small>`) : ""; })()
     + carte("reseau", "Relances à faire", String(nRel), nRel ? "alerte" : "")
     + (ex ? carte("cours", "Prochain examen", `J-${-joursDepuis(ex.examen.date)} <small>${esc(ex.nom)}</small>`, "alerte") : "")
     + carte("bibliotheque", "Morning brief", `${B.length} <small>en bibliothèque</small>`);
@@ -1998,6 +2059,173 @@ RENDU.bot = () => {
     <p class="doux petit" style="margin-top:14px">Pour relancer un passage : sur la page GitHub, choisis le workflow puis « Run workflow ». Le hub ne déclenche rien lui-même.</p>
     ${tab(b.fichiers_cles).length ? `<h3 style="margin:18px 0 6px">Fichiers utiles du dépôt</h3><ul class="liste">${b.fichiers_cles.map(f => `<li>${L.depot ? `<a href="${esc(L.depot)}/blob/HEAD/${esc(f)}" target="_blank" rel="noopener">${esc(f)}</a>` : esc(f)}</li>`).join("")}</ul>` : ""}</div>`;
 };
+
+/* ============================================================
+   15 bis. Calendrier : événements modifiables, catégories en
+      couleur avec leur pictogramme, rappels. Les examens des
+      cours et les relances du carnet réseau s'y ajoutent tout
+      seuls (lecture seule). Tout est enregistré dans le dépôt
+      privé. Les rappels sonnent sur le téléphone : le bouton
+      « Ajouter à mon agenda » envoie l'événement, avec son
+      alarme, dans l'agenda de l'appareil (fichier .ics).
+   ============================================================ */
+const RAPPELS = { "Aucun": null, "À l'heure": 0, "10 minutes avant": 10, "30 minutes avant": 30, "1 heure avant": 60, "2 heures avant": 120, "La veille": 1440, "2 jours avant": 2880, "1 semaine avant": 10080 };
+const REPETITIONS = { "Aucune": null, "Chaque semaine": "WEEKLY", "Chaque mois": "MONTHLY", "Chaque année": "YEARLY" };
+const CATEGORIES_DEFAUT = [
+  { nom: "Cours", couleur: "#6B4FA0", icone: "cours" }, { nom: "Examen", couleur: "#C2452F", icone: "cible" }, { nom: "Entretien", couleur: "#2B5FA8", icone: "mallette" },
+  { nom: "Networking", couleur: "#2E7D9A", icone: "reseau" }, { nom: "CFA", couleur: "#B8862B", icone: "livre" }, { nom: "Échéance", couleur: "#C0692B", icone: "horloge" }, { nom: "Événement", couleur: "#1F7A6B", icone: "etoile" }, { nom: "Perso", couleur: "#28734F", icone: "coeur" }
+];
+const isoJour = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const deIso = s => { const [a, m, j] = String(s).split("-").map(Number); return new Date(a, (m || 1) - 1, j || 1, 12); };
+const CAL = { mois: null, jour: isoJour(new Date()), masquees: new Set(), vue: ["mois", "semaine", "jour"].includes(LS.lire("hub.cal.vue", "")) ? LS.lire("hub.cal.vue", "") : (innerWidth < 700 ? "jour" : "semaine") };
+const evenements = () => tab(D.calendrier?.evenements);
+const categories = () => { const c = tab(D.calendrier?.categories); return c.length ? c : CATEGORIES_DEFAUT; };
+const categorie = nom => categories().find(c => c.nom === nom) || { nom: nom || "Autre", couleur: "#6B7385", icone: "calendrier" };
+const pictoEv = e => PICTOS[e.icone] ? e.icone : (PICTOS[categorie(e.categorie).icone] ? categorie(e.categorie).icone : "calendrier");
+const svgPicto = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${PICTOS[k] || PICTOS.calendrier}</svg>`;
+async function majCalendrier() { await sauver("calendrier"); RENDU.calendrier(); }
+/* Événements déduits des autres vues : examens de la base de cours, relances du carnet réseau */
+function evenementsLies() {
+  return [
+    ...tab(D.courses?.cours).filter(c => c.examen?.date).map(c => ({ id: "x-" + c.id, titre: "Examen : " + c.nom, date: c.examen.date, debut: c.examen.heure || "", categorie: "Examen", notes: c.examen.format || "", lie: "cours", rappel: "La veille" })),
+    ...tab(D.networking?.contacts).filter(c => c.prochaine_relance && c.statut !== "Clos").map(c => ({ id: "r-" + c.id, titre: "Relance : " + c.nom, date: c.prochaine_relance, debut: "", categorie: "Networking", notes: [c.poste, c.entreprise].filter(Boolean).join(", "), lie: "reseau", rappel: "À l'heure" }))
+  ];
+}
+/* Toutes les occurrences entre deux jours (répétitions comprises), triées par date puis par heure */
+function occurrences(de, a) {
+  const res = [], tous = [...evenements(), ...evenementsLies()].filter(e => e.date && !CAL.masquees.has(categorie(e.categorie).nom));
+  for (let d = deIso(de), fin = deIso(a); d <= fin; d.setDate(d.getDate() + 1)) {
+    const iso = isoJour(d);
+    tous.forEach(e => {
+      if (iso < e.date || (e.jusqua && iso > e.jusqua)) return; const o = deIso(e.date), rep = REPETITIONS[e.repetition];
+      if (iso === e.date || (rep === "WEEKLY" && o.getDay() === d.getDay()) || (rep === "MONTHLY" && o.getDate() === d.getDate()) || (rep === "YEARLY" && o.getDate() === d.getDate() && o.getMonth() === d.getMonth())) res.push({ e, date: iso });
+    });
+  }
+  return res.sort((x, y) => x.date.localeCompare(y.date) || (x.e.debut || "").localeCompare(y.e.debut || ""));
+}
+/* Fichier d'agenda (.ics) : heure locale, alarme, répétition. Reconnu par les agendas d'Apple, de Google et d'Outlook. */
+function ics(evs) {
+  const net = s => String(s || "").replace(/\\/g, "\\\\").replace(/([;,])/g, "\\$1").replace(/\r?\n/g, "\\n"), jour = s => s.replaceAll("-", ""), plier = l => l.replace(/(.{70})(?=.)/g, "$1\r\n ");
+  const L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Hub//Calendrier//FR", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"], tampon = new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
+  evs.forEach(e => {
+    L.push("BEGIN:VEVENT", `UID:${e.id}@hub`, `DTSTAMP:${tampon}`);
+    if (e.debut) { const h = t => t.replace(":", "") + "00"; let fin = e.fin && e.fin > e.debut ? e.fin : null; if (!fin) { const [hh, mm] = e.debut.split(":").map(Number), m = Math.min(23 * 60 + 59, hh * 60 + mm + 60); fin = `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; }
+      L.push(`DTSTART:${jour(e.date)}T${h(e.debut)}`, `DTEND:${jour(e.date)}T${h(fin)}`); }
+    else { const d = deIso(e.date); d.setDate(d.getDate() + 1); L.push(`DTSTART;VALUE=DATE:${jour(e.date)}`, `DTEND;VALUE=DATE:${jour(isoJour(d))}`); }
+    L.push(`SUMMARY:${net(e.titre)}`); if (e.lieu) L.push(`LOCATION:${net(e.lieu)}`); if (e.notes) L.push(`DESCRIPTION:${net(e.notes)}`); if (e.categorie) L.push(`CATEGORIES:${net(e.categorie)}`);
+    const rep = REPETITIONS[e.repetition]; if (rep) L.push(`RRULE:FREQ=${rep}${e.jusqua ? `;UNTIL=${jour(e.jusqua)}T235959` : ""}`);
+    const min = RAPPELS[e.rappel]; if (min != null) L.push("BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${net(e.titre)}`, `TRIGGER:${min ? (min % 1440 === 0 ? `-P${min / 1440}D` : `-PT${min}M`) : "PT0M"}`, "END:VALARM");
+    L.push("END:VEVENT");
+  });
+  L.push("END:VCALENDAR"); return L.map(plier).join("\r\n") + "\r\n";
+}
+async function versAgenda(evs, nom) {
+  if (!evs.length) { toast("Aucun événement à envoyer"); return; }
+  const texte = ics(evs), fichier = new File([texte], nom, { type: "text/calendar" });
+  if (matchMedia("(pointer:coarse)").matches && navigator.canShare?.({ files: [fichier] })) { try { await navigator.share({ files: [fichier] }); return; } catch (err) { if (err.name === "AbortError") return; } } // téléphone : la feuille de partage propose l'agenda
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([texte], { type: "text/calendar" })); a.download = nom; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  toast("Fichier d'agenda créé : ouvre-le pour l'ajouter");
+}
+/* Import de l'emploi du temps SKEMA : texte copié depuis la page « My Calendar » (une ligne par séance).
+   Réimporter le même texte ne crée pas de doublon : chaque séance garde le même identifiant. */
+function importerSkema(texte, tout, rappel) {
+  const MOIS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 }, vus = new Set(), res = { total: 0, ajoutes: 0, maj: 0 }, L = D.calendrier.evenements ??= [];
+  const joli = s => s.toLowerCase().replace(/(^|[\s(&/-])(\p{L})/gu, (m, a, b) => a + b.toUpperCase()).replace(/\b(With|And|Of|For|In)\b/g, m => m.toLowerCase());
+  String(texte).split(/\r?\n/).forEach(l => {
+    const m = l.trim().match(/^(\d{1,2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d{2}:\d{2}) - (\d{2}:\d{2}) (.+)$/); if (!m) return;
+    const date = `${m[3]}-${String(MOIS[m[2]]).padStart(2, "0")}-${m[1].padStart(2, "0")}`; let [nom, ...reste] = m[6].split(" / "); nom = nom.trim(); const lieu = reste.join(" / ").trim();
+    const ev = /^(event |ev[èe]nement|activit)/i.test(nom); if (ev && !tout && m[4] === "08:00" && m[5] === "18:00") return; // salons et périodes affichés tous les jours pendant des semaines
+    nom = nom.replace(/^Event /, ""); if (!ev) nom = joli(nom.replace(/\s*\([^)]*$/, "")); // un titre coupé au milieu d'une parenthèse perd ce morceau
+    const id = "sk-" + date + "-" + m[4].replace(":", "") + "-" + hache(nom), cle = id; if (vus.has(cle)) return; vus.add(cle); res.total++;
+    const neuf = { id, titre: nom, date, debut: m[4], fin: m[5], categorie: ev ? "Événement" : "Cours", icone: "auto", rappel, repetition: "Aucune", jusqua: "", lieu, notes: "" }, deja = L.find(x => x.id === id);
+    if (deja) { Object.assign(deja, { debut: neuf.debut, fin: neuf.fin, lieu: neuf.lieu }); res.maj++; } else { L.push(neuf); res.ajoutes++; }
+  });
+  if (res.ajoutes && tab(D.calendrier.categories).length) ["Cours", "Événement"].forEach(n => { if (!D.calendrier.categories.some(c => c.nom === n)) D.calendrier.categories.push({ ...CATEGORIES_DEFAUT.find(c => c.nom === n) }); });
+  return res;
+}
+const fHoraire = e => e.debut ? (e.fin && e.fin > e.debut ? `${e.debut} – ${e.fin}` : e.debut) : "Toute la journée";
+RENDU.calendrier = () => {
+  const v = $("#v-calendrier"), auj = isoJour(new Date()); CAL.mois ??= auj.slice(0, 7);
+  const [an, mo] = CAL.mois.split("-").map(Number), premier = new Date(an, mo - 1, 1, 12), decal = (premier.getDay() + 6) % 7, debut = new Date(an, mo - 1, 1 - decal, 12), nbSem = Math.ceil((decal + new Date(an, mo, 0).getDate()) / 7);
+  const lundi = deIso(CAL.jour); lundi.setDate(lundi.getDate() - (lundi.getDay() + 6) % 7);
+  const jours = CAL.vue === "jour" ? [CAL.jour] : CAL.vue === "semaine" ? Array.from({ length: 7 }, (_, i) => { const d = new Date(lundi); d.setDate(lundi.getDate() + i); return isoJour(d); }) : Array.from({ length: nbSem * 7 }, (_, i) => { const d = new Date(debut); d.setDate(debut.getDate() + i); return isoJour(d); });
+  const titre = CAL.vue === "jour" ? deIso(CAL.jour).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : CAL.vue === "semaine" ? `${deIso(jours[0]).toLocaleDateString("fr-FR", jours[0].slice(0, 7) === jours[6].slice(0, 7) ? { day: "numeric" } : { day: "numeric", month: "short" })} – ${deIso(jours[6]).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}` : premier.toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+  const parJour = new Map(); occurrences(jours[0], jours[jours.length - 1]).forEach(o => { (parJour.get(o.date) || parJour.set(o.date, []).get(o.date)).push(o.e); });
+  const dans60 = new Date(); dans60.setDate(dans60.getDate() + 60); const aVenir = occurrences(auj, isoJour(dans60)).slice(0, 8);
+  const pastille = (e, d) => `<span class="cal-ev" style="--c:${esc(categorie(e.categorie).couleur)}" data-act="calOuvrir" data-id="${esc(e.id)}" data-d="${d}" title="${esc(e.titre)}">${svgPicto(pictoEv(e))}${e.debut ? `<i>${esc(e.debut)}</i>` : ""}<b>${esc(e.titre)}</b></span>`;
+  const ligne = (e, d, avecDate) => `<div class="cal-ligne" style="--c:${esc(categorie(e.categorie).couleur)}"><span class="cal-tuile">${svgPicto(pictoEv(e))}</span><div><b>${esc(e.titre)}</b>
+      <span class="doux petit">${avecDate ? esc(deIso(d).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })) + " · " : ""}${esc(fHoraire(e))}${e.lieu ? " · " + esc(e.lieu) : ""}</span>
+      ${avecDate ? "" : `<span class="rang" style="margin-top:6px;gap:6px"><span class="puce"><i style="background:var(--c)"></i>${esc(categorie(e.categorie).nom)}</span>${RAPPELS[e.rappel] != null ? `<span class="puce">Rappel : ${esc(e.rappel.toLowerCase())}</span>` : ""}${REPETITIONS[e.repetition] ? `<span class="puce">${esc(e.repetition)}</span>` : ""}</span>`}
+      ${e.notes && !avecDate ? `<p class="petit" style="color:var(--encre2);margin-top:6px;white-space:pre-wrap">${esc(e.notes)}</p>` : ""}
+      ${avecDate ? "" : `<span class="rang" style="margin-top:8px">${e.lie ? `<button class="btn mini" data-act="aller" data-v="${e.lie}">Ouvrir dans ${e.lie === "cours" ? "Cours" : "Réseau"}</button>` : `<button class="btn mini" data-act="calEditer" data-id="${esc(e.id)}">Modifier</button>`}<button class="btn mini plein" data-act="calAgenda" data-id="${esc(e.id)}">Ajouter à mon agenda</button></span>`}</div></div>`;
+  // Vues semaine et jour : une colonne par jour, les heures en ordonnée, les événements placés à leur horaire
+  const min = t => { const [h, m] = t.split(":").map(Number); return h * 60 + (m || 0); }, finDe = e => e.fin && e.fin > e.debut ? min(e.fin) : Math.min(1439, min(e.debut) + 60);
+  const horaires = jours.flatMap(d => (parJour.get(d) || []).filter(e => e.debut)), h0 = Math.min(8, ...horaires.map(e => Math.floor(min(e.debut) / 60))), h1 = Math.max(19, ...horaires.map(e => Math.ceil(finDe(e) / 60))), HH = 46;
+  const colonne = d => { // les événements qui se chevauchent se partagent la largeur
+    const E = (parJour.get(d) || []).filter(e => e.debut).map(e => ({ e, a: min(e.debut), b: finDe(e) })).sort((x, y) => x.a - y.a || y.b - x.b); let groupe = [], finG = -1; const poses = [];
+    const clore = () => { const n = Math.max(1, ...groupe.map(g => g.col + 1)); groupe.forEach(g => { g.n = n; poses.push(g); }); groupe = []; };
+    E.forEach(x => { if (groupe.length && x.a >= finG) clore(); const prises = new Set(groupe.filter(g => g.b > x.a).map(g => g.col)); let c = 0; while (prises.has(c)) c++; x.col = c; groupe.push(x); finG = Math.max(finG, x.b); }); clore();
+    return poses.map(p => `<div class="cal-bloc${p.b - p.a < 50 ? " court" : ""}" style="--c:${esc(categorie(p.e.categorie).couleur)};top:${((p.a - h0 * 60) / 60 * HH).toFixed(1)}px;height:${Math.max(18, (p.b - p.a) / 60 * HH - 2).toFixed(1)}px;left:calc(${(p.col / p.n * 100).toFixed(2)}% + 2px);width:calc(${(100 / p.n).toFixed(2)}% - 4px)" data-act="calOuvrir" data-id="${esc(p.e.id)}" data-d="${d}" title="${esc(p.e.titre)} · ${esc(fHoraire(p.e))}${p.e.lieu ? " · " + esc(p.e.lieu) : ""}"><span class="h">${svgPicto(pictoEv(p.e))}${esc(fHoraire(p.e))}</span><b>${esc(p.e.titre)}</b>${p.e.lieu ? `<span class="l">${esc(p.e.lieu)}</span>` : ""}</div>`).join("");
+  };
+  const maint = new Date(), yMaint = ((maint.getHours() * 60 + maint.getMinutes()) / 60 - h0) * HH;
+  const semaine = () => `<div class="cal-sem" style="--n:${jours.length}">
+      <div class="cal-sem-tete"><span></span>${jours.map(d => `<button class="${d === auj ? "auj " : ""}${d === CAL.jour ? "choisi" : ""}" data-act="calJour" data-d="${d}">${esc(deIso(d).toLocaleDateString("fr-FR", { weekday: "short" }).replace(".", ""))} <b>${Number(d.slice(8))}</b></button>`).join("")}</div>
+      <div class="cal-sem-jour"><span class="cal-h">Jour</span>${jours.map(d => `<div data-act="calEditer" data-d="${d}">${(parJour.get(d) || []).filter(e => !e.debut).map(e => pastille(e, d)).join("")}</div>`).join("")}</div>
+      <div class="cal-sem-corps" style="height:${(h1 - h0) * HH}px;--hh:${HH}px"><div class="cal-heures">${Array.from({ length: h1 - h0 }, (_, i) => `<span class="cal-h" style="top:${i * HH}px">${String(h0 + i).padStart(2, "0")}:00</span>`).join("")}</div>
+        ${jours.map(d => `<div class="cal-col${d === auj ? " auj" : ""}" data-act="calCreneau" data-d="${d}" data-h0="${h0}" data-hh="${HH}">${colonne(d)}${d === auj && yMaint > 0 && yMaint < (h1 - h0) * HH ? `<i class="cal-maint" style="top:${yMaint.toFixed(0)}px"></i>` : ""}</div>`).join("")}</div></div>`;
+  const duJour = parJour.get(CAL.jour) || occurrences(CAL.jour, CAL.jour).map(o => o.e);
+  v.innerHTML = `<header><div class="sur">Calendrier · organisation</div><h1>Le calendrier</h1><p>Ajoute et modifie tes événements ici : ils sont enregistrés dans ton dépôt privé. Les examens de tes cours et les relances de ton carnet réseau apparaissent automatiquement.</p></header>${bandeau("calendrier")}
+    <div class="rang cal-barre"><span class="rang"><button class="btn" data-act="calMois" data-k="-1" aria-label="Mois précédent">‹</button><button class="btn" data-act="calMois" data-k="0">Aujourd'hui</button><button class="btn" data-act="calMois" data-k="1" aria-label="Mois suivant">›</button><h2 style="margin-left:8px;text-transform:capitalize">${esc(titre)}</h2></span>
+      <span class="rang"><span class="cal-vues" role="group" aria-label="Affichage">${[["jour", "Jour"], ["semaine", "Semaine"], ["mois", "Mois"]].map(([k, n]) => `<button aria-pressed="${CAL.vue === k}" data-act="calVue" data-k="${k}">${n}</button>`).join("")}</span><button class="btn plein" data-act="calEditer" data-d="${CAL.jour}">Ajouter un événement</button></span></div>
+    <div class="rang" style="margin:0 0 14px;gap:6px">${categories().map(c => `<button class="puce" aria-pressed="${!CAL.masquees.has(c.nom)}" data-act="calFiltre" data-c="${esc(c.nom)}" title="Afficher ou masquer cette catégorie"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${esc(c.couleur)}"></i>${esc(c.nom)}</button>`).join("")}</div>
+    <div class="cal-corps">${CAL.vue !== "mois" ? semaine() : `<div class="cal-grille">${["lun", "mar", "mer", "jeu", "ven", "sam", "dim"].map(j => `<div class="cal-tete">${j}</div>`).join("")}
+      ${jours.map(d => { const E = parJour.get(d) || [], num = Number(d.slice(8)); return `<div class="cal-jour${d.slice(0, 7) !== CAL.mois ? " hors" : ""}${d === auj ? " auj" : ""}${d === CAL.jour ? " choisi" : ""}" data-act="calJour" data-d="${d}" role="button" tabindex="0" aria-label="${esc(deIso(d).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }))}, ${E.length} événement${E.length > 1 ? "s" : ""}"><span class="num">${num}</span><span class="cal-evs">${E.slice(0, 3).map(e => pastille(e, d)).join("")}${E.length > 3 ? `<span class="cal-plus">+${E.length - 3}</span>` : ""}</span></div>`; }).join("")}</div>`}
+      <aside class="cal-cote"><div class="carte"><div class="sur">${CAL.jour === auj ? "Aujourd'hui" : "Jour choisi"}</div><h3 style="margin:6px 0 10px;text-transform:capitalize">${esc(deIso(CAL.jour).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }))}</h3>
+        ${duJour.length ? duJour.map(e => ligne(e, CAL.jour, false)).join("") : `<p class="doux petit">Rien de prévu ce jour-là.</p>`}
+        <p style="margin-top:12px"><button class="btn mini" data-act="calEditer" data-d="${CAL.jour}">Ajouter ce jour-là</button></p></div>
+        <div class="carte"><div class="sur" style="margin-bottom:10px">À venir</div>${aVenir.length ? aVenir.map(o => `<div data-act="calJour" data-d="${o.date}" style="cursor:pointer">${ligne(o.e, o.date, true)}</div>`).join("") : `<p class="doux petit">Aucun événement dans les deux prochains mois.</p>`}</div></aside></div>
+    <div class="rang" style="margin-top:18px"><button class="btn" data-act="calExport">Tout envoyer vers mon agenda</button><button class="btn" data-act="calImporter">Importer un emploi du temps SKEMA</button></div>
+    <div class="rang" style="justify-content:space-between;margin:30px 0 10px"><h2>Catégories</h2><button class="btn" data-act="calCategorie">Ajouter une catégorie</button></div>
+    <div class="grille" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${categories().map(c => `<div class="carte cal-ligne" style="--c:${esc(c.couleur)};align-items:center;border-top:0;margin:0;padding:12px 14px"><span class="cal-tuile">${svgPicto(PICTOS[c.icone] ? c.icone : "calendrier")}</span><div style="flex:1"><b>${esc(c.nom)}</b></div><button class="btn mini" data-act="calCategorie" data-c="${esc(c.nom)}">Modifier</button></div>`).join("")}</div>
+    <p class="doux petit" style="margin-top:18px">Rappels : l'application ne peut pas sonner quand elle est fermée. « Ajouter à mon agenda » envoie l'événement et son rappel dans l'agenda de ton téléphone ou de ton ordinateur, qui se charge de la notification. Après une modification, renvoie l'événement : l'agenda met à jour celui qu'il connaît déjà.</p>`;
+};
+Object.assign(ACT, {
+  calVue: d => { CAL.vue = d.k; LS.ecrire("hub.cal.vue", d.k); CAL.mois = CAL.jour.slice(0, 7); RENDU.calendrier(); },
+  calCreneau: (d, b, ev) => { const m = Math.round(((ev.clientY - b.getBoundingClientRect().top) / Number(d.hh) + Number(d.h0)) * 2) * 30, h = t => `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`; CAL.jour = d.d; ACT.calEditer({ d: d.d, h: h(Math.min(m, 23 * 60)), f: h(Math.min(m + 60, 23 * 60 + 59)) }); }, // clic dans une colonne : nouvel événement à cette heure
+  calImporter: () => formulaire("Importer un emploi du temps SKEMA", [{ k: "texte", l: "Sur la page « My Calendar » de SKEMA (onglet My next classes), sélectionne tout, copie, et colle ici", t: "zone", h: 220 }, { k: "quoi", l: "À importer", t: "choix", o: ["Cours et événements ponctuels", "Tout, y compris les salons sur plusieurs semaines"] }, { k: "rappel", l: "Rappel pour ces événements", t: "choix", o: Object.keys(RAPPELS) }], { texte: "", quoi: "Cours et événements ponctuels", rappel: "30 minutes avant" },
+    r => { const res = importerSkema(r.texte, r.quoi.startsWith("Tout"), r.rappel); if (!res.total) { toast("Aucune ligne de cours reconnue dans ce texte"); return; } majCalendrier(); toast(`${res.ajoutes} ajouté${res.ajoutes > 1 ? "s" : ""}, ${res.maj} déjà présent${res.maj > 1 ? "s" : ""} mis à jour`); }),
+  calMois: d => { const k = Number(d.k); if (!k) { CAL.jour = isoJour(new Date()); CAL.mois = CAL.jour.slice(0, 7); } else if (CAL.vue !== "mois") { const n = deIso(CAL.jour); n.setDate(n.getDate() + k * (CAL.vue === "semaine" ? 7 : 1)); CAL.jour = isoJour(n); CAL.mois = CAL.jour.slice(0, 7); } else { const [a, m] = CAL.mois.split("-").map(Number), n = new Date(a, m - 1 + k, 1, 12); CAL.mois = isoJour(n).slice(0, 7); } RENDU.calendrier(); },
+  calJour: d => { CAL.jour = d.d; CAL.mois = d.d.slice(0, 7); RENDU.calendrier(); },
+  calFiltre: d => { CAL.masquees.has(d.c) ? CAL.masquees.delete(d.c) : CAL.masquees.add(d.c); RENDU.calendrier(); },
+  calOuvrir: (d, b, ev) => { ev.stopPropagation(); CAL.jour = d.d; RENDU.calendrier(); if (!/^[xr]-/.test(d.id) && innerWidth >= 900) ACT.calEditer({ id: d.id }); },
+  calEditer: d => {
+    const e = evenements().find(x => x.id === d.id), neuf = !e, noms = categories().map(c => c.nom);
+    formulaire(neuf ? "Nouvel événement" : "Modifier l'événement", [{ k: "titre", l: "Titre" }, { k: "date", l: "Date", t: "date" }, { k: "debut", l: "Heure de début (vide : toute la journée)", t: "time" }, { k: "fin", l: "Heure de fin", t: "time" },
+      { k: "categorie", l: "Catégorie (donne la couleur)", t: "choix", o: noms }, { k: "icone", l: "Pictogramme (auto : celui de la catégorie)", t: "choix", o: ICONES }, { k: "rappel", l: "Rappel", t: "choix", o: Object.keys(RAPPELS) },
+      { k: "repetition", l: "Répétition", t: "choix", o: Object.keys(REPETITIONS) }, { k: "jusqua", l: "Répéter jusqu'au (facultatif)", t: "date" }, { k: "lieu", l: "Lieu ou lien" }, { k: "notes", l: "Notes", t: "zone", h: 70 }],
+      e ? Object.assign({ icone: "auto", rappel: "Aucun", repetition: "Aucune" }, e) : { id: uid("e-"), titre: "", date: d.d || CAL.jour, debut: d.h || "", fin: d.f || "", categorie: noms[0], icone: "auto", rappel: "30 minutes avant", repetition: "Aucune", jusqua: "", lieu: "", notes: "" },
+      r => { if (!r.titre || !r.date) return; if (neuf) (D.calendrier.evenements ??= []).push(r); else Object.assign(e, r); CAL.jour = r.date; CAL.mois = r.date.slice(0, 7); majCalendrier(); toast(neuf ? "Événement ajouté" : "Événement modifié"); },
+      neuf ? null : () => { D.calendrier.evenements = evenements().filter(x => x.id !== e.id); majCalendrier(); });
+  },
+  calCategorie: d => {
+    if (!tab(D.calendrier.categories).length) D.calendrier.categories = CATEGORIES_DEFAUT.map(c => ({ ...c })); // première modification : la liste par défaut devient la tienne
+    const L = D.calendrier.categories, c = L.find(x => x.nom === d.c), neuf = !c, avant = c?.nom;
+    formulaire(neuf ? "Nouvelle catégorie" : "Modifier la catégorie", [{ k: "nom", l: "Nom" }, { k: "couleur", l: "Couleur", t: "color" }, { k: "icone", l: "Pictogramme", t: "choix", o: ICONES.filter(i => i !== "auto") }], c || { nom: "", couleur: "#27457A", icone: "calendrier" },
+      r => { if (!r.nom || (L.some(x => x.nom === r.nom) && r.nom !== avant)) { toast("Nom manquant ou déjà utilisé"); return; } if (neuf) L.push(r); else { Object.assign(c, r); if (avant !== r.nom) evenements().forEach(e => { if (e.categorie === avant) e.categorie = r.nom; }); } majCalendrier(); },
+      neuf ? null : () => { D.calendrier.categories = L.filter(x => x !== c); majCalendrier(); });
+  },
+  calAgenda: d => { const e = [...evenements(), ...evenementsLies()].find(x => x.id === d.id); if (e) versAgenda([e], nomSur(e.titre).slice(0, 40) + ".ics"); },
+  calExport: () => { const auj = isoJour(new Date()); versAgenda([...evenements(), ...evenementsLies()].filter(e => e.date >= auj || REPETITIONS[e.repetition]), "calendrier-hub.ics"); }
+});
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList?.contains("cal-jour")) { e.preventDefault(); e.target.click(); } });
+/* Exemples du mode démonstration, placés autour de la date du jour */
+DEMO.calendrier = (() => { const j = n => { const d = new Date(); d.setDate(d.getDate() + n); return isoJour(d); };
+  return { version: 1, categories: [], evenements: [
+    { id: "e-demo1", titre: "Cours Fixed Income (exemple)", date: j(0), debut: "09:00", fin: "12:00", categorie: "Cours", icone: "auto", rappel: "30 minutes avant", repetition: "Chaque semaine", lieu: "Campus", notes: "" },
+    { id: "e-demo2", titre: "Entretien téléphonique (exemple)", date: j(2), debut: "14:30", fin: "15:00", categorie: "Entretien", icone: "telephone", rappel: "1 heure avant", repetition: "Aucune", lieu: "", notes: "Relire la fiche de l'entreprise." },
+    { id: "e-demo3", titre: "Révision CFA : Equity (exemple)", date: j(3), debut: "18:00", fin: "20:00", categorie: "CFA", icone: "auto", rappel: "10 minutes avant", repetition: "Aucune", lieu: "", notes: "" },
+    { id: "e-demo4", titre: "Rendu du projet ETF (exemple)", date: j(6), debut: "", fin: "", categorie: "Échéance", icone: "auto", rappel: "La veille", repetition: "Aucune", lieu: "", notes: "" },
+    { id: "e-demo5", titre: "Dîner (exemple)", date: j(1), debut: "20:00", fin: "", categorie: "Perso", icone: "auto", rappel: "Aucun", repetition: "Aucune", lieu: "", notes: "" }] }; })();
 
 /* ============================================================
    16. Réglages : apparence, vues, connexion au dépôt privé, application
