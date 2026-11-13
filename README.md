@@ -47,7 +47,9 @@ Tableau de bord personnel sous forme d'application installable : quartier financ
 - `config/tickers.json` : valeurs suivies (indices, taux et obligations, matières premières, devises, volatilité, crypto, ETF). Symboles Yahoo Finance.
 - `config/indices.json` : composition des cartes par indice, avec des poids indicatifs.
 - `scripts/update_market.py` : récupère les cours avec yfinance et écrit `data/market.json` et `data/heatmap.json`.
-- `.github/workflows/update.yml` : 4 passages par jour en semaine. La fréquence se change sur la ligne `cron`.
+- `.github/workflows/update.yml` : un passage par heure en semaine, de 6 h 17 à 21 h 17 UTC (GitHub lance souvent ces passages en retard et en saute certains ; en prévoir un par heure garde les données fraîches). La fréquence se change sur la ligne `cron`.
+- Chaque valeur est demandée séparément ; son dernier point est le dernier cours affiché par Yahoo, daté sur sa place de cotation. Une valeur peut avoir des symboles de secours (clé `secours` dans `config/tickers.json`).
+- **Message Discord** (facultatif) : ajoute le secret `DISCORD_WEBHOOK_URL` (Settings > Secrets and variables > Actions > New repository secret) avec l'adresse d'un webhook de ton salon. Le robot envoie alors un résumé par tranche de la journée (matin, midi, après-midi, soir) et à chaque lancement à la main. Les valeurs citées se règlent avec la clé `notification` de `config/tickers.json`.
 
 Les cours sont différés (environ 15 minutes) et non garantis. Les fichiers livrés au départ sont des exemples fictifs, signalés dans l'interface, remplacés au premier passage du robot.
 
@@ -58,7 +60,8 @@ data/projects.json        fiches de contexte (projets, sites, outils, bot)
 data/networking.json      contacts et modèles de messages
 data/courses.json         base de cours
 data/morning-brief.json   index des briefs
-pdf/                      PDF des briefs
+documents/briefs/         PDF des briefs envoyés par « Ajouter le PDF du jour » (AAAA-MM-JJ.pdf)
+pdf/                      PDF des briefs ajoutés à la main (ancien emplacement)
 documents/                tous les autres fichiers, par dossier
 ```
 

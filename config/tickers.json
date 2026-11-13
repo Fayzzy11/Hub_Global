@@ -1,5 +1,5 @@
 {
-  "_aide": "Valeurs suivies dans la vue Marché (symboles Yahoo Finance). Ajoute, retire ou reclasse des lignes : le robot de mise à jour suit ce fichier. Le premier ticker est celui du tableau de bord du quartier.",
+  "_aide": "Valeurs suivies dans la vue Marché (symboles Yahoo Finance). Ajoute, retire ou reclasse des lignes : le robot de mise à jour suit ce fichier. Le premier ticker est celui du tableau de bord du quartier. Clé facultative « secours » : symboles essayés si le premier ne répond pas. Clé facultative « notification » (à côté de « tickers ») : symboles cités dans le message Discord.",
   "historique_jours": 70,
   "tickers": [
     {
@@ -206,7 +206,8 @@
       "sous_groupe": "Obligations d'État"
     },
     {
-      "symbole": "IEGA.L",
+      "symbole": "IEGA.AS",
+      "secours": ["EUNH.DE", "IEGA.SW"],
       "nom": "État zone euro (IEGA)",
       "devise": "EUR",
       "groupe": "Taux et obligations",

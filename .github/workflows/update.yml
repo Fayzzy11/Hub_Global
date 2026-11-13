@@ -2,16 +2,17 @@ name: Mise à jour du marché
 
 on:
   schedule:
-    # 4 passages par jour, du lundi au vendredi. Les heures sont en UTC (Paris = UTC+1 en hiver, UTC+2 en été).
+    # Un passage par heure, du lundi au vendredi, de 6 h 17 à 21 h 17 UTC (7 h 17 à 22 h 17 à Paris en hiver, une heure de plus en été).
+    # GitHub lance souvent ces passages en retard et en saute certains : en prévoir un par heure garantit des données fraîches.
     # Pour changer la fréquence, modifie cette ligne : minute, heures, jour du mois, mois, jours de la semaine.
-    - cron: "17 7,11,15,20 * * 1-5"
+    - cron: "17 6-21 * * 1-5"
   workflow_dispatch: {}   # bouton « Run workflow » pour lancer un passage à la main
 
 permissions:
   contents: write   # le robot enregistre les JSON mis à jour dans le dépôt
 
 concurrency:
-  group: maj-marche
+  group: maj-marche-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -26,10 +27,37 @@ jobs:
       - name: Installer les dépendances
         run: pip install -r scripts/requirements.txt
       - name: Récupérer les cours
+        env:
+          MESSAGE_DISCORD: ${{ runner.temp }}/discord.json
+          FORCER_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
         run: python scripts/update_market.py
       - name: Enregistrer les fichiers mis à jour
+        id: enregistrer
         run: |
           git config user.name "hub-robot"
           git config user.email "hub-robot@users.noreply.github.com"
-          git add data/market.json data/heatmap.json
-          git diff --cached --quiet || (git commit -m "Marché : mise à jour automatique" && git push)
+          # Les fichiers obtenus sont reposés sur la toute dernière version du dépôt : aucun conflit possible,
+          # même si le dépôt a bougé pendant le passage (autre passage, livraison de l'application).
+          cp data/market.json data/heatmap.json "$RUNNER_TEMP"/
+          for essai in 1 2 3; do
+            git fetch --quiet origin "$GITHUB_REF_NAME"
+            git reset --quiet --hard FETCH_HEAD
+            cp "$RUNNER_TEMP"/market.json "$RUNNER_TEMP"/heatmap.json data/
+            git add data/market.json data/heatmap.json
+            if git diff --cached --quiet; then echo "Aucun changement."; exit 0; fi
+            git commit --quiet -m "Marché : mise à jour automatique"
+            if git push --quiet origin HEAD:"$GITHUB_REF_NAME"; then echo "change=oui" >> "$GITHUB_OUTPUT"; exit 0; fi
+            sleep 5
+          done
+          echo "::error::Les données n'ont pas pu être enregistrées dans le dépôt."
+          exit 1
+      - name: Prévenir sur Discord
+        # Un message par tranche de la journée (matin, midi, après-midi, soir), et à chaque lancement à la main.
+        # Sans le secret DISCORD_WEBHOOK_URL (Settings > Secrets and variables > Actions), cette étape ne fait rien.
+        if: steps.enregistrer.outputs.change == 'oui'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then echo "Secret DISCORD_WEBHOOK_URL absent : pas de message."; exit 0; fi
+          if [ ! -f "$RUNNER_TEMP/discord.json" ]; then echo "Pas de message pour ce passage."; exit 0; fi
+          curl -sS --fail-with-body -H "Content-Type: application/json" -d @"$RUNNER_TEMP/discord.json" "$DISCORD_WEBHOOK_URL" || echo "::warning::Le message Discord n'est pas parti."
