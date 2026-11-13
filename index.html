@@ -193,6 +193,8 @@ body:has(#fiche.ouverte) #v-univers:not(.plan) .u-tete>*{pointer-events:none}
 .cal-cote{display:grid;gap:16px}
 .cal-ligne{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--trait)} .cal-cote .carte .cal-ligne:first-of-type{border-top:0}
 .cal-ligne>div{min-width:0;display:flex;flex-direction:column;gap:2px}
+.cal-cats{max-height:min(60vh,520px);overflow:auto;border-top:1px solid var(--trait)}
+.cal-cats .cal-ligne{border-bottom:1px solid var(--trait)}
 .cal-tuile{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(145deg,color-mix(in srgb,var(--c) 76%,#fff),var(--c));color:#fff}
 .cal-tuile svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .cal-vues{display:inline-flex;border:1px solid var(--trait);border-radius:8px;overflow:hidden;background:var(--papier)}
@@ -2979,17 +2981,15 @@ RENDU.calendrier = () => {
   v.innerHTML = `<header><div class="sur">Calendrier · organisation</div><h1>Le calendrier</h1><p>Ajoute et modifie tes événements ici : ils sont enregistrés dans ton dépôt privé. Les examens de tes cours et les relances de ton carnet réseau apparaissent automatiquement.</p></header>${bandeau("calendrier")}
     <div class="rang cal-barre"><span class="rang"><button class="btn" data-act="calMois" data-k="-1" aria-label="Mois précédent">‹</button><button class="btn" data-act="calMois" data-k="0">Aujourd'hui</button><button class="btn" data-act="calMois" data-k="1" aria-label="Mois suivant">›</button><h2 style="margin-left:8px;text-transform:capitalize">${esc(titre)}</h2></span>
       <span class="rang"><span class="cal-vues" role="group" aria-label="Affichage">${[["jour", "Jour"], ["semaine", "Semaine"], ["mois", "Mois"]].map(([k, n]) => `<button aria-pressed="${CAL.vue === k}" data-act="calVue" data-k="${k}">${n}</button>`).join("")}</span><button class="btn plein" data-act="calEditer" data-d="${CAL.jour}">Ajouter un événement</button></span></div>
-    <div class="rang" style="margin:0 0 12px"><button class="btn" data-act="calExport">Tout envoyer vers mon agenda</button><button class="btn" data-act="calImporter">Importer un emploi du temps SKEMA</button><button class="btn" data-act="defiler" data-c="#cal-categories">Gérer les catégories</button></div>
-    <div class="rang cal-filtres" style="margin:0 0 14px;gap:6px">${categories().map(c => `<button class="puce" aria-pressed="${!CAL.masquees.has(c.nom)}" data-act="calFiltre" data-c="${esc(c.nom)}" title="Afficher ou masquer cette catégorie"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${esc(c.couleur)}"></i>${esc(c.nom)}</button>`).join("")}</div>
+    <div class="rang" style="margin:0 0 12px"><button class="btn" data-act="calExport">Tout envoyer vers mon agenda</button><button class="btn" data-act="calImporter">Importer un emploi du temps SKEMA</button><button class="btn" data-act="calCategories">Catégories</button></div>
+    <div class="rang cal-filtres" style="margin:0 0 14px;gap:6px">${categories().map(c => `<button class="puce" aria-pressed="${!CAL.masquees.has(c.nom)}" data-act="calFiltre" data-c="${esc(c.nom)}" title="Afficher ou masquer cette catégorie"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${esc(c.couleur)}"></i>${esc(c.nom)}</button>`).join("")}<button class="puce" data-act="calCategories" title="Ajouter, renommer ou recolorer les catégories">✎ Modifier</button></div>
     <div class="cal-corps">${CAL.vue !== "mois" ? semaine() : `<div class="cal-grille">${["lun", "mar", "mer", "jeu", "ven", "sam", "dim"].map(j => `<div class="cal-tete">${j}</div>`).join("")}
       ${jours.map(d => { const E = parJour.get(d) || [], num = Number(d.slice(8)); return `<div class="cal-jour${d.slice(0, 7) !== CAL.mois ? " hors" : ""}${d === auj ? " auj" : ""}${d === CAL.jour ? " choisi" : ""}" data-act="calJour" data-d="${d}" role="button" tabindex="0" aria-label="${esc(deIso(d).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }))}, ${E.length} événement${E.length > 1 ? "s" : ""}"><span class="num">${num}</span><span class="cal-evs">${E.slice(0, 3).map(e => pastille(e, d)).join("")}${E.length > 3 ? `<span class="cal-plus">+${E.length - 3}</span>` : ""}</span></div>`; }).join("")}</div>`}
       <aside class="cal-cote"><div class="carte"><div class="sur">${CAL.jour === auj ? "Aujourd'hui" : "Jour choisi"}</div><h3 style="margin:6px 0 10px;text-transform:capitalize">${esc(deIso(CAL.jour).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }))}</h3>
         ${duJour.length ? duJour.map(e => ligne(e, CAL.jour, false)).join("") : `<p class="doux petit">Rien de prévu ce jour-là.</p>`}
         <p style="margin-top:12px"><button class="btn mini" data-act="calEditer" data-d="${CAL.jour}">Ajouter ce jour-là</button></p></div>
-        <div class="carte"><div class="sur" style="margin-bottom:10px">À venir</div>${aVenir.length ? aVenir.map(o => `<div data-act="calJour" data-d="${o.date}" style="cursor:pointer">${ligne(o.e, o.date, true)}</div>`).join("") : `<p class="doux petit">Aucun événement dans les deux prochains mois.</p>`}</div></aside></div>
-    <div class="rang" id="cal-categories" style="justify-content:space-between;margin:30px 0 10px"><h2>Catégories</h2><button class="btn" data-act="calCategorie">Ajouter une catégorie</button></div>
-    <div class="grille" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${categories().map(c => `<div class="carte cal-ligne" style="--c:${esc(c.couleur)};align-items:center;border-top:0;margin:0;padding:12px 14px"><span class="cal-tuile">${svgPicto(PICTOS[c.icone] ? c.icone : "calendrier")}</span><div style="flex:1"><b>${esc(c.nom)}</b></div><button class="btn mini" data-act="calCategorie" data-c="${esc(c.nom)}">Modifier</button></div>`).join("")}</div>
-    <p class="doux petit" style="margin-top:18px">Rappels : l'application ne peut pas sonner quand elle est fermée. « Ajouter à mon agenda » envoie l'événement et son rappel dans l'agenda de ton téléphone ou de ton ordinateur, qui se charge de la notification. Après une modification, renvoie l'événement : l'agenda met à jour celui qu'il connaît déjà.</p>`;
+        <div class="carte"><div class="sur" style="margin-bottom:10px">À venir</div>${aVenir.length ? aVenir.map(o => `<div data-act="calJour" data-d="${o.date}" style="cursor:pointer">${ligne(o.e, o.date, true)}</div>`).join("") : `<p class="doux petit">Aucun événement dans les deux prochains mois.</p>`}</div>
+        <p class="doux petit">Rappels : l'application ne peut pas sonner quand elle est fermée. « Ajouter à mon agenda » envoie l'événement et son rappel dans l'agenda de ton téléphone ou de ton ordinateur, qui se charge de la notification. Après une modification, renvoie l'événement : l'agenda met à jour celui qu'il connaît déjà.</p></aside></div>`;
 };
 Object.assign(ACT, {
   calVue: d => { CAL.vue = d.k; LS.ecrire("hub.cal.vue", d.k); CAL.mois = CAL.jour.slice(0, 7); RENDU.calendrier(); },
@@ -3009,12 +3009,21 @@ Object.assign(ACT, {
       r => { if (!r.titre || !r.date) return; if (neuf) (D.calendrier.evenements ??= []).push(r); else Object.assign(e, r); CAL.jour = r.date; CAL.mois = r.date.slice(0, 7); majCalendrier(); toast(neuf ? "Événement ajouté" : "Événement modifié"); },
       neuf ? null : () => { D.calendrier.evenements = evenements().filter(x => x.id !== e.id); majCalendrier(); });
   },
+  calCategories: () => { // toutes les catégories dans une fenêtre, accessible depuis le haut de la vue
+    const dlg = $("#dlg"), n = nom => evenements().filter(e => e.categorie === nom).length;
+    dlg.innerHTML = `<h2>Catégories</h2><p class="doux petit" style="margin:6px 0 12px">Chaque catégorie donne sa couleur et son pictogramme aux événements. Touche « Modifier » pour la renommer, changer sa couleur ou la supprimer.</p>
+      <div class="cal-cats">${categories().map(c => `<div class="cal-ligne" style="--c:${esc(c.couleur)};align-items:center;margin:0;padding:8px 4px"><span class="cal-tuile">${svgPicto(PICTOS[c.icone] ? c.icone : "calendrier")}</span><div style="flex:1"><b>${esc(c.nom)}</b><span class="doux petit" style="display:block">${n(c.nom)} événement${n(c.nom) > 1 ? "s" : ""}</span></div><button class="btn mini" data-act="calCategorie" data-c="${esc(c.nom)}" data-retour="1">Modifier</button></div>`).join("")}</div>
+      <div class="rang" style="justify-content:space-between;margin-top:14px"><button class="btn plein" data-act="calCategorie" data-retour="1">Ajouter une catégorie</button><button class="btn" id="cc-fermer">Fermer</button></div>`;
+    $("#cc-fermer").onclick = () => dlg.close();
+    if (!dlg.open) dlg.showModal();
+  },
   calCategorie: d => {
     if (!tab(D.calendrier.categories).length) D.calendrier.categories = CATEGORIES_DEFAUT.map(c => ({ ...c })); // première modification : la liste par défaut devient la tienne
-    const L = D.calendrier.categories, c = L.find(x => x.nom === d.c), neuf = !c, avant = c?.nom;
+    const L = D.calendrier.categories, c = L.find(x => x.nom === d.c), neuf = !c, avant = c?.nom, retour = () => { if (d.retour) setTimeout(() => ACT.calCategories(), 0); };
+    if ($("#dlg").open) $("#dlg").close();
     formulaire(neuf ? "Nouvelle catégorie" : "Modifier la catégorie", [{ k: "nom", l: "Nom" }, { k: "couleur", l: "Couleur", t: "color" }, { k: "icone", l: "Pictogramme", t: "choix", o: ICONES.filter(i => i !== "auto") }], c || { nom: "", couleur: "#27457A", icone: "calendrier" },
-      r => { if (!r.nom || (L.some(x => x.nom === r.nom) && r.nom !== avant)) { toast("Nom manquant ou déjà utilisé"); return; } if (neuf) L.push(r); else { Object.assign(c, r); if (avant !== r.nom) evenements().forEach(e => { if (e.categorie === avant) e.categorie = r.nom; }); } majCalendrier(); },
-      neuf ? null : () => { D.calendrier.categories = L.filter(x => x !== c); majCalendrier(); });
+      r => { if (!r.nom || (L.some(x => x.nom === r.nom) && r.nom !== avant)) { toast("Nom manquant ou déjà utilisé"); return; } if (neuf) L.push(r); else { Object.assign(c, r); if (avant !== r.nom) evenements().forEach(e => { if (e.categorie === avant) e.categorie = r.nom; }); } majCalendrier(); retour(); },
+      neuf ? null : () => { D.calendrier.categories = L.filter(x => x !== c); majCalendrier(); retour(); });
   },
   calAgenda: d => { const e = [...evenements(), ...evenementsLies()].find(x => x.id === d.id); if (e) versAgenda([e], nomSur(e.titre).slice(0, 40) + ".ics"); },
   calExport: () => { const auj = isoJour(new Date()); versAgenda([...evenements(), ...evenementsLies()].filter(e => e.date >= auj || REPETITIONS[e.repetition]), "calendrier-hub.ics"); }
