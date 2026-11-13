@@ -1,6 +1,6 @@
 {
-  "_aide": "Valeurs suivies dans la vue Marché (symboles Yahoo Finance). Ajoute, retire ou reclasse des lignes : le robot de mise à jour suit ce fichier. Le premier ticker est celui du tableau de bord du quartier. Clé facultative « secours » : symboles essayés si le premier ne répond pas. Clé facultative « notification » (à côté de « tickers ») : symboles cités dans le message Discord.",
-  "historique_jours": 70,
+  "_aide": "Valeurs suivies dans la vue Marché (symboles Yahoo Finance). Ajoute, retire ou reclasse des lignes : le robot de mise à jour suit ce fichier. Le premier ticker est celui du tableau de bord de l'univers 3D. Clés facultatives : « secours » (symboles essayés si le premier ne répond pas), « court » (nom court pour les graphiques en barres), « source » (« tresor » : taux du Trésor américain, colonne du fichier officiel ; « bce » : série de la Banque centrale européenne). « historique_jours » : nombre de séances gardées (260 = environ un an). Clé « notification » (à côté de « tickers ») : symboles cités dans le message Discord.",
+  "historique_jours": 260,
   "tickers": [
     {
       "symbole": "^FCHI",
@@ -66,6 +66,13 @@
       "sous_groupe": "Europe"
     },
     {
+      "symbole": "^OMX",
+      "nom": "OMX Stockholm 30",
+      "devise": "SEK",
+      "groupe": "Indices actions",
+      "sous_groupe": "Europe"
+    },
+    {
       "symbole": "^GSPC",
       "nom": "S&P 500",
       "devise": "USD",
@@ -89,6 +96,20 @@
     {
       "symbole": "^RUT",
       "nom": "Russell 2000",
+      "devise": "USD",
+      "groupe": "Indices actions",
+      "sous_groupe": "États-Unis"
+    },
+    {
+      "symbole": "^IXIC",
+      "nom": "Nasdaq Composite",
+      "devise": "USD",
+      "groupe": "Indices actions",
+      "sous_groupe": "États-Unis"
+    },
+    {
+      "symbole": "^SOX",
+      "nom": "Semi-conducteurs US (SOX)",
       "devise": "USD",
       "groupe": "Indices actions",
       "sous_groupe": "États-Unis"
@@ -140,14 +161,317 @@
       "nom": "Bovespa",
       "devise": "BRL",
       "groupe": "Indices actions",
-      "sous_groupe": "Amérique latine"
+      "sous_groupe": "Amériques (hors US)"
     },
     {
       "symbole": "^MXX",
       "nom": "IPC Mexique",
       "devise": "MXN",
       "groupe": "Indices actions",
-      "sous_groupe": "Amérique latine"
+      "sous_groupe": "Amériques (hors US)"
+    },
+    {
+      "symbole": "^GSPTSE",
+      "nom": "S&P/TSX (Canada)",
+      "devise": "CAD",
+      "groupe": "Indices actions",
+      "sous_groupe": "Amériques (hors US)"
+    },
+    {
+      "symbole": "XLK",
+      "nom": "Technologie US (XLK)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Technologie"
+    },
+    {
+      "symbole": "XLF",
+      "nom": "Finance US (XLF)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Finance"
+    },
+    {
+      "symbole": "XLE",
+      "nom": "Énergie US (XLE)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Énergie"
+    },
+    {
+      "symbole": "XLV",
+      "nom": "Santé US (XLV)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Santé"
+    },
+    {
+      "symbole": "XLY",
+      "nom": "Consommation cyclique US (XLY)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Consommation cyclique"
+    },
+    {
+      "symbole": "XLP",
+      "nom": "Consommation de base US (XLP)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Consommation de base"
+    },
+    {
+      "symbole": "XLI",
+      "nom": "Industrie US (XLI)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Industrie"
+    },
+    {
+      "symbole": "XLB",
+      "nom": "Matériaux US (XLB)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Matériaux"
+    },
+    {
+      "symbole": "XLU",
+      "nom": "Services collectifs US (XLU)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Services collectifs"
+    },
+    {
+      "symbole": "XLRE",
+      "nom": "Immobilier US (XLRE)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Immobilier"
+    },
+    {
+      "symbole": "XLC",
+      "nom": "Communication US (XLC)",
+      "devise": "USD",
+      "groupe": "Secteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Communication"
+    },
+    {
+      "symbole": "EXV1.DE",
+      "nom": "Banques Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Banques"
+    },
+    {
+      "symbole": "EXH5.DE",
+      "nom": "Assurance Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Assurance"
+    },
+    {
+      "symbole": "EXH2.DE",
+      "nom": "Services financiers Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Services financiers"
+    },
+    {
+      "symbole": "EXV3.DE",
+      "nom": "Technologie Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Technologie"
+    },
+    {
+      "symbole": "EXV4.DE",
+      "nom": "Santé Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Santé"
+    },
+    {
+      "symbole": "EXH1.DE",
+      "nom": "Pétrole et gaz Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Pétrole et gaz"
+    },
+    {
+      "symbole": "EXH9.DE",
+      "nom": "Services collectifs Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Services collectifs"
+    },
+    {
+      "symbole": "EXH4.DE",
+      "nom": "Industrie Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Industrie"
+    },
+    {
+      "symbole": "EXV8.DE",
+      "nom": "Construction et matériaux Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Construction et matériaux"
+    },
+    {
+      "symbole": "EXV6.DE",
+      "nom": "Ressources de base Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Ressources de base"
+    },
+    {
+      "symbole": "EXV7.DE",
+      "nom": "Chimie Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Chimie"
+    },
+    {
+      "symbole": "EXV5.DE",
+      "nom": "Automobile Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Automobile"
+    },
+    {
+      "symbole": "EXH3.DE",
+      "nom": "Alimentation et boissons Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Alimentation et boissons"
+    },
+    {
+      "symbole": "EXH7.DE",
+      "nom": "Biens de consommation Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Biens de consommation"
+    },
+    {
+      "symbole": "EXH8.DE",
+      "nom": "Distribution Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Distribution"
+    },
+    {
+      "symbole": "EXV9.DE",
+      "nom": "Voyages et loisirs Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Voyages et loisirs"
+    },
+    {
+      "symbole": "EXH6.DE",
+      "nom": "Médias Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Médias"
+    },
+    {
+      "symbole": "EXV2.DE",
+      "nom": "Télécoms Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Télécoms"
+    },
+    {
+      "symbole": "EXI5.DE",
+      "nom": "Immobilier Europe",
+      "devise": "EUR",
+      "groupe": "Secteurs",
+      "sous_groupe": "Europe",
+      "court": "Immobilier"
+    },
+    {
+      "symbole": "^SPXEW",
+      "nom": "S&P 500 équipondéré",
+      "devise": "USD",
+      "groupe": "Styles et facteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Équipondéré"
+    },
+    {
+      "symbole": "IWD",
+      "nom": "Value US (Russell 1000 Value)",
+      "devise": "USD",
+      "groupe": "Styles et facteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Value"
+    },
+    {
+      "symbole": "IWF",
+      "nom": "Croissance US (Russell 1000 Growth)",
+      "devise": "USD",
+      "groupe": "Styles et facteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Croissance"
+    },
+    {
+      "symbole": "MTUM",
+      "nom": "Momentum US (MTUM)",
+      "devise": "USD",
+      "groupe": "Styles et facteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Momentum"
+    },
+    {
+      "symbole": "QUAL",
+      "nom": "Qualité US (QUAL)",
+      "devise": "USD",
+      "groupe": "Styles et facteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Qualité"
+    },
+    {
+      "symbole": "USMV",
+      "nom": "Faible volatilité US (USMV)",
+      "devise": "USD",
+      "groupe": "Styles et facteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Faible volatilité"
+    },
+    {
+      "symbole": "SIZE",
+      "nom": "Petites capitalisations relatives US (SIZE)",
+      "devise": "USD",
+      "groupe": "Styles et facteurs",
+      "sous_groupe": "États-Unis",
+      "court": "Taille"
     },
     {
       "symbole": "^IRX",
@@ -155,6 +479,15 @@
       "devise": "%",
       "groupe": "Taux et obligations",
       "sous_groupe": "Taux souverains US"
+    },
+    {
+      "symbole": "US-2A",
+      "nom": "Taux US 2 ans",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux souverains US",
+      "source": "tresor",
+      "colonne": "2 Yr"
     },
     {
       "symbole": "^FVX",
@@ -176,6 +509,42 @@
       "devise": "%",
       "groupe": "Taux et obligations",
       "sous_groupe": "Taux souverains US"
+    },
+    {
+      "symbole": "EUR-ESTR",
+      "nom": "€STR (taux au jour le jour)",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux zone euro",
+      "source": "bce",
+      "serie": "EST/B.EU000A2X2A25.WT"
+    },
+    {
+      "symbole": "EUR-AAA-2A",
+      "nom": "Zone euro AAA 2 ans",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux zone euro",
+      "source": "bce",
+      "serie": "YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y"
+    },
+    {
+      "symbole": "EUR-AAA-10A",
+      "nom": "Zone euro AAA 10 ans (proche du Bund)",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux zone euro",
+      "source": "bce",
+      "serie": "YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y"
+    },
+    {
+      "symbole": "EUR-AAA-30A",
+      "nom": "Zone euro AAA 30 ans",
+      "devise": "%",
+      "groupe": "Taux et obligations",
+      "sous_groupe": "Taux zone euro",
+      "source": "bce",
+      "serie": "YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_30Y"
     },
     {
       "symbole": "SHY",
@@ -207,7 +576,10 @@
     },
     {
       "symbole": "IEGA.AS",
-      "secours": ["EUNH.DE", "IEGA.SW"],
+      "secours": [
+        "EUNH.DE",
+        "IEGA.SW"
+      ],
       "nom": "État zone euro (IEGA)",
       "devise": "EUR",
       "groupe": "Taux et obligations",
@@ -263,139 +635,6 @@
       "sous_groupe": "Agrégats"
     },
     {
-      "symbole": "GC=F",
-      "nom": "Or",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Métaux précieux"
-    },
-    {
-      "symbole": "SI=F",
-      "nom": "Argent",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Métaux précieux"
-    },
-    {
-      "symbole": "PL=F",
-      "nom": "Platine",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Métaux précieux"
-    },
-    {
-      "symbole": "PA=F",
-      "nom": "Palladium",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Métaux précieux"
-    },
-    {
-      "symbole": "HG=F",
-      "nom": "Cuivre",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Métaux industriels"
-    },
-    {
-      "symbole": "ALI=F",
-      "nom": "Aluminium",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Métaux industriels"
-    },
-    {
-      "symbole": "BZ=F",
-      "nom": "Pétrole Brent",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Énergie"
-    },
-    {
-      "symbole": "CL=F",
-      "nom": "Pétrole WTI",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Énergie"
-    },
-    {
-      "symbole": "NG=F",
-      "nom": "Gaz naturel US",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Énergie"
-    },
-    {
-      "symbole": "TTF=F",
-      "nom": "Gaz naturel Europe (TTF)",
-      "devise": "EUR",
-      "groupe": "Matières premières",
-      "sous_groupe": "Énergie"
-    },
-    {
-      "symbole": "RB=F",
-      "nom": "Essence",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Énergie"
-    },
-    {
-      "symbole": "HO=F",
-      "nom": "Fioul",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Énergie"
-    },
-    {
-      "symbole": "ZC=F",
-      "nom": "Maïs",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Agriculture"
-    },
-    {
-      "symbole": "ZW=F",
-      "nom": "Blé",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Agriculture"
-    },
-    {
-      "symbole": "ZS=F",
-      "nom": "Soja",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Agriculture"
-    },
-    {
-      "symbole": "KC=F",
-      "nom": "Café",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Agriculture"
-    },
-    {
-      "symbole": "SB=F",
-      "nom": "Sucre",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Agriculture"
-    },
-    {
-      "symbole": "CC=F",
-      "nom": "Cacao",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Agriculture"
-    },
-    {
-      "symbole": "CT=F",
-      "nom": "Coton",
-      "devise": "USD",
-      "groupe": "Matières premières",
-      "sous_groupe": "Agriculture"
-    },
-    {
       "symbole": "EURUSD=X",
       "nom": "EUR/USD",
       "devise": "USD",
@@ -420,6 +659,13 @@
       "symbole": "EURJPY=X",
       "nom": "EUR/JPY",
       "devise": "JPY",
+      "groupe": "Devises",
+      "sous_groupe": "Euro"
+    },
+    {
+      "symbole": "EURCAD=X",
+      "nom": "EUR/CAD",
+      "devise": "CAD",
       "groupe": "Devises",
       "sous_groupe": "Euro"
     },
@@ -494,6 +740,160 @@
       "sous_groupe": "Émergents"
     },
     {
+      "symbole": "GC=F",
+      "nom": "Or",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "SI=F",
+      "nom": "Argent",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "PL=F",
+      "nom": "Platine",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "PA=F",
+      "nom": "Palladium",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux précieux"
+    },
+    {
+      "symbole": "HG=F",
+      "nom": "Cuivre",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux industriels"
+    },
+    {
+      "symbole": "ALI=F",
+      "nom": "Aluminium",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux industriels"
+    },
+    {
+      "symbole": "TIO=F",
+      "nom": "Minerai de fer",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Métaux industriels"
+    },
+    {
+      "symbole": "BZ=F",
+      "nom": "Pétrole Brent",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "CL=F",
+      "nom": "Pétrole WTI",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "NG=F",
+      "nom": "Gaz naturel US",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "TTF=F",
+      "nom": "Gaz naturel Europe (TTF)",
+      "devise": "EUR",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "RB=F",
+      "nom": "Essence",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "HO=F",
+      "nom": "Fioul",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Énergie"
+    },
+    {
+      "symbole": "URA",
+      "nom": "Uranium (ETF URA)",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Transition énergétique"
+    },
+    {
+      "symbole": "KRBN",
+      "nom": "Quotas carbone (ETF KRBN)",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Transition énergétique"
+    },
+    {
+      "symbole": "ZC=F",
+      "nom": "Maïs",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "ZW=F",
+      "nom": "Blé",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "ZS=F",
+      "nom": "Soja",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "KC=F",
+      "nom": "Café",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "SB=F",
+      "nom": "Sucre",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "CC=F",
+      "nom": "Cacao",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
+      "symbole": "CT=F",
+      "nom": "Coton",
+      "devise": "USD",
+      "groupe": "Matières premières",
+      "sous_groupe": "Agriculture"
+    },
+    {
       "symbole": "^VIX",
       "nom": "VIX (volatilité actions US)",
       "devise": "pts",
@@ -517,6 +917,13 @@
     {
       "symbole": "ETH-USD",
       "nom": "Ethereum",
+      "devise": "USD",
+      "groupe": "Volatilité et crypto",
+      "sous_groupe": "Crypto"
+    },
+    {
+      "symbole": "SOL-USD",
+      "nom": "Solana",
       "devise": "USD",
       "groupe": "Volatilité et crypto",
       "sous_groupe": "Crypto"
@@ -570,5 +977,18 @@
       "groupe": "ETF",
       "sous_groupe": "Actifs réels"
     }
+  ],
+  "notification": [
+    "^FCHI",
+    "^STOXX50E",
+    "^GSPC",
+    "^NDX",
+    "^N225",
+    "EURUSD=X",
+    "^TNX",
+    "EUR-AAA-10A",
+    "GC=F",
+    "BZ=F",
+    "BTC-USD"
   ]
 }

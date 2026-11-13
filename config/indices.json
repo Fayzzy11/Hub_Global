@@ -963,6 +963,301 @@
      "poids": 0.7
     }
    ]
+  },
+  {
+   "id": "zone-euro",
+   "nom": "Zone euro · grandes valeurs",
+   "note": "Grandes capitalisations de la zone euro, liste indicative",
+   "valeurs": [
+    {
+     "symbole": "ASML.AS",
+     "nom": "ASML",
+     "secteur": "Technologie",
+     "poids": 25.0
+    },
+    {
+     "symbole": "SAP.DE",
+     "nom": "SAP",
+     "secteur": "Technologie",
+     "poids": 25.0
+    },
+    {
+     "symbole": "PRX.AS",
+     "nom": "Prosus",
+     "secteur": "Technologie",
+     "poids": 12.0
+    },
+    {
+     "symbole": "IFX.DE",
+     "nom": "Infineon",
+     "secteur": "Technologie",
+     "poids": 5.0
+    },
+    {
+     "symbole": "ADYEN.AS",
+     "nom": "Adyen",
+     "secteur": "Technologie",
+     "poids": 4.0
+    },
+    {
+     "symbole": "NOKIA.HE",
+     "nom": "Nokia",
+     "secteur": "Technologie",
+     "poids": 3.0
+    },
+    {
+     "symbole": "MC.PA",
+     "nom": "LVMH",
+     "secteur": "Luxe et consommation",
+     "poids": 25.0
+    },
+    {
+     "symbole": "RMS.PA",
+     "nom": "Hermès",
+     "secteur": "Luxe et consommation",
+     "poids": 22.0
+    },
+    {
+     "symbole": "OR.PA",
+     "nom": "L'Oréal",
+     "secteur": "Luxe et consommation",
+     "poids": 19.0
+    },
+    {
+     "symbole": "ITX.MC",
+     "nom": "Inditex",
+     "secteur": "Luxe et consommation",
+     "poids": 15.0
+    },
+    {
+     "symbole": "ABI.BR",
+     "nom": "AB InBev",
+     "secteur": "Luxe et consommation",
+     "poids": 11.0
+    },
+    {
+     "symbole": "BN.PA",
+     "nom": "Danone",
+     "secteur": "Luxe et consommation",
+     "poids": 5.0
+    },
+    {
+     "symbole": "AD.AS",
+     "nom": "Ahold Delhaize",
+     "secteur": "Luxe et consommation",
+     "poids": 3.0
+    },
+    {
+     "symbole": "SIE.DE",
+     "nom": "Siemens",
+     "secteur": "Industrie",
+     "poids": 17.0
+    },
+    {
+     "symbole": "AIR.PA",
+     "nom": "Airbus",
+     "secteur": "Industrie",
+     "poids": 15.0
+    },
+    {
+     "symbole": "SU.PA",
+     "nom": "Schneider Electric",
+     "secteur": "Industrie",
+     "poids": 13.0
+    },
+    {
+     "symbole": "SAF.PA",
+     "nom": "Safran",
+     "secteur": "Industrie",
+     "poids": 12.0
+    },
+    {
+     "symbole": "ENR.DE",
+     "nom": "Siemens Energy",
+     "secteur": "Industrie",
+     "poids": 9.0
+    },
+    {
+     "symbole": "RHM.DE",
+     "nom": "Rheinmetall",
+     "secteur": "Industrie",
+     "poids": 8.0
+    },
+    {
+     "symbole": "DG.PA",
+     "nom": "Vinci",
+     "secteur": "Industrie",
+     "poids": 6.0
+    },
+    {
+     "symbole": "ALV.DE",
+     "nom": "Allianz",
+     "secteur": "Finance",
+     "poids": 13.0
+    },
+    {
+     "symbole": "SAN.MC",
+     "nom": "Banco Santander",
+     "secteur": "Finance",
+     "poids": 12.0
+    },
+    {
+     "symbole": "UCG.MI",
+     "nom": "UniCredit",
+     "secteur": "Finance",
+     "poids": 10.0
+    },
+    {
+     "symbole": "ISP.MI",
+     "nom": "Intesa Sanpaolo",
+     "secteur": "Finance",
+     "poids": 10.0
+    },
+    {
+     "symbole": "BNP.PA",
+     "nom": "BNP Paribas",
+     "secteur": "Finance",
+     "poids": 9.0
+    },
+    {
+     "symbole": "BBVA.MC",
+     "nom": "BBVA",
+     "secteur": "Finance",
+     "poids": 8.0
+    },
+    {
+     "symbole": "CS.PA",
+     "nom": "AXA",
+     "secteur": "Finance",
+     "poids": 8.0
+    },
+    {
+     "symbole": "MUV2.DE",
+     "nom": "Munich Re",
+     "secteur": "Finance",
+     "poids": 7.0
+    },
+    {
+     "symbole": "INGA.AS",
+     "nom": "ING",
+     "secteur": "Finance",
+     "poids": 6.0
+    },
+    {
+     "symbole": "DB1.DE",
+     "nom": "Deutsche Börse",
+     "secteur": "Finance",
+     "poids": 5.0
+    },
+    {
+     "symbole": "DBK.DE",
+     "nom": "Deutsche Bank",
+     "secteur": "Finance",
+     "poids": 5.0
+    },
+    {
+     "symbole": "SAN.PA",
+     "nom": "Sanofi",
+     "secteur": "Santé",
+     "poids": 11.0
+    },
+    {
+     "symbole": "EL.PA",
+     "nom": "EssilorLuxottica",
+     "secteur": "Santé",
+     "poids": 12.0
+    },
+    {
+     "symbole": "ARGX.BR",
+     "nom": "argenx",
+     "secteur": "Santé",
+     "poids": 4.0
+    },
+    {
+     "symbole": "BAYN.DE",
+     "nom": "Bayer",
+     "secteur": "Santé",
+     "poids": 3.0
+    },
+    {
+     "symbole": "TTE.PA",
+     "nom": "TotalEnergies",
+     "secteur": "Énergie et services collectifs",
+     "poids": 12.0
+    },
+    {
+     "symbole": "IBE.MC",
+     "nom": "Iberdrola",
+     "secteur": "Énergie et services collectifs",
+     "poids": 11.0
+    },
+    {
+     "symbole": "ENEL.MI",
+     "nom": "Enel",
+     "secteur": "Énergie et services collectifs",
+     "poids": 8.0
+    },
+    {
+     "symbole": "ENI.MI",
+     "nom": "Eni",
+     "secteur": "Énergie et services collectifs",
+     "poids": 5.0
+    },
+    {
+     "symbole": "DTE.DE",
+     "nom": "Deutsche Telekom",
+     "secteur": "Communication",
+     "poids": 15.0
+    },
+    {
+     "symbole": "AI.PA",
+     "nom": "Air Liquide",
+     "secteur": "Matériaux",
+     "poids": 10.0
+    },
+    {
+     "symbole": "SGO.PA",
+     "nom": "Saint-Gobain",
+     "secteur": "Matériaux",
+     "poids": 4.0
+    },
+    {
+     "symbole": "BAS.DE",
+     "nom": "BASF",
+     "secteur": "Matériaux",
+     "poids": 4.0
+    },
+    {
+     "symbole": "RACE.MI",
+     "nom": "Ferrari",
+     "secteur": "Automobile",
+     "poids": 7.0
+    },
+    {
+     "symbole": "MBG.DE",
+     "nom": "Mercedes-Benz",
+     "secteur": "Automobile",
+     "poids": 6.0
+    },
+    {
+     "symbole": "BMW.DE",
+     "nom": "BMW",
+     "secteur": "Automobile",
+     "poids": 5.0
+    },
+    {
+     "symbole": "VOW3.DE",
+     "nom": "Volkswagen",
+     "secteur": "Automobile",
+     "poids": 5.0
+    },
+    {
+     "symbole": "STLAM.MI",
+     "nom": "Stellantis",
+     "secteur": "Automobile",
+     "poids": 3.0
+    }
+   ]
   }
  ]
 }
