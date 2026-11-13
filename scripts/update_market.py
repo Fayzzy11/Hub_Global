@@ -77,6 +77,8 @@ def serie(symbole, jours):
         try:
             valeur = yf.Ticker(symbole)
             histo = valeur.history(start=debut, interval="1d", auto_adjust=False)
+            if histo is None or len(histo) < 2:  # certains contrats (gaz TTF…) répondent mieux à une période toute faite
+                histo = valeur.history(period="1y" if jours > 30 else "1mo", interval="1d", auto_adjust=False)
             meta = valeur.history_metadata or {}
             break
         except Exception as e:  # réseau, quota, cache occupé : on réessaie, puis on abandonne cette valeur
