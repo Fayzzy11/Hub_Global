@@ -25,11 +25,5 @@ jobs:
           python-version: "3.12"
       - name: Installer les dépendances
         run: pip install -r scripts/requirements.txt
-      - name: Récupérer les cours
-        run: python scripts/update_market.py
-      - name: Enregistrer les fichiers mis à jour
-        run: |
-          git config user.name "hub-robot"
-          git config user.email "hub-robot@users.noreply.github.com"
-          git add data/market.json data/heatmap.json
-          git diff --cached --quiet || (git commit -m "Marché : mise à jour automatique" && git push)
+      - name: Diagnostic
+        run: python scripts/diag.py
