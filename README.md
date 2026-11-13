@@ -26,6 +26,14 @@ Tableau de bord personnel sous forme d'application installable : quartier financ
 - Tout est calculé dans le navigateur avec three.js (embarqué dans `assets/lib/`) : aucune image ni modèle à télécharger pour cette vue.
 - Réglages > Décor de l'univers 3D permet de revenir au quartier de La Défense. Réglages > Qualité de la 3D : « Allégée » pour les appareils modestes, « Toujours en liste » pour désactiver la 3D.
 
+## Networking du jour
+
+- Chaque matin en semaine, la routine Claude « Daily Networking Checklist » écrit la checklist du jour dans le dépôt privé (`data/networking.json`, clé `jour`), avec l'état du tracker (contacts, statuts, échéances, compteurs).
+- Accueil : une carte compacte montre les actions du jour, cochables, avec un bouton Claude qui ouvre la discussion networking du jour. Sur téléphone, la carte est repliée : touche-la pour la déplier.
+- Vue Réseau : le détail de chaque action, les messages prêts à copier-coller (bouton Copier), les compteurs, les jours précédents et l'accès aux documents du tracker (`documents/networking/`).
+- Ce que tu coches ou modifies dans l'app est gardé et repris par Claude au passage suivant (journal des modifications) ; la page Checklist réseau et le tracker du projet Claude restent la référence.
+- Le script `scripts/hub_sync.py` du dépôt privé fait la conversion (tracker vers `networking.json` et documents).
+
 ## Calendrier
 
 - La vue Calendrier permet d'ajouter, modifier et supprimer des événements directement dans l'app. Ils sont enregistrés dans le dépôt privé (`data/calendrier.json`, créé au premier enregistrement).
@@ -74,7 +82,9 @@ Glisse des fichiers ou des dossiers entiers n'importe où dans la fenêtre (ou u
 
 ```
 data/projects.json        fiches de contexte (projets, sites, outils, bot)
-data/networking.json      contacts et modèles de messages
+data/networking.json      contacts, checklist du jour, compteurs et modèles de messages (écrit par la routine Claude)
+documents/networking/     documents du tracker networking (checklists, état des contacts, fichiers du projet Claude)
+scripts/hub_sync.py       conversion du tracker vers l'app (utilisé par Claude)
 data/courses.json         base de cours
 data/morning-brief.json   index des briefs
 data/briefs-texte.json    texte des briefs, pour la recherche
