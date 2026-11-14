@@ -165,7 +165,7 @@ body:has(#fiche.ouverte) #v-univers:not(.plan) .u-tete>*{pointer-events:none}
 .u-legende i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
 #u-liste{position:absolute;inset:0;overflow:auto;padding:160px clamp(18px,4.4vw,60px) 80px;display:none;background:var(--fond)}
 #v-univers.plan #u-liste{display:block}
-#v-univers.plan #u-scene,#v-univers.plan .u-legende,#v-univers.plan .u-voile{display:none}
+#v-univers.plan #u-scene,#v-univers.plan .u-legende,#v-univers.plan .u-voile,#v-univers.plan [data-act="uRecentrer"]{display:none}
 .u-legende .puce{background:var(--papier)}
 .noeud{cursor:pointer;text-align:left;width:100%;display:block}
 .noeud:hover{border-color:var(--encre2)}
@@ -440,6 +440,171 @@ li.fait .t b,.nj-action.fait h3{text-decoration:line-through;color:var(--doux)}
   .nj-bloc>.rang:first-child{flex-direction:column}
 }
 @media (min-width:821px){#u-jour .nj-bascule-txt{display:none}#v-univers.plan:has(#u-jour:not([hidden])) #u-liste{padding-right:calc(min(350px,38vw) + 56px)}}
+/* ---------- Accueil ---------- */
+.acc-entete h1{font-size:clamp(30px,4vw,42px)}
+.acc-etat{color:var(--encre2);margin-top:6px}
+.lien-btn{border:0;background:none;padding:0;color:var(--bleu);text-decoration:underline;cursor:pointer;font:inherit}
+.acc-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;align-items:stretch;max-width:1320px}
+.acc-carte{background:var(--papier);border:1px solid var(--trait);border-radius:14px;padding:16px 18px;box-shadow:var(--ombre);min-width:0}
+.acc-large{grid-column:1/-1}
+@media (min-width:1180px){.acc-large{grid-column:span 2}.acc-carte:has(.r2){grid-column:1/-1}}
+.acc-tete{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.acc-tete h2{font-size:19px}
+.acc-ouvrir{border:0;background:none;color:var(--or);font:500 13px var(--texte);cursor:pointer;padding:8px 4px;min-height:36px}
+.acc-ev{display:flex;gap:12px;align-items:center;width:100%;text-align:left;border:0;background:none;padding:9px 6px 9px 10px;border-left:3px solid var(--c);border-radius:0 8px 8px 0;margin-bottom:6px;cursor:pointer;color:var(--encre);font:inherit;background:color-mix(in srgb,var(--c) 7%,transparent)}
+.acc-heure{font-size:13px;min-width:52px;color:var(--encre2)}
+.acc-ev-t{display:flex;flex-direction:column;min-width:0}
+.acc-ev-t b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-ev-t span{font-size:12.5px}
+.acc-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.acc-chiffre{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.acc-chiffre b{font-size:30px;font-weight:600}
+.acc-chiffre span{color:var(--encre2)}
+.acc-case{display:flex;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--trait);cursor:pointer}
+.acc-case input{width:20px;height:20px;accent-color:var(--or);flex:none}
+.acc-ligne{display:flex;gap:12px;align-items:center;width:100%;text-align:left;border:0;border-top:1px solid var(--trait);background:none;padding:9px 0;cursor:pointer;color:var(--encre);font:inherit}
+.acc-ligne:first-child{border-top:0}
+.acc-ligne>span{display:flex;flex-direction:column;min-width:0}
+.acc-ligne b{font-weight:500}
+.acc-ligne .doux{font-size:12.5px}
+.acc-j{min-width:52px;color:var(--or);font-size:15px}
+.acc-marche{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.acc-cours{display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;border:1px solid var(--trait);border-radius:10px;background:var(--fond);padding:9px 10px;cursor:pointer;color:var(--encre);font:inherit;min-width:0}
+.acc-cours>span:first-child{font-size:12px;color:var(--encre2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.acc-cours b{font-size:15px}
+.acc-cours .mono:last-child{font-size:12.5px}
+.acc-resume{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;color:var(--encre2);margin:8px 0 10px}
+.acc-acces{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.acc-acces button{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 6px 12px;border:1px solid var(--trait);border-radius:12px;background:var(--fond);cursor:pointer;color:var(--encre);font:500 13px var(--texte)}
+.acc-acces button:hover,.acc-cours:hover,.acc-ev:hover{border-color:var(--encre2)}
+.acc-acces svg{width:26px;height:26px;fill:none;stroke:var(--or);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+/* Réseau 2D */
+svg.r2{width:100%;max-width:600px;height:auto;display:block;margin:0 auto;touch-action:manipulation}
+.r2-axe{stroke:var(--trait);stroke-width:1}
+.r2-lien{fill:none;stroke-width:1.5;opacity:.4}
+.r2-n{cursor:pointer;outline:none}
+.r2-cible{fill:transparent}
+.r2-n:hover circle:nth-child(2),.r2-n:focus-visible circle:nth-child(2){stroke-width:4}
+.r2-picto{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.r2-mono{font:600 15px var(--texte)}
+.r2-nom{font:500 11.5px var(--texte);fill:var(--encre);paint-order:stroke;stroke:var(--papier);stroke-width:3.5px;stroke-linejoin:round}
+/* ---------- Navigation du téléphone ---------- */
+.onglets{display:none}
+.plus-liste{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.plus-liste button{display:flex;gap:14px;align-items:center;width:100%;text-align:left;border:1px solid var(--trait);border-radius:12px;background:var(--fond);padding:12px 14px;min-height:60px;cursor:pointer;color:var(--encre);font:inherit}
+.plus-liste button[aria-current="page"]{border-color:var(--or)}
+.plus-liste svg{width:26px;height:26px;flex:none;fill:none;stroke:var(--or);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.plus-liste span{display:flex;flex-direction:column}
+.plus-liste b{font-weight:500;font-size:16px}
+.plus-liste .doux{font-size:13px}
+.feuille-poignee{display:none}
+@media (max-width:820px){
+  nav.rail{background:var(--papier);padding:0 0 env(safe-area-inset-bottom);box-shadow:0 -6px 20px -14px rgba(24,32,47,.35)}
+  .liens{display:none}
+  .onglets{display:flex;align-items:stretch}
+  .onglets>a,.onglets>button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 2px 7px;min-height:58px;border:0;background:none;color:var(--encre2);text-decoration:none;font:500 11px/1.1 var(--texte);cursor:pointer;position:relative}
+  .onglets span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .onglets svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .onglets [aria-current="page"]{color:var(--or)}
+  .onglets [aria-current="page"]::before{content:"";position:absolute;top:0;left:28%;right:28%;height:3px;border-radius:0 0 3px 3px;background:var(--or)}
+  .vue{padding:18px 16px calc(32px + env(safe-area-inset-bottom))}
+  .vue>header{margin-bottom:16px}
+  .vue>header h1{font-size:30px}
+  .acc-grille{grid-template-columns:minmax(0,1fr);gap:12px}
+  .acc-carte{padding:14px 15px;border-radius:16px}
+  .acc-marche{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .acc-acces{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #toast{bottom:calc(86px + env(safe-area-inset-bottom))}
+  /* Fenêtres : feuilles qui montent du bas de l'écran */
+  dialog{width:100%;max-width:100%;margin:auto 0 0;border-radius:20px 20px 0 0;border-bottom:0;max-height:92dvh;padding:10px 18px calc(18px + env(safe-area-inset-bottom));overflow:auto}
+  dialog[open]{animation:monte .22s ease-out}
+  dialog.grand[open]{height:100dvh;max-height:100dvh;border-radius:0;padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+  .feuille-poignee{display:block;width:44px;height:5px;border-radius:3px;background:var(--trait);margin:4px auto 12px}
+}
+@keyframes monte{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+/* Écrans tactiles : des cibles assez grandes pour le doigt, et pas de zoom automatique sur les champs */
+@media (pointer:coarse){
+  .btn{min-height:44px;padding:9px 16px}
+  .btn.mini{min-height:40px;padding:6px 13px;font-size:14px}
+  input,select,textarea,.saisie{font-size:16px!important}
+  .seg button{min-height:40px}
+  .etoile{font-size:23px;padding:8px}
+  table td,table th{padding-top:12px;padding-bottom:12px}
+}
+/* ---------- Cours : explorateur de dossiers ---------- */
+.c-onglets{margin:14px 0 16px}
+.c-onglets button{min-height:40px;padding:8px 16px;font:500 14px var(--texte)}
+.f-fil{gap:4px}
+.f-fil .puce{text-transform:none;letter-spacing:0;font:500 13px var(--texte);padding:6px 10px;cursor:pointer}
+.f-liste{border:1px solid var(--trait);border-radius:12px;overflow:hidden;background:var(--papier)}
+.f-ligne{display:flex;align-items:center;gap:6px;border-top:1px solid var(--trait);padding-right:8px}
+.f-ligne:first-child{border-top:0}
+.f-ouvrir{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:0;background:none;padding:10px 12px;min-height:54px;text-align:left;cursor:pointer;color:var(--encre);font:inherit}
+.f-ouvrir:hover{background:var(--fond)}
+.f-nom{display:flex;flex-direction:column;min-width:0;flex:1}
+.f-nom b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.f-nom .doux{font-size:12.5px}
+.f-ext{flex:none;width:38px;height:38px;border-radius:8px;display:grid;place-items:center;font:600 10.5px var(--mono);letter-spacing:.04em;color:#fff;background:var(--c)}
+.f-dossier{flex:none;width:38px;height:38px;border-radius:8px;display:grid;place-items:center;background:var(--or-doux);color:var(--or);font-size:20px}
+.f-dossier svg{width:22px;height:22px;fill:var(--or);opacity:.85}
+.f-plus{flex:none;min-width:40px;justify-content:center;font-size:18px;letter-spacing:.05em}
+.c-detail{min-width:0}
+/* ---------- Patrimoine ---------- */
+.pat-onglets{margin:0 0 18px;max-width:100%;overflow-x:auto}
+.pat-onglets button{min-height:40px;padding:8px 16px;font:500 14px var(--texte);white-space:nowrap}
+.pat-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:stretch;max-width:1320px}
+.pat-net,.pat-large{grid-column:1/-1}
+.pat-total{font-size:clamp(34px,5vw,48px);font-weight:600;letter-spacing:-.02em;margin:8px 0 4px}
+.pat-courbe{width:100%;height:110px;display:block;margin-top:8px}
+.pat-ligne{fill:none;stroke:var(--or);stroke-width:2;vector-effect:non-scaling-stroke}
+.pat-aire{fill:var(--or-doux);opacity:.7}
+.pat-deuxchiffres{display:flex;flex-wrap:wrap;gap:12px 26px;margin-bottom:12px}
+.pat-deuxchiffres b{display:block;font-size:22px;font-weight:600;margin-top:4px}
+.pat-barre{display:block;width:100%;border:0;background:none;padding:6px 0;text-align:left;cursor:pointer;color:var(--encre);font:inherit}
+.pat-barre[tabindex="-1"]{cursor:default}
+.pat-barre[aria-pressed="true"] .pat-barre-t span{font-weight:600}
+.pat-barre-t{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:5px}
+.pat-barre-t i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px}
+.pat-jauge{display:block;height:8px;border-radius:5px;background:var(--fond);overflow:hidden}
+.pat-jauge span{display:block;height:100%;border-radius:5px}
+.pat-compte{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;border:0;border-top:1px solid var(--trait);background:none;padding:11px 0;min-height:56px;text-align:left;cursor:pointer;color:var(--encre);font:inherit}
+.pat-compte:first-of-type{border-top:0}
+.pat-compte>span{display:flex;flex-direction:column;min-width:0}
+.pat-compte b{font-weight:500}
+.pat-op{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--trait);font-size:14px}
+.pat-op:first-of-type{border-top:0}
+.pat-lib{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pat-op-l .pat-lib{display:flex;flex-direction:column;white-space:normal}
+.pat-op-l .pat-lib>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pat-sel{align-self:flex-start;margin-top:3px;border:1px solid var(--trait);border-left:3px solid var(--c);border-radius:6px;background:var(--papier);padding:3px 6px;font-size:12.5px;max-width:100%;color:var(--encre2)}
+.pat-mois{margin-bottom:14px}
+.pat-mois h2{min-width:170px;text-align:center;text-transform:capitalize}
+.pat-code{max-width:520px}
+.pat-table td,.pat-table th{white-space:nowrap}
+.pi-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.pi-deux{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+.pi-deux[hidden]{display:none}
+.pi-apercu{border:1px solid var(--trait);border-radius:10px;padding:10px 12px;margin:10px 0;background:var(--fond)}
+#dlg .champ{margin-top:8px}
+/* Univers sur téléphone : le réseau 2D en tête de la vue plan */
+.u-r2{max-width:560px;margin:0 auto 10px;padding:12px}
+@media (max-width:820px){
+  .pi-cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pat-grille{grid-template-columns:minmax(0,1fr);gap:12px}
+  .pat-onglets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%}
+  .pat-onglets button{padding:8px 2px;font-size:13.5px}
+  .pat-table .p-ext{display:none}
+  .f-ouvrir{min-height:58px}
+  .c-detail h2{font-size:22px!important}
+  .deux .c-item{min-height:64px}
+  #v-cours .c-item{display:block;width:100%;text-align:left;margin-bottom:10px}
+  /* Bibliothèque, réseau : moins de colonnes et de petits boutons */
+  #v-reseau table th:nth-child(3),#v-reseau table td:nth-child(3),#v-reseau table th:nth-child(5),#v-reseau table td:nth-child(5){display:none}
+  #v-univers.plan .u-tete{left:0;right:0;top:0;max-width:none;padding:16px 16px 10px;background:var(--fond);border-bottom:1px solid var(--trait);z-index:2}
+  #v-univers.plan .u-tete p{display:none}
+  #v-univers.plan #u-liste{padding:96px 14px 130px}
+  #v-univers.plan .u-outils{left:0;right:0;bottom:0;padding:10px 14px;justify-content:center;background:var(--fond);border-top:1px solid var(--trait);z-index:3}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -448,9 +613,11 @@ li.fait .t b,.nj-action.fait h3{text-decoration:line-through;color:var(--doux)}
   <nav class="rail" aria-label="Navigation principale">
     <div class="marque">Hub<small class="sur">Noah · place financière</small></div>
     <div class="liens" id="liens"></div>
+    <div class="onglets" id="onglets" aria-label="Navigation principale"></div>
     <div class="pied" id="pied"></div>
   </nav>
   <main>
+    <section class="vue" id="v-accueil"></section>
     <!-- 01 Univers -->
     <section class="vue" id="v-univers">
       <div id="u-scene"><canvas id="u-canvas"></canvas><div id="u-labels"></div></div>
@@ -479,6 +646,7 @@ li.fait .t b,.nj-action.fait h3{text-decoration:line-through;color:var(--doux)}
     <section class="vue" id="v-calendrier"></section>
     <section class="vue" id="v-reseau"></section>
     <section class="vue" id="v-bot"></section>
+    <section class="vue" id="v-patrimoine"></section>
     <section class="vue" id="v-reglages"></section>
     <aside id="fiche" aria-label="Fiche détaillée"></aside>
   </main>
@@ -557,12 +725,12 @@ function telecharger(nom, texte) {
    2. Réglages (sauvegardés dans le navigateur)
    ============================================================ */
 const VUES = [
-  { id: "univers", nom: "Univers" }, { id: "agent", nom: "Agent" }, { id: "marche", nom: "Marché" },
+  { id: "accueil", nom: "Accueil" }, { id: "univers", nom: "Univers" }, { id: "agent", nom: "Agent" }, { id: "marche", nom: "Marché" },
   { id: "bibliotheque", nom: "Bibliothèque" }, { id: "cours", nom: "Cours" }, { id: "documents", nom: "Documents" }, { id: "calendrier", nom: "Calendrier" }, { id: "reseau", nom: "Réseau" },
-  { id: "bot", nom: "Bot" }, { id: "reglages", nom: "Réglages" }
+  { id: "bot", nom: "Bot" }, { id: "patrimoine", nom: "Patrimoine" }, { id: "reglages", nom: "Réglages" }
 ];
 const REGLAGES_DEFAUT = {
-  theme: "clair", mode3d: "auto", scene3d: "reseau", liensApp: true, ordre: VUES.map(v => v.id), masquees: [],
+  theme: "clair", mode3d: "auto", scene3d: "reseau", liensApp: true, ordre: VUES.map(v => v.id), masquees: [], onglets: ["accueil", "marche", "calendrier", "cours"], patMasque: false,
   couleurs: { "projet Claude": "#27457A", outil: "#A87B1E", site: "#28734F", bot: "#B2452F" },
   marche: { version: 2, colonnes: ["cours", "jour", "periode", "graph", "devise"], per: "1J", masques: [], onglet: "apercu", page: "", auto: true, carte: { indice: "", taille: "poids", secteurs: true, echelle: 3 } }
 };
@@ -571,6 +739,7 @@ R.couleurs = Object.assign({}, REGLAGES_DEFAUT.couleurs, R.couleurs);
 R.marche = Object.assign({}, REGLAGES_DEFAUT.marche, R.marche);
 R.marche.carte = Object.assign({}, REGLAGES_DEFAUT.marche.carte, R.marche.carte);
 if (LS.lire("hub.reglages", {}).marche?.version !== 2) Object.assign(R.marche, { version: 2, onglet: "apercu", per: "1J", colonnes: [...new Set([...R.marche.colonnes, "haut", "bas"])] }); // nouvelle vue Marché : on ouvre sur la vue d'ensemble
+if (!R.ordre.includes("accueil")) R.ordre.unshift("accueil"); // l'accueil arrive en tête du menu
 VUES.forEach(v => { if (R.ordre.includes(v.id)) return; const i = R.ordre.indexOf("reseau"); if (i < 0) R.ordre.push(v.id); else R.ordre.splice(i, 0, v.id); }); // une vue ajoutée par une mise à jour prend place avant le carnet réseau
 const sauverReglages = () => LS.ecrire("hub.reglages", R);
 function appliquerTheme() {
@@ -627,7 +796,7 @@ const JEUX = {
 };
 const D = {};      // données en mémoire
 const M = {};      // état de chaque jeu : source, attente d'envoi, erreur
-const S = { demo: false, vue: "univers", projet: null };
+const S = { demo: false, vue: "accueil", projet: null };
 
 /* Accès au dépôt privé par l'API de GitHub */
 const GH = {
@@ -775,12 +944,13 @@ const RENDU = {};
 function vuesVisibles() { return R.ordre.filter(id => VUES.some(v => v.id === id) && (id === "reglages" || !R.masquees.includes(id))); }
 function rendreNav() {
   $("#liens").innerHTML = vuesVisibles().map((id, i) => `<a href="#/${id}" ${S.vue === id ? 'aria-current="page"' : ""}><span class="n">${String(i + 1).padStart(2, "0")}</span>${esc(VUES.find(v => v.id === id).nom)}</a>`).join("");
+  rendreOnglets();
   const maj = D.market?.derniere_maj;
   const prives = Object.keys(JEUX).filter(n => JEUX[n].prive && M[n]), err = prives.some(n => M[n].erreur), att = prives.some(n => M[n].attente);
   $("#pied").innerHTML = `${S.demo ? "Mode démonstration" : err ? '<b class="baisse">Non synchronisé</b> · <a href="#" data-act="resync">réessayer</a>' : att ? "Enregistrement…" : "Dépôt privé à jour"}<br>Marché : ${maj ? esc(fDate(maj)) : "aucune donnée"}`;
 }
 function aller(id) {
-  if (!VUES.some(v => v.id === id)) id = "univers";
+  if (!VUES.some(v => v.id === id)) id = "accueil";
   S.vue = id; fermerFiche();
   $$(".vue").forEach(v => v.classList.toggle("active", v.id === "v-" + id));
   rendreNav(); RENDU[id]?.(); univActif(id === "univers");
@@ -1523,15 +1693,16 @@ function univBoucle(t) {
   const b = $("#u-bulle"); if (U.survol && b) { const x = Math.min(U.w - 276, Math.max(8, U.survol.sx + 26)), y = Math.min(U.h - 200, Math.max(8, U.survol.sy + 18)); b.style.transform = `translate(${x.toFixed(0)}px,${y.toFixed(0)}px)`; }
   if (U.compo && !(U.pr <= .75 && U.ms > 34)) { U.etalon.uniforms.uT.value = t / 1000; U.compo.render(); } else U.r.render(U.scene, U.cam); // le post-traitement est coupé en dernier recours
 }
+const enPlan = () => !!(R.mode3d === "2d" || U.echec || (S.plan ?? petitEcran())); // sur téléphone, le réseau 2D par défaut
 function univActif(oui) {
-  const plan = R.mode3d === "2d" || U.echec || S.plan;
+  const plan = enPlan();
   $("#v-univers").classList.toggle("plan", !!plan);
   const etait = U.actif; U.actif = oui && !plan && U.pret;
   if (U.actif && !etait) requestAnimationFrame(univBoucle);
 }
 function rendreListeUnivers() {
   const L = projets();
-  $("#u-liste").innerHTML = L.length ? TYPES.map(t => { const l = L.filter(p => p.type === t); return l.length ? `<div class="sur" style="margin:22px 0 10px">${esc(t)}</div><div class="grille">${l.map(p => `<button class="carte noeud" data-act="fiche" data-id="${esc(p.id)}"><span class="rang" style="flex-wrap:nowrap;align-items:flex-start;gap:12px">${tuile(p, "petite")}<span><h3>${esc(p.nom)}</h3><span class="doux petit">${esc(p.objectif || "")}</span><br><span class="doux petit mono">${esc(fDate(p.derniere_maj))}${recent(p) ? ' · <b style="color:var(--or)">récent</b>' : ""}</span></span></span></button>`).join("")}</div>` : ""; }).join("") : `<div class="vide"><b>Aucune fiche pour l'instant</b>Ajoute ta première fiche de projet.</div>`;
+  $("#u-liste").innerHTML = (L.length ? `<div class="carte u-r2">${reseau2D()}</div>` : "") + (L.length ? TYPES.map(t => { const l = L.filter(p => p.type === t); return l.length ? `<div class="sur" style="margin:22px 0 10px">${esc(t)}</div><div class="grille">${l.map(p => `<button class="carte noeud" data-act="fiche" data-id="${esc(p.id)}"><span class="rang" style="flex-wrap:nowrap;align-items:flex-start;gap:12px">${tuile(p, "petite")}<span><h3>${esc(p.nom)}</h3><span class="doux petit">${esc(p.objectif || "")}</span><br><span class="doux petit mono">${esc(fDate(p.derniere_maj))}${recent(p) ? ' · <b style="color:var(--or)">récent</b>' : ""}</span></span></span></button>`).join("")}</div>` : ""; }).join("") : `<div class="vide"><b>Aucune fiche pour l'instant</b>Ajoute ta première fiche de projet.</div>`);
   $("#u-liste").insertAdjacentHTML("beforeend", `<p style="margin-top:22px"><button class="btn" data-act="editerFiche">Ajouter une fiche</button></p>`);
 }
 /* Tableau de bord en surimpression : les chiffres qui comptent, cliquables */
@@ -1905,7 +2076,7 @@ function rxBoucle(t) {
 }
 
 RENDU.univers = () => {
-  if (R.mode3d !== "2d") univInit();
+  if (R.mode3d !== "2d" && !enPlan()) univInit();
   univConstruire(); rendreHud(); rendreJour();
   const L = projets();
   $("#u-titre").textContent = reseau3d() ? "un seul réseau." : "une seule place.";
@@ -1913,17 +2084,132 @@ RENDU.univers = () => {
   $("#u-sous").innerHTML = L.length ? `${L.length} ${reseau3d() ? "neurones reliés" : "tours reliées"} au hub, ${L.filter(recent).length} mises à jour ces trois derniers jours.${U.echec && R.mode3d !== "2d" ? " La 3D n'est pas disponible sur cet appareil : vue liste affichée." : ""}${S.demo ? " <b>Mode démonstration.</b>" : ""}` : "Aucune fiche chargée.";
   $("#u-recents").innerHTML = [...L].sort((a, b) => String(b.derniere_maj).localeCompare(String(a.derniere_maj))).slice(0, 4).map(p => `<button data-act="fiche" data-id="${esc(p.id)}"><span class="mono">${esc(fDate(p.derniere_maj))}</span> · ${esc(p.nom)}</button>`).join("");
   $("#u-legende").innerHTML = TYPES.filter(t => L.some(p => p.type === t)).map(t => `<button class="puce" aria-pressed="${U.filtre === t}" data-act="uFiltre" data-t="${esc(t)}"><i style="background:${esc(R.couleurs[t])}"></i>${esc(t)}</button>`).join("") + `<span class="u-aide">${reseau3d() ? "Glisse pour tourner · molette ou pincement pour zoomer · clique un neurone. Plus il est gros, plus la fiche est récente." : "Glisse pour tourner · molette ou pincement pour zoomer · clique une tour ou la Grande Arche. Plus la tour est haute, plus la fiche est récente."}</span>`;
-  const plan = R.mode3d === "2d" || U.echec || S.plan;
+  const plan = enPlan();
   $("#u-bascule").textContent = plan ? "Vue 3D" : "Vue liste";
   $("#u-bascule").disabled = U.echec || R.mode3d === "2d";
   $("#u-theme").textContent = estNuit() ? "Jour" : "Nuit";
 };
 Object.assign(ACT, {
   uRecentrer: () => { fermerFiche(); if (reseau3d()) { const d = ((.55 - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; Object.assign(U.cons, { th: U.cons.th + d, ph: 1.46, d: rxDist() }); U.dAvant = null; U.viseCible?.set(0, 0, 0); U.repos = 0; return; } const d = ((.85 - U.cons.th + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; Object.assign(U.cons, { th: U.cons.th + d, ph: 1.37, d: distDefaut() }); U.dAvant = U.phAvant = null; U.viseCible?.set(...Q.CENTRE); U.repos = 0; },
-  uBascule: () => { S.plan = !S.plan; univActif(true); RENDU.univers(); },
+  uBascule: () => { S.plan = !enPlan(); RENDU.univers(); univActif(true); },
   uFiltre: d => { U.filtre = U.filtre === d.t ? null : d.t; $$("#u-legende .puce").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === U.filtre)); appliquerEtat(true); },
   uTheme: () => { R.theme = estNuit() ? "clair" : "nuit"; sauverReglages(); appliquerTheme(); RENDU.univers(); }
 });
+
+const ICONES_VUES = {
+  accueil: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h4.5v-5.5h4V20h4.5V9.5"/>',
+  univers: '<circle cx="12" cy="12" r="2.6"/><circle cx="5" cy="5.5" r="1.9"/><circle cx="19" cy="5.5" r="1.9"/><circle cx="5" cy="18.5" r="1.9"/><circle cx="19" cy="18.5" r="1.9"/><path d="m6.4 6.9 3.7 3.4M17.6 6.9l-3.7 3.4M6.4 17.1l3.7-3.4M17.6 17.1l-3.7-3.4"/>',
+  agent: '<path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/>',
+  marche: '<path d="M3.5 20h17"/><path d="m4.5 15.5 4.5-4.5 3.5 3 7-7.5"/><path d="M15 6.5h4.5V11"/>',
+  bibliotheque: '<path d="M4.5 4.5h4v15h-4zM10.5 4.5h4v15h-4z"/><path d="m16.2 5.6 3.4-.9 3.1 14.1-3.4.9z"/>',
+  cours: '<path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11v5c3.2 2.4 7.8 2.4 11 0v-5"/><path d="M21.5 9v5.5"/>',
+  documents: '<path d="M3.5 6.5h6.5l2 2h8.5v10.5h-17z"/>',
+  calendrier: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  reseau: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3 20c0-3.4 2.7-5.8 6-5.8s6 2.4 6 5.8"/><circle cx="17.2" cy="9.5" r="2.4"/><path d="M16.5 14.4c2.8.1 4.5 2.1 4.5 4.8"/>',
+  bot: '<rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 4.5V8M9.5 12.5v1M14.5 12.5v1M9.5 16h5"/>',
+  patrimoine: '<path d="M4.5 7.5h14a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2H17"/><path d="M15.5 13.75h.01"/><path d="M20.5 11h-4a2.75 2.75 0 0 0 0 5.5h4"/>',
+  reglages: '<path d="M4 6.5h9M17 6.5h3M4 12h3M11 12h9M4 17.5h11M19 17.5h1"/><circle cx="15" cy="6.5" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17.5" r="2"/>',
+  plus: '<circle cx="5.5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.5" cy="12" r="1.5"/>'
+};
+/* ============================================================
+   8 ter. Accueil : ce qui compte aujourd'hui, en cartes claires
+       (agenda, networking du jour, marché, échéances, dernier
+       brief, patrimoine), des accès rapides, et les projets en
+       réseau 2D, net et léger, qui fonctionne aussi au doigt.
+   ============================================================ */
+const petitEcran = () => matchMedia("(max-width:820px)").matches;
+const salutation = () => { const h = new Date().getHours(); return h < 5 ? "Bonne nuit" : h < 18 ? "Bonjour" : "Bonsoir"; };
+const ACCUEIL_MARCHE = ["^FCHI", "^GSPC", "EURUSD=X", "^TNX", "BZ=F", "BTC-USD"];
+const svgVue = id => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONES_VUES[id] || ICONES_VUES.plus}</svg>`;
+function carteA(id, titre, corps, { vue, lien = "Ouvrir", classe = "" } = {}) {
+  return `<section class="acc-carte ${classe}" aria-labelledby="acc-${id}"><div class="acc-tete"><h2 id="acc-${id}">${esc(titre)}</h2>${vue ? `<button class="acc-ouvrir" data-act="aller" data-v="${vue}">${esc(lien)} <span aria-hidden="true">›</span></button>` : ""}</div>${corps}</section>`;
+}
+/* Projets en réseau 2D : l'agent au centre, les projets Claude en premier cercle, les autres fiches autour */
+function reseau2D() {
+  const L = projets(); if (!L.length) return `<p class="doux petit">Aucune fiche pour l'instant.</p>`;
+  const W = 500, C = W / 2, interne = L.filter(p => p.type === "projet Claude"), externe = L.filter(p => p.type !== "projet Claude");
+  const anneaux = interne.length >= 3 && externe.length >= 3 ? [[interne, 122, Math.PI / interne.length], [externe, 212, 0]] : [[L, 180, 0]];
+  const pos = new Map();
+  anneaux.forEach(([l, r, d]) => l.forEach((p, i) => { const a = -Math.PI / 2 + d + i * 2 * Math.PI / l.length; pos.set(p.id, { x: C + r * Math.cos(a), y: C + r * Math.sin(a) }); }));
+  let liens = "", vus = new Set();
+  L.forEach(p => { const a = pos.get(p.id); liens += `<line x1="${C}" y1="${C}" x2="${a.x.toFixed(1)}" y2="${a.y.toFixed(1)}" class="r2-axe"/>`;
+    tab(p.liens_projets).forEach(id => { const b = pos.get(id), k = [p.id, id].sort().join("|"); if (!b || vus.has(k)) return; vus.add(k); const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2, cx = mx + (C - mx) * .35, cy = my + (C - my) * .35; liens += `<path d="M${a.x.toFixed(1)},${a.y.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${b.x.toFixed(1)},${b.y.toFixed(1)}" class="r2-lien" style="stroke:${esc(couleurDe(p))}"/>`; }); });
+  const noeud = p => { const { x, y } = pos.get(p.id), c = couleurDe(p), k = pictoDe(p), r = p.type === "projet Claude" ? 25 : 22, nom = p.nom.length > 16 ? p.nom.slice(0, 15) + "…" : p.nom, id = "r2c-" + p.id.replace(/\W/g, "");
+    return `<g class="r2-n" data-act="fiche" data-id="${esc(p.id)}" role="button" tabindex="0" aria-label="${esc(p.nom)}, ${esc(p.type)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r + 9}" class="r2-cible"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="var(--papier)" stroke="${esc(c)}" stroke-width="2.6"/>
+      ${p.logo ? `<clipPath id="${id}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r - 4}"/></clipPath><image href="${esc(p.logo)}" x="${(x - r + 4).toFixed(1)}" y="${(y - r + 4).toFixed(1)}" width="${2 * r - 8}" height="${2 * r - 8}" clip-path="url(#${id})" preserveAspectRatio="xMidYMid meet"/>`
+        : k ? `<g transform="translate(${(x - 12).toFixed(1)},${(y - 12).toFixed(1)})" class="r2-picto" style="stroke:${esc(c)}">${PICTOS[k]}</g>` : `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle" class="r2-mono" style="fill:${esc(c)}">${esc(monogramme(p.nom))}</text>`}
+      ${recent(p) ? `<circle cx="${(x + r * .72).toFixed(1)}" cy="${(y - r * .72).toFixed(1)}" r="5" fill="var(--or)" stroke="var(--papier)" stroke-width="2"/>` : ""}
+      <text x="${x.toFixed(1)}" y="${(y + r + 15).toFixed(1)}" text-anchor="middle" class="r2-nom">${esc(nom)}</text></g>`; };
+  return `<svg viewBox="-10 -6 ${W + 20} ${W + 24}" class="r2" role="group" aria-label="Tes projets, reliés entre eux">${liens}
+    <g class="r2-n" data-act="aller" data-v="agent" role="button" tabindex="0" aria-label="Agent global"><circle cx="${C}" cy="${C}" r="40" class="r2-cible"/><circle cx="${C}" cy="${C}" r="30" fill="var(--encre)"/><g transform="translate(${C - 12},${C - 12})" class="r2-picto" style="stroke:var(--fond)">${ICONES_VUES.agent}</g><text x="${C}" y="${C + 47}" text-anchor="middle" class="r2-nom">Agent</text></g>
+    ${L.map(noeud).join("")}</svg>`;
+}
+RENDU.accueil = () => {
+  const v = $("#v-accueil"), aujD = new Date(), auj = isoJour(aujD), dem = new Date(); dem.setDate(dem.getDate() + 1);
+  const h = aujD.toTimeString().slice(0, 5), O = occurrences(auj, isoJour(dem)), aujE = O.filter(o => o.date === auj && (!o.e.debut || (o.e.fin || o.e.debut) >= h)), demE = O.filter(o => o.date !== auj);
+  const ev = o => { const c = categorie(o.e.categorie); return `<button class="acc-ev" data-act="accJour" data-d="${o.date}" style="--c:${esc(c.couleur)}"><span class="acc-heure mono">${esc(o.e.debut || "Journée")}</span><span class="acc-ev-t"><b>${esc(o.e.titre)}</b><span class="doux">${esc([c.nom, o.e.lieu].filter(Boolean).join(" · "))}</span></span></button>`; };
+  const agenda = `${aujE.length ? aujE.slice(0, 4).map(ev).join("") + (aujE.length > 4 ? `<p class="doux petit">et ${aujE.length - 4} autre${aujE.length > 5 ? "s" : ""}</p>` : "") : `<p class="doux">Plus rien de prévu aujourd'hui.</p>`}
+    ${demE.length ? `<div class="sur" style="margin:12px 0 6px">Demain</div>${demE.slice(0, 2).map(ev).join("")}${demE.length > 2 ? `<p class="doux petit">et ${demE.length - 2} autre${demE.length > 3 ? "s" : ""}</p>` : ""}` : ""}
+    <div class="acc-actions"><button class="btn" data-act="calEditer" data-d="${auj}">Ajouter un événement</button></div>`;
+  // Networking : la checklist du jour écrite par la routine Claude, sinon les relances
+  const j = jourNet(), rel = relances();
+  const reseau = j ? (() => { const A = tab(j.actions), f = A.filter(a => a.fait).length, reste = A.filter(a => !a.fait);
+    return `<div class="acc-chiffre"><b class="mono">${f}/${A.length}</b><span>${f === A.length ? "Tout est fait" : "actions faites"}${j.date !== auj ? " · checklist du " + esc(libJour(j.date)) : ""}</span></div>${reste.slice(0, 3).map(a => `<label class="acc-case">${caseAction(a)}<span>${esc(a.titre || a.categorie)}</span></label>`).join("")}<div class="acc-actions">${boutonClaudeJour()}<button class="btn" data-act="aller" data-v="reseau">Messages</button></div>`; })()
+    : `<div class="acc-chiffre"><b class="mono">${rel.length}</b><span>relance${rel.length > 1 ? "s" : ""} dans les 7 jours</span></div>${rel.slice(0, 3).map(c => `<button class="acc-ligne" data-act="aller" data-v="reseau"><b>${esc(c.nom)}</b><span class="doux">${esc(c.entreprise || "")} · ${esc(fDate(c.prochaine_relance))}</span></button>`).join("")}`;
+  // Marché : six repères
+  const T = ACCUEIL_MARCHE.map(valeurM).filter(Boolean), m = D.market || {};
+  const marche = T.length ? `<div class="acc-marche">${T.map(t => { const x = varP(t, "1J"); return `<button class="acc-cours" data-act="mFiche" data-s="${esc(t.symbole)}"><span>${esc(t.court || t.nom)}</span><b class="mono">${fCours(t)}</b><span class="mono ${x == null ? "" : x >= 0 ? "hausse" : "baisse"}">${txtVar(t, x)}</span></button>`; }).join("")}</div><p class="doux petit" style="margin-top:8px">${m.derniere_maj ? "Mis à jour " + esc(fHeure(m.derniere_maj)) : "Pas encore de cours"}${ageMarche() > 180 && GH.jetonRobot ? ` · <button class="lien-btn" data-act="mActualiser">actualiser</button>` : ""}</p>` : `<p class="doux">Pas de données de marché.</p>`;
+  // Échéances : prochain examen, échéances du calendrier
+  const fin = new Date(); fin.setDate(fin.getDate() + 21);
+  const ex = tab(D.courses?.cours).filter(c => c.examen?.date && c.examen.date >= auj).sort((a, b) => a.examen.date.localeCompare(b.examen.date));
+  const ech = occurrences(auj, isoJour(fin)).filter(o => ["Échéance", "Examen", "Entretien"].includes(categorie(o.e.categorie).nom) && !o.e.id.startsWith("x-")).slice(0, 3);
+  const echeances = `${ex.length ? ex.slice(0, 2).map(c => `<button class="acc-ligne" data-act="cChoisirVue" data-id="${esc(c.id)}"><b class="mono acc-j">J-${-joursDepuis(c.examen.date)}</b><span><b>${esc(c.nom)}</b><span class="doux">${esc(fDate(c.examen.date))}${c.examen.heure ? " à " + esc(c.examen.heure) : ""}${c.examen.format ? " · " + esc(c.examen.format) : ""}</span></span></button>`).join("") : ""}
+    ${ech.map(o => `<button class="acc-ligne" data-act="accJour" data-d="${o.date}"><b class="mono acc-j">J-${-joursDepuis(o.date)}</b><span><b>${esc(o.e.titre)}</b><span class="doux">${esc(fDate(o.date))}</span></span></button>`).join("")}` || `<p class="doux">Aucune échéance dans les trois semaines.</p>`;
+  // Dernier brief
+  const B = [...tab(D["morning-brief"]?.briefs)].sort((a, b) => String(b.date).localeCompare(String(a.date))), b0 = B[0];
+  const brief = b0 ? `<div class="sur">${esc(fDate(b0.date))}${b0.date === auj ? " · aujourd'hui" : ""}</div><p class="acc-resume">${esc(b0.resume || b0.titre)}</p>${tab(b0.tickers).length ? `<div class="rang" style="gap:6px;margin-bottom:10px">${b0.tickers.slice(0, 5).map(t => `<span class="puce or">${esc(t)}</span>`).join("")}</div>` : ""}<div class="acc-actions">${b0.fichier_pdf && GH.pret ? `<button class="btn plein" data-act="docOuvrir" data-p="${esc(cheminPdf(b0))}">Lire le brief</button>` : ""}<button class="btn" data-act="aller" data-v="bibliotheque">Tous les briefs</button></div>`
+    : `<p class="doux">Pas encore de brief.</p><div class="acc-actions"><button class="btn plein" data-act="bPdfJour">Ajouter le PDF du jour</button></div>`;
+  // Accès rapides : toutes les vues
+  const acces = `<div class="acc-acces">${vuesVisibles().filter(id => id !== "accueil").map(id => `<button data-act="aller" data-v="${id}">${svgVue(id)}<span>${esc(VUES.find(x => x.id === id).nom)}</span></button>`).join("")}</div>`;
+  const prives = Object.keys(JEUX).filter(n => JEUX[n].prive && M[n]), err = prives.some(n => M[n].erreur);
+  v.innerHTML = `<header class="acc-entete"><div class="sur">${esc(aujD.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }))}</div><h1>${salutation()} Noah</h1>
+      <p class="acc-etat">${S.demo ? "Mode démonstration : données d'exemple." : err ? '<span class="baisse">Données non synchronisées</span> · <button class="lien-btn" data-act="resync">réessayer</button>' : "Tout est à jour."}${aujE.length ? ` ${aujE.length} rendez-vous aujourd'hui.` : ""}${j ? ` Networking : ${tab(j.actions).filter(a => a.fait).length}/${tab(j.actions).length}.` : ""}</p></header>
+    ${bandeau("projects")}
+    <div class="acc-grille">
+      ${carteA("agenda", "Aujourd'hui", agenda, { vue: "calendrier", lien: "Agenda" })}
+      ${carteA("reseau", j ? "Networking du jour" : "Relances", reseau, { vue: "reseau", lien: "Réseau" })}
+      ${carteA("marche", "Marché", marche, { vue: "marche" })}
+      ${carteA("echeances", "Échéances", echeances, { vue: "calendrier", lien: "Calendrier" })}
+      ${carteA("brief", "Dernier brief", brief, { vue: "bibliotheque", lien: "Bibliothèque", classe: "acc-large" })}
+      ${typeof cartePatrimoine === "function" ? cartePatrimoine() : ""}
+      ${carteA("acces", "Accès rapides", acces, { classe: "acc-large" })}
+      ${carteA("projets", "Tes projets", `${reseau2D()}<p class="doux petit" style="text-align:center">Touche un projet pour sa fiche, le centre pour l'agent. Un point doré : mis à jour ces trois derniers jours.</p>${!petitEcran() ? `<div class="acc-actions" style="justify-content:center"><button class="btn" data-act="aller" data-v="univers">Voir le réseau en 3D</button><button class="btn" data-act="editerFiche">Ajouter une fiche</button></div>` : `<div class="acc-actions" style="justify-content:center"><button class="btn" data-act="editerFiche">Ajouter une fiche</button></div>`}`, { classe: "acc-large" })}
+    </div>`;
+};
+Object.assign(ACT, {
+  accJour: d => { CAL.jour = d.d; CAL.mois = d.d.slice(0, 7); if (petitEcran()) { CAL.vue = "jour"; } location.hash = "#/calendrier"; if (S.vue === "calendrier") RENDU.calendrier(); },
+  cChoisirVue: d => { filtreC.id = d.id; filtreC.ouvert = true; location.hash = "#/cours"; if (S.vue === "cours") RENDU.cours(); }
+});
+/* Clavier : Entrée ou espace sur un nœud du réseau 2D */
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches?.(".r2-n")) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent("click", { bubbles: true })); } });
+
+/* ---------- Navigation du téléphone : une barre d'onglets en bas, et « Plus » pour le reste ---------- */
+const DESC_VUES = { accueil: "Ta journée en un coup d'œil", univers: "Tes projets en réseau", agent: "Questions sur tes projets", marche: "Cours, cartes et pages", bibliotheque: "Morning briefs et recherche", cours: "Cours SKEMA et documents", documents: "Tous tes fichiers", calendrier: "Agenda et rappels", reseau: "Contacts et networking", bot: "Offres sur Discord", patrimoine: "Comptes et portefeuille", reglages: "Jetons, apparence, vues" };
+function ongletsTel() { const vis = vuesVisibles(); return tab(R.onglets).filter(id => vis.includes(id)).slice(0, 4); }
+function rendreOnglets() {
+  const z = $("#onglets"); if (!z) return;
+  const O = ongletsTel(), dansPlus = !O.includes(S.vue);
+  z.innerHTML = O.map(id => `<a href="#/${id}" ${S.vue === id ? 'aria-current="page"' : ""}>${svgVue(id)}<span>${esc(VUES.find(v => v.id === id).nom)}</span></a>`).join("")
+    + `<button data-act="plusVues" ${dansPlus ? 'aria-current="page"' : ""} aria-haspopup="dialog">${svgVue("plus")}<span>${dansPlus ? esc(VUES.find(v => v.id === S.vue)?.nom || "Plus") : "Plus"}</span></button>`;
+}
+ACT.plusVues = () => {
+  const dlg = $("#dlg"), O = ongletsTel(), L = vuesVisibles().filter(id => !O.includes(id));
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><h2>Toutes les vues</h2><div class="plus-liste">${L.map(id => `<button data-act="aller" data-v="${id}" data-ferme="1" ${S.vue === id ? 'aria-current="page"' : ""}>${svgVue(id)}<span><b>${esc(VUES.find(v => v.id === id).nom)}</b><span class="doux">${esc(DESC_VUES[id] || "")}</span></span></button>`).join("")}</div><button class="btn" style="width:100%;margin-top:12px" id="pv-fermer">Fermer</button>`;
+  $("#pv-fermer").onclick = () => dlg.close(); $$("[data-ferme]", dlg).forEach(b => b.addEventListener("click", () => dlg.close()));
+  dlg.showModal();
+};
+/* Feuilles du bas sur téléphone : on ferme en touchant le fond */
+$("#dlg").addEventListener("click", e => { if (e.target === e.currentTarget && petitEcran()) { const r = e.currentTarget.getBoundingClientRect(); if (e.clientY < r.top) e.currentTarget.close(); } });
 
 /* ============================================================
    9. Agent global, version 1 : mots-clés et score, sans IA
@@ -2606,7 +2892,7 @@ ACT.bEditer = d => {
 /* ============================================================
    12. Base de cours
    ============================================================ */
-const filtreC = { q: "", origine: "", id: null };
+const filtreC = { q: "", origine: "", id: null, onglet: "documents", dossier: "", dossierCours: null, qDoc: "", ouvert: false };
 const ORIGINES = ["fourni par SKEMA", "créé par Claude", "mes notes"];
 const coursTous = () => tab(D.courses?.cours);
 async function majCours() { await sauver("courses"); RENDU.cours(); }
@@ -2614,29 +2900,171 @@ RENDU.cours = () => {
   const C = coursTous(), v = $("#v-cours"), mots = jetons(filtreC.q);
   const foin = c => norm([c.nom, c.resume, c.professeur, tab(c.tags).join(" "), tab(c.notes).map(n => n.titre + " " + n.contenu + " " + tab(n.tags).join(" ")).join(" "), tab(c.documents).map(d => d.titre).join(" ")].join(" "));
   const liste = C.filter(c => mots.every(m => foin(c).includes(m)) && (!filtreC.origine || [...tab(c.notes), ...tab(c.documents)].some(x => x.origine === filtreC.origine)));
-  const c = liste.find(x => x.id === filtreC.id) || liste[0];
+  const c = liste.find(x => x.id === filtreC.id) || liste[0], tel = petitEcran(), detailSeul = tel && filtreC.ouvert && c;
   const origine = o => `<span class="puce ${o === "créé par Claude" ? "or" : ""}">${esc(o || "origine inconnue")}</span>`;
-  const jx = c?.examen?.date ? -joursDepuis(c.examen.date) : null;
-  v.innerHTML = `<header><div class="sur">Base de cours · SKEMA</div><h1>Les cours</h1><p>Tout ce qui t'a été donné et tout ce que Claude a construit à partir des sources, cours par cours.</p>${boutonsClaude("cours")}</header>${bandeau("courses")}
-    <div class="rang" style="margin-bottom:16px"><input class="saisie" style="max-width:340px" type="search" id="q-cours" value="${esc(filtreC.q)}" placeholder="Chercher dans les cours et les notes" aria-label="Recherche dans les cours">
-      <select class="saisie" style="max-width:220px" id="o-cours" aria-label="Origine"><option value="">Toutes les origines</option>${ORIGINES.map(o => `<option ${filtreC.origine === o ? "selected" : ""}>${o}</option>`).join("")}</select>
-      <button class="btn" data-act="cEditer">Ajouter un cours</button><button class="btn" data-act="triChoisir">Déposer des fichiers</button><button class="btn" data-act="triChoisir" data-dossier="1">Déposer un dossier</button></div>
-    ${astuceDepot("Chaque fichier va dans le cours dont il porte le nom (ou le nom de son dossier), sinon dans le cours affiché.")}
-    ${!C.length ? `<div class="vide"><b>Aucun cours enregistré</b>Ajoute ton premier cours pour commencer la base.</div>` : !liste.length ? `<div class="vide"><b>Aucun cours ne correspond</b>Modifie la recherche ou le filtre d'origine.</div>` : `<div class="deux"><div>${liste.map(x => `<button class="carte c-item" aria-current="${x.id === c.id}" data-act="cChoisir" data-id="${esc(x.id)}"><h3>${esc(x.nom)}</h3><span class="doux petit">${esc(x.statut || "")} · ${tab(x.notes).length} note${tab(x.notes).length > 1 ? "s" : ""} · ${tab(x.documents).length} document${tab(x.documents).length > 1 ? "s" : ""}</span></button>`).join("")}</div>
-    <article class="carte"><div class="rang" style="justify-content:space-between"><span class="puce">${esc(c.statut || "statut non renseigné")}</span><span class="rang">${c.liens?.projet_claude ? `<a class="btn mini plein" href="${esc(c.liens.projet_claude)}" target="_blank" rel="noopener"${attrApp(c.liens.projet_claude)}>Ouvrir le projet Claude</a>` : ""}<button class="btn mini" data-act="cEditer" data-id="${esc(c.id)}">Modifier</button></span></div>
-      <h2 style="font-size:26px;margin-top:12px">${esc(c.nom)}</h2><p class="doux petit">${esc(c.programme || "")}</p>
+  const jx = c?.examen?.date ? -joursDepuis(c.examen.date) : null, ong = filtreC.onglet === "infos" ? "infos" : "documents";
+  const groupes = [["en cours", "En cours"], ["à venir", "À venir"], ["terminé", "Terminés"]];
+  const carteCours = x => { const n = (ARBRE.items || []).filter(f => f.path.startsWith(`documents/cours/${x.id}/`)).length || tab(x.documents).length, ex = x.examen?.date && x.examen.date >= isoJour(new Date()) ? -joursDepuis(x.examen.date) : null;
+    return `<button class="carte c-item" aria-current="${!tel && x.id === c?.id}" data-act="cChoisir" data-id="${esc(x.id)}"><h3>${esc(x.nom)}</h3><span class="doux petit">${n} document${n > 1 ? "s" : ""} · ${tab(x.notes).length} note${tab(x.notes).length > 1 ? "s" : ""}${ex != null ? ` · <b style="color:var(--or)">examen J-${ex}</b>` : ""}</span></button>`; };
+  const colonne = `${groupes.map(([s, l]) => { const g = liste.filter(x => (x.statut || "en cours") === s); return g.length ? `<div class="sur" style="margin:4px 0 8px">${l}</div>${g.map(carteCours).join("")}` : ""; }).join("")}${liste.filter(x => !groupes.some(([s]) => s === (x.statut || "en cours"))).map(carteCours).join("")}
+    <button class="btn" style="width:100%;margin-top:4px" data-act="cEditer">+ Ajouter un cours</button>
+    ${GH.pret ? `<button class="btn" style="width:100%;margin-top:8px" data-act="cATrier">Fichiers à trier</button>` : ""}`;
+  const detail = c ? `<article class="carte c-detail">${tel ? `<button class="btn mini" data-act="cRetour" style="margin-bottom:12px">‹ Tous les cours</button>` : ""}
+      <div class="rang" style="justify-content:space-between"><span class="puce">${esc(c.statut || "statut non renseigné")}</span><span class="rang">${c.liens?.projet_claude ? `<a class="btn mini plein" href="${esc(c.liens.projet_claude)}" target="_blank" rel="noopener"${attrApp(c.liens.projet_claude)}>Ouvrir le projet Claude</a>` : ""}<button class="btn mini" data-act="cEditer" data-id="${esc(c.id)}">Modifier</button></span></div>
+      <h2 style="font-size:26px;margin-top:12px">${esc(c.nom)}</h2>
+      <p class="doux petit">${esc(c.programme || "")}${c.examen?.date ? ` · examen le ${esc(fDate(c.examen.date))}${c.examen.heure ? " à " + esc(c.examen.heure) : ""}${jx > 0 ? ` <b style="color:var(--or)">J-${jx}</b>` : jx === 0 ? " <b>aujourd'hui</b>" : ""}` : ""}</p>
+      <div class="seg c-onglets" role="tablist" aria-label="Partie du cours"><button role="tab" aria-selected="${ong === "documents"}" aria-pressed="${ong === "documents"}" data-act="cOnglet" data-o="documents">Documents</button><button role="tab" aria-selected="${ong === "infos"}" aria-pressed="${ong === "infos"}" data-act="cOnglet" data-o="infos">Infos et notes</button></div>
+      ${ong === "documents" ? `<div id="c-explorateur"><p class="doux">Chargement des documents…</p></div>` : `
       <div class="meta"><div><span class="sur">Sessions</span>${esc(c.sessions || "n.d.")}</div><div><span class="sur">Professeur</span>${esc(c.professeur || "non renseigné")}</div><div><span class="sur">Évaluation</span>${esc(c.evaluation || "non renseignée")}</div><div><span class="sur">Examen</span>${c.examen?.date ? `${esc(fDate(c.examen.date))}${jx > 0 ? ` <b style="color:var(--or)">J-${jx}</b>` : jx === 0 ? " <b>aujourd'hui</b>" : " (passé)"}` : "date non renseignée"}<br><span class="doux petit">${esc(c.examen?.format || "")}</span></div></div>
       ${c.resume ? `<p>${esc(c.resume)}</p>` : ""}
       <div class="rang" style="justify-content:space-between;margin-top:18px"><h3>Notes et fiches</h3><button class="btn mini" data-act="cNote" data-c="${esc(c.id)}">Ajouter une note</button></div>
-      ${tab(c.notes).length ? c.notes.map(n => `<details class="note" ${mots.length && mots.every(m => norm(n.titre + n.contenu).includes(m)) ? "open" : ""}><summary>${esc(n.titre)} <span class="doux petit">· ${esc(fDate(n.date))}</span></summary><div class="rang" style="margin-top:8px">${origine(n.origine)}${tab(n.tags).map(t => `<span class="puce">${esc(t)}</span>`).join("")}</div><pre>${esc(n.contenu)}</pre><div class="rang"><button class="btn mini" data-act="cNote" data-c="${esc(c.id)}" data-id="${esc(n.id)}">Modifier</button><button class="btn mini" data-act="cCopier" data-c="${esc(c.id)}" data-id="${esc(n.id)}">Copier le texte</button></div></details>`).join("") : `<p class="doux petit" style="margin-top:8px">Aucune note pour ce cours.</p>`}
-      <div class="rang" style="justify-content:space-between;margin-top:22px"><h3>Documents</h3><button class="btn mini" data-act="cDoc" data-c="${esc(c.id)}">Ajouter une référence</button><button class="btn mini plein" data-act="cFichiers" data-c="${esc(c.id)}" ${GH.pret ? "" : "disabled"}>Déposer des fichiers</button></div>
-      ${tab(c.documents).length ? `<ul class="liste" style="margin-top:8px">${c.documents.map(d => `<li><div class="rang" style="justify-content:space-between"><span>${esc(d.titre)} <span class="doux petit">· ${esc(d.type || "document")} · ${esc(fDate(d.date))}</span></span><span class="rang">${origine(d.origine)}${d.fichier ? `<button class="btn mini plein" data-act="docOuvrir" data-p="${esc(d.fichier)}">Ouvrir</button>` : '<span class="doux petit">fichier non déposé</span>'}<button class="btn mini" data-act="cDoc" data-c="${esc(c.id)}" data-id="${esc(d.id)}">Modifier</button></span></div></li>`).join("")}</ul>` : `<p class="doux petit" style="margin-top:8px">Aucun document référencé.</p>`}
-    </article></div>`}`;
-  $("#q-cours").oninput = e => { filtreC.q = e.target.value; const p = e.target.selectionStart; RENDU.cours(); const i = $("#q-cours"); i.focus(); i.setSelectionRange(p, p); };
-  $("#o-cours").onchange = e => { filtreC.origine = e.target.value; RENDU.cours(); };
+      ${tab(c.notes).length ? c.notes.map(n => `<details class="note" ${mots.length && mots.every(m => norm(n.titre + n.contenu).includes(m)) ? "open" : ""}><summary>${esc(n.titre)} <span class="doux petit">· ${esc(fDate(n.date))}</span></summary><div class="rang" style="margin-top:8px">${origine(n.origine)}${tab(n.tags).map(t => `<span class="puce">${esc(t)}</span>`).join("")}</div><pre>${esc(n.contenu)}</pre><div class="rang"><button class="btn mini" data-act="cNote" data-c="${esc(c.id)}" data-id="${esc(n.id)}">Modifier</button><button class="btn mini" data-act="cCopier" data-c="${esc(c.id)}" data-id="${esc(n.id)}">Copier le texte</button></div></details>`).join("") : `<p class="doux petit">Aucune note pour ce cours.</p>`}
+      <div class="rang" style="justify-content:space-between;margin-top:22px"><h3>Liens et références</h3><button class="btn mini" data-act="cDoc" data-c="${esc(c.id)}">Ajouter un lien</button></div>
+      ${tab(c.documents).filter(d => !d.fichier || /^https?:/.test(d.fichier)).length ? `<ul class="liste">${c.documents.filter(d => !d.fichier || /^https?:/.test(d.fichier)).map(d => `<li>${d.fichier ? `<a href="${esc(d.fichier)}" target="_blank" rel="noopener">${esc(d.titre)}</a>` : esc(d.titre)} <button class="btn mini" data-act="cDoc" data-c="${esc(c.id)}" data-id="${esc(d.id)}">Modifier</button></li>`).join("")}</ul>` : `<p class="doux petit">Les fichiers déposés sont dans l'onglet Documents. Ici, les liens externes (Drive, sites).</p>`}`}
+    </article>` : "";
+  v.innerHTML = `<header><div class="sur">Base de cours · SKEMA</div><h1>Les cours</h1><p>Chaque cours a ses documents rangés en dossiers, ses infos d'examen et ses notes.</p>${boutonsClaude("cours")}</header>${bandeau("courses")}
+    ${detailSeul ? "" : `<div class="rang" style="margin-bottom:16px"><input class="saisie" style="max-width:340px" type="search" id="q-cours" value="${esc(filtreC.q)}" placeholder="Chercher un cours ou une note" aria-label="Recherche dans les cours"></div>`}
+    ${!C.length ? `<div class="vide"><b>Aucun cours enregistré</b>Ajoute ton premier cours pour commencer la base.<br><br><button class="btn plein" data-act="cEditer">Ajouter un cours</button></div>` : !liste.length ? `<div class="vide"><b>Aucun cours ne correspond</b>Modifie la recherche.</div>` : tel ? (detailSeul ? detail : colonne) : `<div class="deux"><div>${colonne}</div>${detail}</div>`}`;
+  const q = $("#q-cours"); if (q) q.oninput = e => { filtreC.q = e.target.value; const p = e.target.selectionStart; RENDU.cours(); const i = $("#q-cours"); i.focus(); i.setSelectionRange(p, p); };
+  if (c && ong === "documents" && $("#c-explorateur")) explorateurCours(c);
+  if (GH.pret && !ARBRE.items) arbre().then(() => { if (S.vue === "cours" && !filtreC.recharge) { filtreC.recharge = true; RENDU.cours(); filtreC.recharge = false; } }).catch(() => {});
 };
+
+/* ---------- Fichiers du dépôt : l'arborescence complète en une seule requête (API « git trees ») ---------- */
+const ARBRE = { items: null, promesse: null };
+function arbre(forcer) {
+  if (forcer) ARBRE.items = null;
+  if (ARBRE.items) return Promise.resolve(ARBRE.items);
+  if (!GH.pret) return Promise.resolve([]);
+  return ARBRE.promesse ??= GH.api(`git/trees/${encodeURIComponent(GH.cfg.branche || "main")}?recursive=1`).then(r => r.json())
+    .then(j => { ARBRE.items = tab(j.tree).filter(x => x.type === "blob").map(x => ({ path: x.path, sha: x.sha, size: x.size })); ARBRE.promesse = null; return ARBRE.items; })
+    .catch(e => { ARBRE.promesse = null; throw e; });
+}
+const invaliderArbre = () => { ARBRE.items = null; DOCS.items = null; };
+/* Un enregistrement qui ajoute, déplace ou supprime plusieurs fichiers d'un coup (sha null : suppression) */
+async function commitArbre(entrees, message) {
+  const br = GH.cfg.branche || "main";
+  for (let essai = 0; essai < 4; essai++) {
+    const tete = (await (await GH.api("git/ref/heads/" + br)).json()).object.sha, base = (await (await GH.api("git/commits/" + tete)).json()).tree.sha;
+    const arbreN = (await (await GH.api("git/trees", { methode: "POST", corps: { base_tree: base, tree: entrees.map(e => ({ path: e.path, mode: "100644", type: "blob", sha: e.sha })) } })).json()).sha;
+    const commit = (await (await GH.api("git/commits", { methode: "POST", corps: { message, tree: arbreN, parents: [tete] } })).json()).sha;
+    try { await GH.api("git/refs/heads/" + br, { methode: "PATCH", corps: { sha: commit, force: false } }); return; }
+    catch (e) { if (![409, 422].includes(e.status)) throw e; await attendre(1200); }
+  }
+  throw new Error("Le dépôt a changé pendant l'opération : réessaie");
+}
+const ICONE_EXT = { pdf: ["PDF", "#B2452F"], ppt: ["PPT", "#C0692B"], pptx: ["PPT", "#C0692B"], key: ["KEY", "#C0692B"], doc: ["DOC", "#2B5FA8"], docx: ["DOC", "#2B5FA8"], md: ["MD", "#55627A"], txt: ["TXT", "#55627A"], xls: ["XLS", "#28734F"], xlsx: ["XLS", "#28734F"], xlsm: ["XLS", "#28734F"], csv: ["CSV", "#28734F"], py: ["PY", "#6B4FA0"], jl: ["JL", "#6B4FA0"], ipynb: ["NB", "#6B4FA0"], html: ["WEB", "#2E7D9A"], png: ["IMG", "#8A4F9E"], jpg: ["IMG", "#8A4F9E"], jpeg: ["IMG", "#8A4F9E"], zip: ["ZIP", "#857F70"] };
+const pastilleExt = n => { const [t, c] = ICONE_EXT[ext(n)] || [(ext(n) || "?").slice(0, 4).toUpperCase(), "#857F70"]; return `<span class="f-ext" style="--c:${c}">${esc(t)}</span>`; };
+/* Contenu d'un dossier : sous-dossiers (avec leur nombre de fichiers) et fichiers */
+function contenuDossier(items, base) {
+  const pre = base ? base + "/" : "", dossiers = new Map(), fichiers = [];
+  items.forEach(f => { if (!f.path.startsWith(pre)) return; const reste = f.path.slice(pre.length), i = reste.indexOf("/"); if (i < 0) fichiers.push(f); else { const d = reste.slice(0, i); dossiers.set(d, (dossiers.get(d) || 0) + 1); } });
+  return { dossiers: [...dossiers].sort((a, b) => a[0].localeCompare(b[0], "fr", { numeric: true })), fichiers: fichiers.sort((a, b) => a.path.localeCompare(b.path, "fr", { numeric: true })) };
+}
+const ligneFichier = (f, montrerChemin, base = "") => { const nom = f.path.split("/").pop(); return `<div class="f-ligne"><button class="f-ouvrir" data-act="docOuvrir" data-p="${esc(f.path)}" title="Ouvrir ${esc(nom)}">${pastilleExt(nom)}<span class="f-nom"><b>${esc(nom)}</b><span class="doux">${montrerChemin ? esc(f.path.slice(base.length + 1, -nom.length - 1) || "racine") + " · " : ""}${fTaille(f.size || 0)}</span></span></button><button class="btn mini f-plus" data-act="fMenu" data-p="${esc(f.path)}" aria-label="Actions sur ${esc(nom)}">⋯</button></div>`; };
+const ligneDossier = (nom, n, chemin, act = "cDossier") => `<div class="f-ligne"><button class="f-ouvrir" data-act="${act}" data-p="${esc(chemin)}"><span class="f-dossier" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3z"/></svg></span><span class="f-nom"><b>${esc(nom)}</b><span class="doux">${n == null ? "Dossier" : `${n} fichier${n > 1 ? "s" : ""}`}</span></span><span class="doux" aria-hidden="true">›</span></button><button class="btn mini f-plus" data-act="fMenuDossier" data-p="${esc(chemin)}" aria-label="Actions sur le dossier ${esc(nom)}">⋯</button></div>`;
+async function explorateurCours(c) {
+  const z = $("#c-explorateur"); if (!z) return;
+  if (!GH.pret) { z.innerHTML = `<p class="doux">Connecte ton dépôt privé pour voir les documents.</p>`; return; }
+  let items; try { items = await arbre(); } catch (e) { z.innerHTML = `<div class="vide"><b>Lecture impossible</b>${esc(e.message)}.</div>`; return; }
+  if (!$("#c-explorateur")) return;
+  const base = `documents/cours/${c.id}`, tous = items.filter(f => f.path.startsWith(base + "/")), rel = filtreC.dossier && filtreC.dossierCours === c.id ? filtreC.dossier : "", ici = rel ? `${base}/${rel}` : base;
+  const { dossiers, fichiers } = contenuDossier(tous, ici), mots = jetons(filtreC.qDoc || ""), parts = rel ? rel.split("/") : [];
+  const trouves = mots.length ? tous.filter(f => mots.every(m => norm(f.path.slice(base.length)).includes(m))) : null;
+  z.innerHTML = `<div class="rang f-barre"><nav class="rang f-fil" aria-label="Dossier courant"><button class="puce" data-act="cDossier" data-p="">Tous les documents</button>${parts.map((p, i) => `<span class="doux">/</span><button class="puce" data-act="cDossier" data-p="${esc(parts.slice(0, i + 1).join("/"))}">${esc(p)}</button>`).join("")}</nav></div>
+    <div class="rang" style="margin:10px 0 12px"><input class="saisie" style="max-width:260px" type="search" id="c-qdoc" placeholder="Chercher un fichier" aria-label="Chercher un fichier dans ce cours" value="${esc(filtreC.qDoc || "")}"><button class="btn plein" data-act="cDeposer" data-c="${esc(c.id)}">Déposer ici</button><button class="btn" data-act="cNouveauDossier" data-c="${esc(c.id)}">Nouveau dossier</button></div>
+    ${trouves ? (trouves.length ? `<p class="doux petit">${trouves.length} fichier${trouves.length > 1 ? "s" : ""}</p><div class="f-liste">${trouves.map(f => ligneFichier(f, true, base)).join("")}</div>` : `<p class="doux">Aucun fichier ne correspond.</p>`)
+      : (dossiers.length || fichiers.length ? `<div class="f-liste">${rel ? `<div class="f-ligne"><button class="f-ouvrir" data-act="cDossier" data-p="${esc(parts.slice(0, -1).join("/"))}"><span class="f-dossier" aria-hidden="true">‹</span><span class="f-nom"><b>Dossier parent</b></span></button></div>` : ""}${dossiers.map(([d, n]) => ligneDossier(d, n, rel ? `${rel}/${d}` : d)).join("")}${fichiers.map(f => ligneFichier(f, false)).join("")}</div>`
+        : `<div class="vide"><b>${rel ? "Dossier vide" : "Pas encore de document"}</b>${rel ? "Dépose un fichier pour créer ce dossier." : "Dépose des fichiers, ou glisse un dossier entier dans la fenêtre."}</div>`)}
+    <p class="doux petit" style="margin-top:10px">${tous.length} fichier${tous.length > 1 ? "s" : ""} dans ce cours. Le bouton ⋯ d'un fichier permet de le déplacer (dans un autre dossier ou un autre cours) ou de le supprimer.</p>`;
+  const q = $("#c-qdoc"); q.oninput = () => { filtreC.qDoc = q.value; const p = q.selectionStart; explorateurCours(c).then(() => { const i = $("#c-qdoc"); if (i) { i.focus(); i.setSelectionRange(p, p); } }); };
+}
+/* Dépôt dans le dossier ouvert, puis inscription des fichiers dans la base de cours */
+async function deposerDans(F, dossier, surFin) {
+  const L = F.filter(fichierUtile).map(f => ({ f, chemin: `${dossier}/${(f.webkitRelativePath || "").split("/").slice(0, -1).map(nomSur).filter(Boolean).join("/")}${f.webkitRelativePath && f.webkitRelativePath.includes("/") ? "/" : ""}${nomSur(f.name)}`.replace(/\/+/g, "/") })).filter(x => x.f.size <= TAILLE_MAX);
+  if (!L.length) return toast("Aucun fichier à envoyer (50 Mo au plus par fichier)");
+  try { await envoyerLot(L, n => toast(`Envoi ${n} sur ${L.length}…`)); }
+  catch (e) { if ([0, 401].includes(e.status)) return alert("Envoi impossible : " + e.message); for (const [i, x] of L.entries()) { toast(`Envoi ${i + 1} sur ${L.length}…`); try { await televerser(new File([x.f], x.chemin.split("/").pop()), x.chemin.split("/").slice(0, -1).join("/")); x.sha = "ok"; } catch {} } }
+  inscrireCours(L.filter(x => x.sha).map(x => ({ chemin: x.chemin, nom: x.f.name })));
+  invaliderArbre(); toast(`${L.filter(x => x.sha).length} fichier${L.length > 1 ? "s" : ""} déposé${L.length > 1 ? "s" : ""}`); surFin?.();
+}
+/* Tout fichier rangé sous documents/cours/<cours>/ est inscrit dans ce cours (type deviné d'après le nom) */
+function inscrireCours(L, sansSauver) {
+  let n = 0; const auj = AUJ();
+  L.forEach(({ chemin, nom }) => { const m = chemin.match(/^documents\/cours\/([^/]+)\//), c = m && coursTous().find(x => x.id === m[1]); if (!c) return; c.documents = tab(c.documents).filter(o => o.fichier !== chemin); c.documents.push({ id: uid("d-"), titre: sansExt(nom || chemin.split("/").pop()), type: typeDoc(nom || chemin), origine: "fourni par SKEMA", date: auj, fichier: chemin }); c.derniere_maj = auj; n++; });
+  if (n && !sansSauver) sauver("courses");
+  return n;
+}
+/* Déplacer (ou renommer) des fichiers : un seul enregistrement, puis mise à jour des index (cours, briefs) */
+async function deplacer(paires, message) { // paires : [{ de, vers, sha }]
+  await commitArbre([...paires.map(p => ({ path: p.vers, sha: p.sha })), ...paires.map(p => ({ path: p.de, sha: null }))], message);
+  const auj = AUJ();
+  paires.forEach(({ de, vers }) => {
+    let doc = null;
+    coursTous().forEach(c => { const d = tab(c.documents).find(o => o.fichier === de); if (d) { doc = d; c.documents = c.documents.filter(o => o !== d); c.derniere_maj = auj; } });
+    const m = vers.match(/^documents\/cours\/([^/]+)\//), c = m && coursTous().find(x => x.id === m[1]);
+    if (c) { (c.documents ??= []).push({ ...(doc || { id: uid("d-"), titre: sansExt(vers.split("/").pop()), type: typeDoc(vers), origine: "fourni par SKEMA", date: auj }), fichier: vers }); c.derniere_maj = auj; }
+    tab(D["morning-brief"]?.briefs).forEach(b => { if (cheminPdf(b) === de) b.fichier_pdf = vers; });
+  });
+  sauver("courses"); if (paires.some(p => /documents\/briefs\//.test(p.de))) sauver("morning-brief");
+  invaliderArbre();
+}
+/* Choix d'une destination : tous les dossiers existants, ceux des cours en tête, ou un nouveau dossier */
+async function choisirDestination(titre, cheminActuel, surChoix) {
+  const items = await arbre(), dlg = $("#dlg"), dossiers = new Set(["documents/à trier"]);
+  coursTous().forEach(c => dossiers.add(`documents/cours/${c.id}`));
+  items.forEach(f => { const p = f.path.split("/"); for (let i = 2; i < p.length; i++) { const d = p.slice(0, i).join("/"); if (d.startsWith("documents")) dossiers.add(d); } });
+  const libelle = d => { const m = d.match(/^documents\/cours\/([^/]+)(.*)$/), c = m && coursTous().find(x => x.id === m[1]); return c ? `Cours · ${c.nom}${m[2] ? m[2].replace(/\//g, " › ") : ""}` : "Documents › " + d.replace(/^documents\/?/, "").replace(/\//g, " › "); };
+  const L = [...dossiers].filter(d => d !== cheminActuel && !d.startsWith("documents/briefs")).sort((a, b) => (a.startsWith("documents/cours/") ? 0 : 1) - (b.startsWith("documents/cours/") ? 0 : 1) || libelle(a).localeCompare(libelle(b), "fr", { numeric: true }));
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><form method="dialog"><h2>${esc(titre)}</h2>
+    <label class="champ">Vers le dossier<select id="dest-d">${L.map(d => `<option value="${esc(d)}">${esc(libelle(d))}</option>`).join("")}</select></label>
+    <label class="champ">Dans un nouveau sous-dossier (facultatif)<input id="dest-n" placeholder="par exemple : Lectures"></label>
+    <div class="rang" style="justify-content:flex-end"><button class="btn" type="button" id="dest-annuler">Annuler</button><button class="btn plein" type="submit">Déplacer</button></div></form>`;
+  $("#dest-annuler").onclick = () => dlg.close();
+  $("form", dlg).onsubmit = () => { const n = nomSur($("#dest-n").value || ""); surChoix($("#dest-d").value + (n ? "/" + n : "")); };
+  dlg.showModal();
+}
+/* Menu d'un fichier (⋯) : ouvrir, déplacer, renommer, supprimer */
+function menuFichier(chemin, surFin) {
+  const f = (ARBRE.items || []).find(x => x.path === chemin), nom = chemin.split("/").pop(), dlg = $("#dlg"), dossier = chemin.split("/").slice(0, -1).join("/");
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><h2 style="word-break:break-word">${esc(nom)}</h2><p class="doux petit">${esc(dossier.replace(/^documents\/?/, "") || "Documents")} · ${fTaille(f?.size || 0)}</p>
+    <div class="plus-liste"><button id="fm-ouvrir"><span><b>Ouvrir</b></span></button><button id="fm-dep"><span><b>Déplacer</b><span class="doux">Vers un autre dossier ou un autre cours</span></span></button><button id="fm-ren"><span><b>Renommer</b></span></button><button id="fm-sup"><span><b class="baisse">Supprimer</b></span></button></div>
+    <button class="btn" style="width:100%;margin-top:12px" id="fm-fermer">Fermer</button>`;
+  $("#fm-fermer").onclick = () => dlg.close();
+  $("#fm-ouvrir").onclick = () => { dlg.close(); ouvrirDoc(chemin); };
+  $("#fm-dep").onclick = () => { dlg.close(); setTimeout(() => choisirDestination(`Déplacer « ${nom} »`, dossier, async d => { toast("Déplacement…"); try { await deplacer([{ de: chemin, vers: `${d}/${nom}`, sha: f.sha }], `Hub : déplacement de ${nom}`); toast("Fichier déplacé"); } catch (e) { alert("Déplacement impossible : " + e.message); } surFin?.(); }), 0); };
+  $("#fm-ren").onclick = async () => { const n = nomSur(prompt("Nouveau nom :", nom) || ""); if (!n || n === nom) return; dlg.close(); try { await deplacer([{ de: chemin, vers: `${dossier}/${n}`, sha: f.sha }], `Hub : ${nom} renommé`); toast("Fichier renommé"); } catch (e) { alert("Impossible : " + e.message); } surFin?.(); };
+  $("#fm-sup").onclick = async () => { if (!confirm(`Supprimer définitivement « ${nom} » du dépôt ?`)) return; dlg.close(); try { await commitArbre([{ path: chemin, sha: null }], `Hub : suppression de ${nom}`); coursTous().forEach(c => { c.documents = tab(c.documents).filter(o => o.fichier !== chemin); }); sauver("courses"); invaliderArbre(); toast("Fichier supprimé"); } catch (e) { alert("Suppression impossible : " + e.message); } surFin?.(); };
+  dlg.showModal();
+}
+function menuDossier(chemin, surFin) {
+  const items = (ARBRE.items || []).filter(f => f.path.startsWith(chemin + "/")), nom = chemin.split("/").pop(), parent = chemin.split("/").slice(0, -1).join("/"), dlg = $("#dlg");
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><h2>Dossier « ${esc(nom)} »</h2><p class="doux petit">${items.length} fichier${items.length > 1 ? "s" : ""}</p>
+    <div class="plus-liste"><button id="md-dep"><span><b>Déplacer le dossier</b><span class="doux">Avec tout son contenu, vers un autre cours ou dossier</span></span></button><button id="md-ren"><span><b>Renommer</b></span></button></div>
+    <button class="btn" style="width:100%;margin-top:12px" id="md-fermer">Fermer</button>`;
+  $("#md-fermer").onclick = () => dlg.close();
+  const bouger = async (nouveau, msg) => { toast("Déplacement…"); try { await deplacer(items.map(f => ({ de: f.path, vers: nouveau + f.path.slice(chemin.length), sha: f.sha })), msg); toast(`${items.length} fichier${items.length > 1 ? "s" : ""} déplacé${items.length > 1 ? "s" : ""}`); } catch (e) { alert("Déplacement impossible : " + e.message); } surFin?.(); };
+  $("#md-dep").onclick = () => { dlg.close(); setTimeout(() => choisirDestination(`Déplacer le dossier « ${nom} »`, parent, d => bouger(`${d}/${nom}`, `Hub : dossier ${nom} déplacé`)), 0); };
+  $("#md-ren").onclick = () => { const n = nomSur(prompt("Nouveau nom du dossier :", nom) || ""); if (!n || n === nom) return; dlg.close(); bouger(`${parent}/${n}`, `Hub : dossier ${nom} renommé en ${n}`); };
+  dlg.showModal();
+}
+const coursCourant = () => coursTous().find(x => x.id === filtreC.id) || coursTous()[0];
+const apresFichiers = () => { if (S.vue === "cours") arbre().then(() => RENDU.cours()); else if (S.vue === "documents") RENDU.documents(); };
 Object.assign(ACT, {
-  cChoisir: d => { filtreC.id = d.id; RENDU.cours(); },
+  cOnglet: d => { filtreC.onglet = d.o; RENDU.cours(); },
+  cRetour: () => { filtreC.ouvert = false; RENDU.cours(); },
+  cDossier: d => { const c = coursCourant(); filtreC.dossier = d.p; filtreC.dossierCours = c.id; filtreC.qDoc = ""; explorateurCours(c); },
+  cNouveauDossier: d => { const n = nomSur(prompt("Nom du nouveau dossier :") || ""); if (!n) return; const c = coursCourant(), rel = filtreC.dossierCours === c.id && filtreC.dossier ? filtreC.dossier + "/" + n : n; filtreC.dossier = rel; filtreC.dossierCours = c.id; explorateurCours(c); toast("Dépose un fichier pour créer ce dossier"); },
+  cDeposer: d => { const c = coursTous().find(x => x.id === d.c), rel = filtreC.dossierCours === c.id ? filtreC.dossier || "" : ""; choisirFichiers(F => deposerDans(F, `documents/cours/${c.id}${rel ? "/" + rel : ""}`, apresFichiers)); },
+  cATrier: () => { DOCS.chemin = "documents/à trier"; DOCS.items = null; DOCS.q = ""; location.hash = "#/documents"; },
+  fMenu: d => menuFichier(d.p, apresFichiers),
+  fMenuDossier: d => { const c = coursCourant(); menuDossier(`documents/cours/${c.id}/${d.p}`, apresFichiers); },
+  dMenu: d => arbre().then(() => menuFichier(d.p, apresFichiers)),
+  dMenuDossier: d => arbre().then(() => menuDossier(d.p, apresFichiers))
+});
+
+Object.assign(ACT, {
+  cChoisir: d => { if (filtreC.id !== d.id) { filtreC.dossier = ""; filtreC.qDoc = ""; } filtreC.id = d.id; filtreC.ouvert = true; RENDU.cours(); if (petitEcran()) $("#v-cours").scrollTop = 0; },
   cEditer: d => {
     const neuf = !d.id, c = neuf ? { id: uid("c-"), nom: "", programme: "MSc Financial Markets & Investments", statut: "en cours", examen: {}, liens: {}, notes: [], documents: [], derniere_maj: AUJ() } : coursTous().find(x => x.id === d.id);
     formulaire(neuf ? "Nouveau cours" : "Modifier le cours", [{ k: "nom", l: "Nom du cours" }, { k: "professeur", l: "Professeur" }, { k: "sessions", l: "Nombre de sessions", t: "number" }, { k: "statut", l: "Statut", t: "choix", o: ["à venir", "en cours", "terminé"] }, { k: "evaluation", l: "Évaluation" }, { k: "examen.date", l: "Date de l'examen", t: "date" }, { k: "examen.format", l: "Format de l'examen" }, { k: "resume", l: "Résumé", t: "zone" }, { k: "tags", l: "Tags", t: "tags" }, { k: "liens.projet_claude", l: "URL du projet Claude", t: "url" }],
@@ -2763,7 +3191,7 @@ Object.assign(ACT, {
     const j = jourNet(), a = j && j.actions.find(x => String(x.rang) === String(d.r));
     if (!a || a.fait_page) return;
     a.fait_app = !a.fait_app; a.fait = !!(a.fait_page || a.fait_app); j.faits = j.actions.filter(x => x.fait).length;
-    sauver("networking"); rendreJour(); if (S.vue === "reseau") RENDU.reseau(); rendreHud();
+    sauver("networking"); rendreJour(); if (S.vue === "reseau") RENDU.reseau(); if (S.vue === "accueil") RENDU.accueil(); rendreHud();
     toast(a.fait ? (S.demo ? "Coché (démonstration : rien n'est enregistré)" : "Coché : Claude le reportera dans le tracker") : "Décoché");
   },
   njCopier: d => { const a = jourNet()?.actions.find(x => String(x.rang) === String(d.r)), m = a && blocsMessages(a.message)[+d.i]; if (m) copier(m.corps, "Message copié : colle-le dans " + (/e-?mail/i.test(m.tete) ? "ton e-mail" : "LinkedIn")); },
@@ -2804,9 +3232,7 @@ RENDU.documents = async () => {
     <div class="rang" style="margin-bottom:16px"><input class="saisie" style="max-width:300px" type="search" id="d-q" placeholder="Filtrer par nom" aria-label="Filtrer par nom" value="${esc(DOCS.q)}"><button class="btn plein" data-act="triChoisir">Ajouter des fichiers</button><button class="btn" data-act="triChoisir" data-dossier="1">Ajouter un dossier entier</button><button class="btn" data-act="dDossier">Nouveau dossier</button></div>${astuceDepot(DOCS.chemin === "documents" ? "À la racine, chaque fichier est rangé d'après son nom : briefs, cours, projets, sinon « à trier »." : "Ici, les fichiers vont dans ce dossier, avec leurs sous-dossiers.")}<div id="d-liste"><p class="doux">Chargement…</p></div>`;
   const lister = () => {
     const L = tab(DOCS.items).filter(x => norm(x.name).includes(norm(DOCS.q))).sort((a, b) => (a.type === "dir" ? 0 : 1) - (b.type === "dir" ? 0 : 1) || a.name.localeCompare(b.name));
-    $("#d-liste").innerHTML = L.length ? `<div class="table-zone"><table><thead><tr><th>Nom</th><th>Taille</th><th></th></tr></thead><tbody>${L.map(x => x.type === "dir"
-      ? `<tr><td><button class="btn mini" data-act="dAller" data-p="${esc(x.path)}">Dossier · ${esc(x.name)}</button></td><td class="doux">dossier</td><td></td></tr>`
-      : `<tr><td><b>${esc(x.name)}</b><span>${esc(ext(x.name).toUpperCase())}</span></td><td class="mono">${fTaille(x.size)}</td><td><span class="rang" style="justify-content:flex-end"><button class="btn mini plein" data-act="docOuvrir" data-p="${esc(x.path)}">Ouvrir</button><button class="btn mini" data-act="dSuppr" data-p="${esc(x.path)}" data-sha="${esc(x.sha)}">Supprimer</button></span></td></tr>`).join("")}</tbody></table></div>`
+    $("#d-liste").innerHTML = L.length ? `<div class="f-liste">${L.map(x => x.type === "dir" ? ligneDossier(x.name, null, x.path, "dAller").replace('data-act="fMenuDossier"', 'data-act="dMenuDossier"') : ligneFichier({ path: x.path, size: x.size }, false).replace('data-act="fMenu"', 'data-act="dMenu"')).join("")}</div>`
       : `<div class="vide"><b>${tab(DOCS.items).length ? "Aucun fichier ne correspond" : "Ce dossier est vide"}</b>${tab(DOCS.items).length ? "Modifie le filtre." : "Ajoute des fichiers : le dossier est créé au premier envoi."}</div>`;
   };
   $("#d-q").oninput = e => { DOCS.q = e.target.value; lister(); };
@@ -2817,7 +3243,7 @@ Object.assign(ACT, {
   dAller: d => { DOCS.chemin = d.p; DOCS.items = null; DOCS.q = ""; RENDU.documents(); },
   dDossier: () => { const n = nomSur(prompt("Nom du nouveau dossier :") || ""); if (n) { DOCS.chemin += "/" + n; DOCS.items = []; DOCS.q = ""; RENDU.documents(); } },
   docsProjet: d => { DOCS.chemin = "documents/projets/" + d.id; DOCS.items = null; DOCS.q = ""; fermerFiche(); if (S.vue === "documents") RENDU.documents(); else location.hash = "#/documents"; },
-  dSuppr: async d => { if (!confirm(`Supprimer définitivement « ${d.p.split("/").pop()} » du dépôt ?`)) return; try { await GH.supprimer(d.p, d.sha); toast("Fichier supprimé"); } catch (e) { alert("Suppression impossible : " + e.message); } DOCS.items = null; RENDU.documents(); }
+  dSupprAncien: async d => { if (!confirm(`Supprimer définitivement « ${d.p.split("/").pop()} » du dépôt ?`)) return; try { await GH.supprimer(d.p, d.sha); toast("Fichier supprimé"); } catch (e) { alert("Suppression impossible : " + e.message); } DOCS.items = null; RENDU.documents(); }
 });
 
 /* ============================================================
@@ -2847,6 +3273,7 @@ function classer(x) {
   if (x.f.size > TAILLE_MAX) return "ignorer";
   const texte = x.rel + " " + sansExt(x.f.name), pdf = ext(x.f.name) === "pdf";
   if (S.vue === "documents" && DOCS.chemin !== "documents") return "dossier:" + DOCS.chemin;
+  if (S.vue === "cours" && filtreC.onglet !== "infos" && filtreC.id && filtreC.dossierCours === filtreC.id && filtreC.dossier) return `dossier:documents/cours/${filtreC.id}/${filtreC.dossier}`; // explorateur ouvert sur un sous-dossier : on dépose là
   const meilleur = (L, nomDe) => L.map(o => ({ o, s: Math.max(ressemblance(texte, nomDe(o)), norm(texte).includes(norm(o.id)) && o.id.length > 4 ? 1 : 0) })).sort((a, b) => b.s - a.s)[0];
   const c = meilleur(coursTous(), o => o.nom), f = meilleur(projets().filter(o => o.type !== "outil"), o => o.nom);
   if (S.vue === "bibliotheque" && pdf) return "brief";
@@ -2891,15 +3318,7 @@ async function envoyerLot(L, surProgres) {
   const ouvrier = async () => { while (i < L.length) { const x = L[i++]; try { x.sha = (await (await apiTenace("git/blobs", { methode: "POST", corps: { content: b64(await x.f.arrayBuffer()), encoding: "base64" } })).json()).sha; } catch (e) { x.erreur = e.message; x.statut = e.status; } surProgres(++fait); } };
   await Promise.all([ouvrier(), ouvrier()]);
   const ok = L.filter(x => x.sha); if (!ok.length) { const e = new Error(L[0]?.erreur || "Aucun fichier envoyé"); e.status = L[0]?.statut; throw e; }
-  const br = GH.cfg.branche || "main";
-  for (let essai = 0; essai < 4; essai++) {
-    const tete = (await (await GH.api("git/ref/heads/" + br)).json()).object.sha, base = (await (await GH.api("git/commits/" + tete)).json()).tree.sha;
-    const arbre = (await (await GH.api("git/trees", { methode: "POST", corps: { base_tree: base, tree: ok.map(x => ({ path: x.chemin, mode: "100644", type: "blob", sha: x.sha })) } })).json()).sha;
-    const commit = (await (await GH.api("git/commits", { methode: "POST", corps: { message: `Hub : dépôt de ${ok.length} fichier${ok.length > 1 ? "s" : ""}`, tree: arbre, parents: [tete] } })).json()).sha;
-    try { await GH.api("git/refs/heads/" + br, { methode: "PATCH", corps: { sha: commit, force: false } }); return; }
-    catch (e) { if (![409, 422].includes(e.status)) throw e; await attendre(1200); }
-  }
-  throw new Error("Le dépôt a changé pendant l'envoi : relance l'envoi");
+  await commitArbre(ok.map(x => ({ path: x.chemin, sha: x.sha })), `Hub : dépôt de ${ok.length} fichier${ok.length > 1 ? "s" : ""}`);
 }
 /* Fenêtre de rangement */
 function ouvrirTri(L) {
@@ -2944,8 +3363,9 @@ function ouvrirTri(L) {
     OK.filter(x => x.dest === "brief" && ext(x.chemin) === "pdf").forEach(x => { const b = B.find(o => o.date === x.date && (!o.fichier_pdf || o.fichier_pdf === x.chemin)); if (b) b.fichier_pdf = x.chemin; else B.push({ id: uid("b-"), titre: /brief/i.test(x.f.name) && !dateDansNom(x.f.name) ? sansExt(x.f.name) : `Morning brief du ${fDate(x.date)}`, date: x.date, tags: [], tickers: [], themes: [], resume: "", fichier_pdf: x.chemin, texte_indexe: "" }); nb++; });
     OK.filter(x => x.dest.startsWith("cours:")).forEach(x => { const c = coursTous().find(o => o.id === x.dest.slice(6)); if (!c) return; c.documents = tab(c.documents).filter(o => o.fichier !== x.chemin); c.documents.push({ id: uid("d-"), titre: sansExt(x.f.name), type: typeDoc(x.f.name), origine: "fourni par SKEMA", date: auj, fichier: x.chemin }); c.derniere_maj = auj; nc++; });
     if (nb) { try { etat.innerHTML = "Lecture du texte des briefs pour la recherche…"; await indexerBriefs(OK.filter(x => x.dest === "brief" && ext(x.chemin) === "pdf").map(x => ({ b: B.find(o => o.fichier_pdf === x.chemin), buf: x.f })).filter(y => y.b)); } catch {} }
+    const dc = OK.filter(x => x.dest.startsWith("dossier:documents/cours/")); if (dc.length) { inscrireCours(dc.map(x => ({ chemin: x.chemin, nom: x.f.name })), true); nc += dc.length; }
     if (nb) await sauver("morning-brief"); if (nc) await sauver("courses");
-    DOCS.items = null;
+    invaliderArbre();
     const np = OK.filter(x => x.dest.startsWith("projet:")).length, nd = OK.filter(x => x.dest.startsWith("dossier:")).length, tri = OK.filter(x => x.dest === "dossier:documents/à trier").length;
     dlg.innerHTML = `<h2>${OK.length} fichier${OK.length > 1 ? "s" : ""} rangé${OK.length > 1 ? "s" : ""}</h2>
       <ul class="liste" style="margin:12px 0">${nb ? `<li>${nb} brief${nb > 1 ? "s" : ""} dans la Bibliothèque</li>` : ""}${nc ? `<li>${nc} document${nc > 1 ? "s" : ""} dans les cours</li>` : ""}${np ? `<li>${np} dans les dossiers de projets (bouton « Documents du projet » de chaque fiche)</li>` : ""}${nd ? `<li>${nd} dans Documents${tri ? `, dont ${tri} dans « à trier »` : ""}</li>` : ""}</ul>
@@ -2970,6 +3390,7 @@ document.body.insertAdjacentHTML("beforeend", '<div id="zone-depot" aria-hidden=
   addEventListener("drop", async e => {
     if (!avecFichiers(e) || $("#dlg").open) return;
     e.preventDefault(); cacher();
+    if (S.vue === "patrimoine") { const L = await fichiersDeposes(e.dataTransfer); return patDepot(L.map(x => x.f)); }
     if (!GH.pret) return toast("Connecte ton dépôt privé pour déposer des fichiers");
     toast("Lecture des fichiers…"); const L = await fichiersDeposes(e.dataTransfer); ouvrirTri(L);
   });
@@ -3193,6 +3614,8 @@ RENDU.reglages = () => {
     <div class="carte"><h2>Vues et ordre</h2><p class="doux petit">Décoche une vue pour la masquer, utilise les flèches pour changer l'ordre du menu.</p>
       ${R.ordre.filter(id => VUES.some(x => x.id === id)).map((id, i, a) => `<div class="rang" style="justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--trait)"><label class="coche"><input type="checkbox" data-vis="${id}" ${R.masquees.includes(id) ? "" : "checked"} ${id === "reglages" ? "disabled" : ""}>${esc(VUES.find(x => x.id === id).nom)}</label><span class="rang"><button class="btn mini" data-act="rOrdre" data-id="${id}" data-s="-1" ${i === 0 ? "disabled" : ""} aria-label="Monter ${esc(id)}">↑</button><button class="btn mini" data-act="rOrdre" data-id="${id}" data-s="1" ${i === a.length - 1 ? "disabled" : ""} aria-label="Descendre ${esc(id)}">↓</button></span></div>`).join("")}
     </div>
+    <div class="carte"><h2>Barre du téléphone</h2><p class="doux petit">Les quatre onglets toujours visibles en bas de l'écran sur téléphone. Les autres vues sont dans « Plus ».</p>
+      <div style="display:grid;gap:10px;margin-top:10px">${[0, 1, 2, 3].map(i => `<label class="champ">Onglet ${i + 1}<select data-onglet="${i}">${vuesVisibles().filter(id => id !== "reglages").map(id => `<option value="${id}" ${tab(R.onglets)[i] === id ? "selected" : ""}>${esc(VUES.find(x => x.id === id).nom)}</option>`).join("")}</select></label>`).join("")}</div></div>
     <div class="carte"><h2>Application</h2><p class="petit" style="color:var(--encre2);margin:8px 0 10px">Installe le hub comme une application : icône, plein écran, ouverture même hors ligne.</p>
       ${invite ? '<button class="btn plein" data-act="rInstaller">Installer l\'application</button>' : '<p class="doux petit">Sur PC (Chrome ou Edge) : icône d\'installation dans la barre d\'adresse. Sur Android : menu du navigateur, « Installer l\'application ». Sur iPhone (Safari) : Partager, puis « Sur l\'écran d\'accueil ».</p>'}
       <label class="coche" style="margin-top:14px"><input type="checkbox" id="r-liens" ${R.liensApp === false ? "" : "checked"}>Ouvrir Discord et Claude dans leur application plutôt que dans le navigateur</label>
@@ -3205,6 +3628,7 @@ RENDU.reglages = () => {
   $("#r-scene").onchange = e => { R.scene3d = e.target.value; sauverReglages(); location.reload(); };
   $("#r-3d").onchange = e => { R.mode3d = e.target.value; sauverReglages(); location.reload(); };
   $$("[data-coul]", v).forEach(i => i.onchange = () => { R.couleurs[i.dataset.coul] = i.value; sauverReglages(); });
+  $$("[data-onglet]", v).forEach(i => i.onchange = () => { const O = [...tab(R.onglets)]; const k = O.indexOf(i.value); if (k >= 0) O[k] = O[+i.dataset.onglet]; O[+i.dataset.onglet] = i.value; R.onglets = O; sauverReglages(); rendreNav(); RENDU.reglages(); });
   $$("[data-vis]", v).forEach(i => i.onchange = () => { R.masquees = i.checked ? R.masquees.filter(x => x !== i.dataset.vis) : [...R.masquees, i.dataset.vis]; sauverReglages(); rendreNav(); });
   $("#r-fichier").onchange = async e => { try { const o = JSON.parse(await e.target.files[0].text()); R = Object.assign({}, REGLAGES_DEFAUT, o); sauverReglages(); location.reload(); } catch { alert("Fichier de réglages illisible."); } };
   const ra = $("#r-auto"); if (ra) ra.onchange = () => { R.marche.auto = ra.checked; sauverReglages(); };
@@ -3231,12 +3655,406 @@ Object.assign(ACT, {
   rOrdre: d => { const i = R.ordre.indexOf(d.id), j = i + +d.s; [R.ordre[i], R.ordre[j]] = [R.ordre[j], R.ordre[i]]; sauverReglages(); RENDU.reglages(); rendreNav(); },
   rRobotAide: () => aideRobot(),
   rRobotOublier: () => { if (confirm("Retirer le jeton du robot de cet appareil ?")) { LS.oter("hub.robot"); GH.jetonRobot = null; RENDU.reglages(); } },
-  oublierJeton: () => { if (confirm("Retirer le jeton de cet appareil ? Tes données restent intactes dans le dépôt privé.")) { LS.oter("hub.depot"); LS.oter("hub.robot"); Object.keys(JEUX).forEach(n => { LS.oter("hub.cache." + n); LS.oter("hub.brouillon." + n); }); location.reload(); } },
+  oublierJeton: () => { if (confirm("Retirer le jeton de cet appareil ? Tes données restent intactes dans le dépôt privé.")) { LS.oter("hub.depot"); LS.oter("hub.robot"); LS.oter("hub.cache.patrimoine"); Object.keys(JEUX).forEach(n => { LS.oter("hub.cache." + n); LS.oter("hub.brouillon." + n); }); location.reload(); } },
   rInstaller: async () => { if (invite) { invite.prompt(); await invite.userChoice; invite = null; RENDU.reglages(); } },
   rExport: () => telecharger("hub-reglages.json", JSON.stringify(R, null, 2)),
   rImport: () => $("#r-fichier").click(),
   rReset: () => { if (confirm("Revenir aux réglages d'origine ? Tes données ne sont pas touchées.")) { LS.oter("hub.reglages"); location.reload(); } }
 });
+
+/* ============================================================
+   16. Patrimoine : comptes, budget et portefeuille.
+       Le fichier data/patrimoine.json est chiffré (AES-256) avec
+       un code à toi avant de partir dans le dépôt privé : sans ce
+       code, il est illisible, même avec le jeton GitHub. Le code
+       ne quitte jamais l'appareil et n'est pas enregistré.
+       Les relevés (CSV ou OFX de la banque, relevé d'activité
+       Interactive Brokers) sont lus dans le navigateur ; seules
+       les opérations et les soldes sont gardés, jamais un numéro
+       de compte ni un IBAN.
+   ============================================================ */
+const PAT = { etat: "inconnu", code: null, d: null, sha: null, env: null, onglet: "synthese", mois: null, cat: "", q: "", file: [] };
+const PAT_FICHIER = "data/patrimoine.json";
+const PAT_VIDE = () => ({ version: 1, devise: "EUR", comptes: [], operations: [], positions: [], regles: [], historique: [] });
+const TYPES_COMPTE = [["courant", "Compte courant"], ["epargne", "Épargne"], ["courtage", "Courtage"], ["autre", "Autre"]];
+/* Catégories et mots-clés du libellé (le premier qui correspond l'emporte ; tes propres règles passent avant) */
+const CATS_PAT = [
+  ["Revenus", "#28734F", "salaire|paie|bourse|caf|remboursement|vir recu|virement recu|interets"],
+  ["Logement", "#27457A", "loyer|edf|engie|eau de paris|veolia|assurance habitation|free mobile|freebox|orange|sfr|bouygues|sosh"],
+  ["Alimentation", "#A87B1E", "carrefour|monoprix|franprix|lidl|auchan|leclerc|picard|intermarche|casino|g20|naturalia|biocoop|super u|supermarche|daily monop"],
+  ["Restaurants", "#C0692B", "uber eats|deliveroo|mcdonald|mcdo|burger|restaurant|resto|starbucks|cafe|kfc|sushi|pizza|boulangerie|brasserie"],
+  ["Transport", "#2E7D9A", "ratp|sncf|navigo|uber|bolt|lime|blablacar|essence|esso|parking|air france|easyjet|transavia|ouigo|vueling"],
+  ["Abonnements", "#6B4FA0", "spotify|netflix|apple com|icloud|google|amazon prime|disney|deezer|youtube|canal|chatgpt|openai|anthropic|claude ai"],
+  ["Shopping", "#8A4F9E", "amazon|fnac|zara|uniqlo|decathlon|ikea|darty|boulanger|sephora|vinted|zalando"],
+  ["Santé", "#B2452F", "pharmacie|doctolib|medecin|mutuelle|dentiste|ameli"],
+  ["Loisirs", "#55627A", "cinema|ugc|pathe|steam|playstation|concert|musee|basic fit|fitness|fnac spectacles"],
+  ["Épargne et placements", "#3F6E5A", "interactive brokers|ibkr|livret|assurance vie|pea|trade republic|boursobank vie"],
+  ["Frais bancaires", "#857F70", "frais|cotisation|commission|agios"],
+  ["Retraits", "#99907E", "retrait|dab"],
+  ["Virements", "#7A8394", "vir|virement|prlv sepa"],
+  ["Autre", "#B9B1A0", ""]
+];
+const HORS_BUDGET = ["Épargne et placements"]; // ni dépense ni revenu : de l'argent qui change de poche
+const couleurCat = c => (CATS_PAT.find(x => x[0] === c) || CATS_PAT.at(-1))[1];
+const motsLib = s => " " + norm(s).replace(/[^a-z0-9]+/g, " ").trim() + " ";
+function categoriser(libelle, montant) {
+  const t = motsLib(libelle);
+  for (const r of tab(PAT.d?.regles)) if (t.includes(motsLib(r.mot))) return r.categorie;
+  for (const [c, , mots] of CATS_PAT) { if (!mots || (c === "Revenus" && montant < 0)) continue; if (mots.split("|").some(m => t.includes(" " + m + " "))) return c; }
+  return montant > 0 ? "Revenus" : "Autre";
+}
+/* Un libellé ne garde ni IBAN ni longue suite de chiffres (numéro de carte, de compte, de référence) */
+const nettoyerLib = s => String(s || "").replace(/\b[A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){2,7}(?: ?[A-Z0-9]{1,4})?\b/g, "…").replace(/\d[\d ]{6,}\d/g, "…").replace(/\s+/g, " ").trim().slice(0, 140);
+
+/* ---------- Montants et devises ---------- */
+const masque = () => !!R.patMasque;
+function fArgent(x, devise = "EUR", signe = false) {
+  if (x == null || isNaN(x)) return "n.d.";
+  if (masque()) return "•••• " + (devise === "EUR" ? "€" : devise);
+  const s = Number(x).toLocaleString("fr-FR", { style: "currency", currency: /^[A-Z]{3}$/.test(devise) ? devise : "EUR", maximumFractionDigits: Math.abs(x) >= 1e4 ? 0 : 2 });
+  return signe && x > 0 ? "+" + s : s;
+}
+/* Unités de la devise pour 1 euro, d'après les cours du marché (EURUSD=X, EURGBP=X…, sinon en passant par le dollar) */
+function taux(dev) {
+  if (!dev || dev === "EUR") return 1;
+  const c = s => { const t = valeurM(s); return t?.cours > 0 ? +t.cours : null; };
+  const eu = c("EURUSD=X");
+  return c(`EUR${dev}=X`) ?? (dev === "USD" ? eu : eu && c(`USD${dev}=X`) ? eu * c(`USD${dev}=X`) : eu && c(`${dev}USD=X`) ? eu / c(`${dev}USD=X`) : null);
+}
+const enEuros = (x, dev) => { const t = taux(dev); return x == null || t == null ? null : x / t; };
+function nombre(s) {
+  if (s == null) return null; let t = String(s).replace(/[\s  €$£]|EUR|USD/gi, ""); if (!t || t === "-" || t === "--") return null;
+  const neg = /^\(.*\)$/.test(t) || /-$/.test(t); t = t.replace(/[()]/g, "").replace(/-$/, "");
+  t = /,\d{1,2}$/.test(t) || (t.includes(",") && !t.includes(".")) ? t.replace(/\./g, "").replace(",", ".") : t.replace(/,/g, "");
+  const n = parseFloat(t); return isNaN(n) ? null : neg ? -Math.abs(n) : n;
+}
+function dateIso(s) {
+  const t = String(s || "").trim(); let m;
+  if ((m = t.match(/^(\d{4})-?(\d{2})-?(\d{2})/)) && +m[2] <= 12 && +m[3] <= 31) return `${m[1]}-${m[2]}-${m[3]}`;
+  if ((m = t.match(/^(\d{1,2})[/.\-](\d{1,2})[/.\-](\d{2,4})/)) && +m[2] <= 12 && +m[1] <= 31) return `${m[3].length === 2 ? "20" + m[3] : m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  const d = /[a-z]{3,}/i.test(t) ? new Date(t) : null; return d && !isNaN(d) ? isoJour(d) : "";
+}
+const patTotal = () => tab(PAT.d?.comptes).reduce((a, c) => a + (enEuros(c.solde, c.devise) ?? 0), 0);
+const sansTaux = () => tab(PAT.d?.comptes).filter(c => c.solde != null && taux(c.devise) == null);
+function noterHistorique() { const H = PAT.d.historique ??= [], j = AUJ(), t = Math.round(patTotal() * 100) / 100, i = H.findIndex(h => h.date === j); if (i >= 0) H[i].total = t; else H.push({ date: j, total: t }); H.sort((a, b) => a.date.localeCompare(b.date)); }
+
+/* ---------- Lecture, déverrouillage, enregistrement ---------- */
+async function patCharger(forcer) {
+  if (!GH.pret) { if (PAT.etat !== "demo") { PAT.etat = "demo"; PAT.d = patDemo(); } return; }
+  if (!forcer && !["inconnu", "erreur"].includes(PAT.etat)) return;
+  PAT.etat = "chargement";
+  try {
+    const r = await GH.lire(PAT_FICHIER);
+    if (!r) { PAT.etat = "absent"; return; }
+    PAT.sha = r.sha; const env = JSON.parse(r.texte);
+    if (estChiffre(env)) { PAT.env = env; PAT.etat = "ferme"; LS.ecrire("hub.cache.patrimoine", env); }
+    else { PAT.clair = env; PAT.etat = "absent"; } // fichier non chiffré (déposé à la main) : il sera chiffré avec le code choisi
+  } catch (e) { const c = LS.lire("hub.cache.patrimoine", null); if (c) { PAT.env = c; PAT.etat = "ferme"; PAT.horsLigne = true; } else { PAT.etat = "erreur"; PAT.erreur = e.message; } }
+}
+let patMinuterie;
+function patSauver() { noterHistorique(); if (PAT.etat !== "ouvert") return; PAT.attente = true; clearTimeout(patMinuterie); patMinuterie = setTimeout(patEnvoyer, 700); }
+async function patEnvoyer() {
+  try {
+    const env = await chiffrer(PAT.d, PAT.code), b = b64(new TextEncoder().encode(JSON.stringify(env)));
+    try { PAT.sha = await GH.ecrire(PAT_FICHIER, b, PAT.sha, "Hub : patrimoine (chiffré)"); }
+    catch (e) { if (![409, 422].includes(e.status)) throw e; PAT.sha = (await GH.lire(PAT_FICHIER))?.sha; PAT.sha = await GH.ecrire(PAT_FICHIER, b, PAT.sha, "Hub : patrimoine (chiffré)"); }
+    LS.ecrire("hub.cache.patrimoine", env); PAT.attente = false; PAT.erreur = "";
+  } catch (e) { PAT.erreur = e.message; toast("Patrimoine non enregistré : " + e.message); }
+  if (S.vue === "patrimoine") $("#pat-etat") && ($("#pat-etat").innerHTML = patEtatTxt());
+}
+const patEtatTxt = () => PAT.etat === "demo" ? "Exemple : rien n'est enregistré" : PAT.erreur ? `<span class="baisse">Non enregistré (${esc(PAT.erreur)})</span>` : PAT.attente ? "Enregistrement chiffré…" : "Chiffré et à jour";
+
+/* ---------- Données d'exemple (mode démonstration) ---------- */
+function patDemo() {
+  const d = PAT_VIDE(), j = n => { const x = new Date(); x.setDate(x.getDate() - n); return isoJour(x); };
+  d.comptes = [{ id: "c-cour", nom: "Compte courant", type: "courant", devise: "EUR", solde: 1842.37, solde_date: j(1), source: "exemple" }, { id: "c-liv", nom: "Livret A", type: "epargne", devise: "EUR", solde: 6200, solde_date: j(12), source: "exemple" }, { id: "c-ib", nom: "Interactive Brokers", type: "courtage", devise: "EUR", solde: 9480.5, solde_date: j(1), source: "exemple" }];
+  const O = [[1, "CB MONOPRIX PARIS", -23.4], [2, "UBER EATS", -18.9], [2, "NAVIGO MOIS", -88.8], [3, "VIR RECU SALAIRE ALTERNANCE", 1450], [4, "SPOTIFY", -11.12], [5, "LOYER", -720], [6, "CB FNAC", -39.99], [7, "VIR SEPA INTERACTIVE BROKERS", -300], [8, "PHARMACIE", -12.6], [9, "CB CARREFOUR CITY", -31.75], [11, "UGC CINE", -11.9], [13, "RETRAIT DAB", -40], [16, "SNCF OUIGO", -29], [18, "STARBUCKS", -6.4], [21, "FRAIS COTISATION CARTE", -2.5], [33, "VIR RECU SALAIRE ALTERNANCE", 1450], [35, "LOYER", -720], [37, "CB MONOPRIX", -42.1], [39, "DELIVEROO", -21.3], [42, "NETFLIX", -13.49], [45, "CB DECATHLON", -64.99]];
+  d.operations = O.map(([n, l, m], i) => ({ id: "o-" + i, compte: "c-cour", date: j(n), libelle: l, montant: m, devise: "EUR", categorie: "" }));
+  d.positions = [["VWCE.DE", "Vanguard FTSE All-World", "ETF", "EUR", 38, 128.4], ["CSPX.L", "iShares Core S&P 500", "ETF", "USD", 4, 612.1], ["AAPL", "Apple", "Actions", "USD", 6, 228.5], ["MSFT", "Microsoft", "Actions", "USD", 3, 512.3]].map(([s, n, c, dv, q, p]) => ({ compte: "c-ib", symbole: s, nom: n, classe: c, devise: dv, quantite: q, prix: p, valeur: q * p, cout: q * p * .88, pnl: q * p * .12, date: j(1) }));
+  d.historique = [60, 45, 30, 20, 10, 1].map((n, i) => ({ date: j(n), total: 16400 + i * 210 + (i % 2 ? -90 : 60) }));
+  PAT.d = d; d.operations.forEach(o => { o.categorie = categoriser(o.libelle, o.montant); }); noterHistorique();
+  return d;
+}
+
+/* ---------- Lecture des fichiers ---------- */
+async function lireTexte(f) { const buf = await f.arrayBuffer(); try { return new TextDecoder("utf-8", { fatal: true }).decode(buf); } catch { return new TextDecoder("windows-1252").decode(buf); } } // les banques françaises exportent souvent en Windows-1252
+function lireCSV(txt) {
+  txt = txt.replace(/^﻿/, "");
+  const echantillon = txt.split(/\r?\n/).slice(0, 25).join("\n"), sep = [";", ",", "\t", "|"].map(s => [s, echantillon.split(s).length]).sort((a, b) => b[1] - a[1])[0][0];
+  const L = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < txt.length; i++) {
+    const ch = txt[i];
+    if (q) { if (ch === '"') { if (txt[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === sep) { row.push(cell); cell = ""; }
+    else if (ch === "\n" || ch === "\r") { if (ch === "\r" && txt[i + 1] === "\n") i++; row.push(cell); L.push(row); row = []; cell = ""; }
+    else cell += ch;
+  }
+  if (cell || row.length) { row.push(cell); L.push(row); }
+  return L.map(r => r.map(c => c.trim())).filter(r => r.some(Boolean));
+}
+/* Relevé bancaire CSV : on repère la ligne d'en-tête et le rôle de chaque colonne d'après son nom */
+function analyserReleve(L) {
+  const role = h => { const x = norm(h).replace(/[^a-z]/g, ""); return /^(date|dateop|dateoperation|datedoperation|datecomptable|bookingdate|transactiondate|datedelop)/.test(x) ? "date" : /valeur|value/.test(x) && /date/.test(x) ? "datev" : /^(libelle|label|libell|description|intitule|detail|nature|operation|beneficiaire|motif|wording)/.test(x) || x === "libelleoperation" ? "libelle" : /^(debit)/.test(x) ? "debit" : /^(credit)/.test(x) ? "credit" : /^(montant|amount|somme|montanteur)/.test(x) ? "montant" : /(solde|balance)/.test(x) ? "solde" : /^(devise|currency)/.test(x) ? "devise" : ""; };
+  let iE = L.slice(0, 20).findIndex(r => r.filter(Boolean).length >= 3 && r.some(c => role(c) === "date") && r.some(c => ["montant", "debit", "credit"].includes(role(c))));
+  const cols = { date: -1, libelle: -1, montant: -1, debit: -1, credit: -1, solde: -1, devise: -1 };
+  if (iE >= 0) L[iE].forEach((h, i) => { const r = role(h) === "datev" ? "" : role(h); if (r && cols[r] < 0) cols[r] = i; });
+  else { // pas d'en-tête : on devine d'après le contenu
+    iE = -1; const r0 = L.find(r => r.some(c => dateIso(c))) || []; r0.forEach((c, i) => { if (cols.date < 0 && dateIso(c)) cols.date = i; else if (cols.montant < 0 && nombre(c) != null && /[\d]/.test(c) && !dateIso(c)) cols.montant = i; else if (cols.libelle < 0 && /[a-z]{3}/i.test(c)) cols.libelle = i; });
+  }
+  if (cols.libelle < 0 && iE >= 0) cols.libelle = L[iE].findIndex((h, i) => !Object.values(cols).includes(i) && h);
+  return { L, iE, cols };
+}
+function opsReleve(P) {
+  const { L, iE, cols } = P, ops = []; let solde = null, soldeDate = "";
+  L.slice(iE + 1).forEach(r => {
+    const date = dateIso(r[cols.date]); if (!date) return;
+    const m = cols.montant >= 0 ? nombre(r[cols.montant]) : (nombre(r[cols.credit]) || 0) - Math.abs(nombre(r[cols.debit]) || 0);
+    if (m == null || (cols.montant < 0 && !r[cols.credit] && !r[cols.debit])) return;
+    ops.push({ date, libelle: r[cols.libelle] || "", montant: Math.round(m * 100) / 100 });
+    const s = cols.solde >= 0 ? nombre(r[cols.solde]) : null; if (s != null && date >= soldeDate) { if (date > soldeDate || solde == null) solde = s; soldeDate = date; }
+  });
+  return { ops, solde, soldeDate, devise: cols.devise >= 0 ? (L[iE + 1]?.[cols.devise] || "EUR").toUpperCase() : "EUR" };
+}
+function lireOFX(txt) {
+  const val = (b, tag) => ((b.match(new RegExp(`<${tag}>([^<\\r\\n]*)`, "i")) || [])[1] || "").trim();
+  const ops = [...txt.matchAll(/<STMTTRN>([\s\S]*?)(?=<\/STMTTRN>|<STMTTRN>|<\/BANKTRANLIST>)/gi)].map(([, b]) => { const n = val(b, "NAME"), m = val(b, "MEMO"); return { date: dateIso(val(b, "DTPOSTED").slice(0, 8)), montant: nombre(val(b, "TRNAMT")), libelle: m && m !== n ? `${n} ${m}`.trim() : n || m, fitid: val(b, "FITID") }; }).filter(o => o.date && o.montant != null);
+  const bal = (txt.match(/<LEDGERBAL>([\s\S]*?)(?:<\/LEDGERBAL>|<AVAILBAL>|$)/i) || [])[1] || "";
+  return { ops, devise: val(txt, "CURDEF") || "EUR", solde: bal ? nombre(val(bal, "BALAMT")) : null, soldeDate: bal ? dateIso(val(bal, "DTASOF").slice(0, 8)) : "" };
+}
+/* Relevé d'activité Interactive Brokers (CSV, en anglais) : positions ouvertes, liquidités, valeur nette */
+function lireIBKR(txt) {
+  const L = lireCSV(txt), H = {}, I = { positions: [], liquidites: [], nav: null, base: "", date: "", noms: {} };
+  for (const r of L) {
+    const [sec, typ, ...c] = r; if (typ === "Header") { H[sec] = c; continue; } if (typ !== "Data") continue;
+    const o = Object.fromEntries((H[sec] || []).map((k, i) => [k, c[i]]));
+    if (sec === "Account Information" && /base currency/i.test(o["Field Name"] || "")) I.base = o["Field Value"];
+    else if (sec === "Statement" && /period/i.test(o["Field Name"] || "")) I.date = dateIso((o["Field Value"] || "").split(/ - /).pop());
+    else if (sec === "Financial Instrument Information" && o.Symbol) I.noms[o.Symbol] = o.Description;
+    else if (sec === "Open Positions" && o.Symbol && (!o.DataDiscriminator || o.DataDiscriminator === "Summary")) I.positions.push({ symbole: o.Symbol, classe: o["Asset Category"] || "", devise: o.Currency || "", quantite: nombre(o.Quantity), prix: nombre(o["Close Price"]), valeur: nombre(o.Value), cout: nombre(o["Cost Basis"]), pnl: nombre(o["Unrealized P/L"]) });
+    else if (sec === "Cash Report" && /ending cash/i.test(o["Currency Summary"] || "")) { if (/base currency/i.test(o.Currency || "")) I.cash = nombre(o.Total); else if (o.Currency) I.liquidites.push({ devise: o.Currency, montant: nombre(o.Total) }); }
+    else if (sec === "Net Asset Value" && /^total$/i.test(o["Asset Class"] || "")) I.nav = nombre(o["Current Total"]);
+  }
+  I.positions.forEach(p => { p.nom = I.noms[p.symbole] || ""; p.classe = { Stocks: "Actions", "Equity and Index Options": "Options", Bonds: "Obligations", Forex: "Devises", Funds: "Fonds", Futures: "Contrats à terme" }[p.classe] || p.classe; });
+  return I;
+}
+
+/* ---------- Imports ---------- */
+async function patDepot(F) {
+  if (!["ouvert", "demo"].includes(PAT.etat)) return toast("Déverrouille le patrimoine avant d'importer");
+  PAT.file.push(...F); if (PAT.file.length === F.length) patSuivant();
+}
+async function patSuivant() {
+  const f = PAT.file[0]; if (!f) return;
+  const fin = () => { PAT.file.shift(); RENDU.patrimoine(); setTimeout(patSuivant, 300); };
+  try {
+    const txt = await lireTexte(f), e = ext(f.name);
+    if (["ofx", "qfx"].includes(e) || /<OFX>/i.test(txt.slice(0, 2000))) return dialogueReleve({ nom: f.name, ...lireOFX(txt), source: "ofx" }, fin);
+    if (/^﻿?"?Statement"?,"?Header/m.test(txt.slice(0, 400)) || /^Open Positions,Header/m.test(txt)) return dialogueIBKR(f.name, lireIBKR(txt), fin);
+    if (["csv", "txt"].includes(e)) return dialogueReleve({ nom: f.name, P: analyserReleve(lireCSV(txt)), source: "csv" }, fin);
+    toast(`« ${f.name} » : format non reconnu (CSV, OFX ou relevé Interactive Brokers)`); fin();
+  } catch (x) { alert(`Lecture impossible de « ${f.name} » : ${x.message}`); fin(); }
+}
+const cleOp = o => o.fitid ? "f:" + o.fitid : `${o.date}|${o.montant}|${motsLib(nettoyerLib(o.libelle)).trim().slice(0, 40)}`;
+function ajouterOps(c, ops) { // sans doublon : deux cafés identiques le même jour restent deux opérations
+  const compter = L => { const n = new Map(); return L.map(o => { const k = cleOp(o), i = (n.get(k) || 0) + 1; n.set(k, i); return k + "#" + i; }); };
+  const deja = new Set(compter(PAT.d.operations.filter(o => o.compte === c.id))); let n = 0;
+  compter(ops).forEach((k, i) => { if (deja.has(k)) return; const o = ops[i]; PAT.d.operations.push({ id: uid("o-"), compte: c.id, date: o.date, libelle: nettoyerLib(o.libelle), montant: o.montant, devise: c.devise, categorie: categoriser(o.libelle, o.montant), ...(o.fitid ? { fitid: o.fitid } : {}) }); n++; });
+  return n;
+}
+function choixCompte(types, defaut) {
+  const C = PAT.d.comptes.filter(c => types.includes(c.type));
+  return `<label class="champ">Compte<select id="pi-compte">${C.map(c => `<option value="${esc(c.id)}" ${c.id === defaut ? "selected" : ""}>${esc(c.nom)}</option>`).join("")}<option value="" ${!defaut ? "selected" : ""}>+ Nouveau compte</option></select></label>
+    <div id="pi-nouveau" class="pi-deux"><label class="champ">Nom du nouveau compte<input id="pi-nom" placeholder="ex. Compte courant"></label><label class="champ">Type<select id="pi-type">${TYPES_COMPTE.map(([k, l]) => `<option value="${k}" ${k === types[0] ? "selected" : ""}>${l}</option>`).join("")}</select></label></div>`;
+}
+function lierChoixCompte(nomDefaut) { const s = $("#pi-compte"), z = $("#pi-nouveau"), maj = () => { z.hidden = !!s.value; }; s.onchange = maj; maj(); if (!$("#pi-nom").value) $("#pi-nom").value = nomDefaut; }
+function compteChoisi(devise, source) {
+  const id = $("#pi-compte").value; if (id) return PAT.d.comptes.find(c => c.id === id);
+  const c = { id: uid("c-"), nom: $("#pi-nom").value.trim() || "Compte", type: $("#pi-type").value, devise: devise || "EUR", solde: null, solde_date: "", source };
+  PAT.d.comptes.push(c); return c;
+}
+function dialogueReleve(info, fin) {
+  const dlg = $("#dlg"), P = info.P, ent = P ? (P.iE >= 0 ? P.L[P.iE] : (P.L[0] || []).map((_, i) => "Colonne " + (i + 1))) : [];
+  const sel = (r, l) => `<label class="champ">${l}<select data-col="${r}"><option value="-1">(aucune)</option>${ent.map((h, i) => `<option value="${i}" ${P.cols[r] === i ? "selected" : ""}>${esc(h || "Colonne " + (i + 1))}</option>`).join("")}</select></label>`;
+  const defaut = PAT.d.comptes.find(c => c.type !== "courtage" && norm(info.nom).includes(norm(c.nom).split(" ")[0]))?.id || (PAT.d.comptes.filter(c => c.type !== "courtage").length === 1 ? PAT.d.comptes.find(c => c.type !== "courtage").id : "");
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><h2>Importer « ${esc(info.nom)} »</h2>
+    ${P ? `<p class="doux petit">Vérifie le rôle des colonnes : l'aperçu se met à jour.</p><div class="pi-cols">${sel("date", "Date")}${sel("libelle", "Libellé")}${sel("montant", "Montant")}${sel("debit", "Débit")}${sel("credit", "Crédit")}${sel("solde", "Solde")}</div>` : ""}
+    <div id="pi-apercu" class="pi-apercu"></div>
+    ${choixCompte(["courant", "epargne", "autre"], defaut)}
+    <label class="champ">Solde actuel du compte (facultatif)<input id="pi-solde" inputmode="decimal" placeholder="ex. 1 842,37"></label>
+    <p class="doux petit">Les doublons sont écartés : tu peux réimporter un relevé qui chevauche le précédent. Les numéros de compte et IBAN éventuels du fichier ne sont pas gardés.</p>
+    <div class="rang" style="justify-content:flex-end;margin-top:8px"><button class="btn" id="pi-annuler">Annuler</button><button class="btn plein" id="pi-ok">Importer</button></div>`;
+  let R0;
+  const apercu = () => {
+    R0 = P ? opsReleve(P) : info; const o = [...R0.ops].sort((a, b) => b.date.localeCompare(a.date));
+    $("#pi-apercu").innerHTML = o.length ? `<p class="petit"><b>${o.length} opération${o.length > 1 ? "s" : ""}</b> du ${esc(fDate(o.at(-1).date))} au ${esc(fDate(o[0].date))}</p>${o.slice(0, 5).map(x => `<div class="pat-op"><span class="mono doux">${esc(x.date.slice(5).split("-").reverse().join("/"))}</span><span class="pat-lib">${esc(nettoyerLib(x.libelle))}</span><b class="mono ${x.montant >= 0 ? "hausse" : ""}">${fArgent(x.montant, R0.devise, true)}</b></div>`).join("")}`
+      : `<p class="baisse petit">Aucune opération lisible : choisis les colonnes Date et Montant (ou Débit et Crédit).</p>`;
+    if (R0.solde != null && !$("#pi-solde").dataset.touche) $("#pi-solde").value = String(R0.solde).replace(".", ",");
+  };
+  dlg.onchange = e => { const c = e.target.dataset?.col; if (c) { P.cols[c] = +e.target.value; apercu(); } };
+  $("#pi-solde").oninput = e => { e.target.dataset.touche = 1; };
+  const fermer = () => { dlg.close(); };
+  dlg.onclose = () => { dlg.onclose = null; dlg.onchange = null; fin(); };
+  $("#pi-annuler").onclick = fermer;
+  $("#pi-ok").onclick = () => {
+    if (!R0.ops.length && !$("#pi-solde").value) return toast("Rien à importer");
+    const c = compteChoisi(R0.devise, info.source), n = ajouterOps(c, R0.ops), s = nombre($("#pi-solde").value);
+    if (s != null) { c.solde = s; c.solde_date = R0.soldeDate || R0.ops.reduce((a, o) => o.date > a ? o.date : a, "") || AUJ(); }
+    c.source = info.source; c.import = AUJ(); patSauver(); toast(`${n} opération${n > 1 ? "s" : ""} ajoutée${n > 1 ? "s" : ""}${R0.ops.length - n ? ` · ${R0.ops.length - n} déjà présente${R0.ops.length - n > 1 ? "s" : ""}` : ""}`); fermer();
+  };
+  dlg.showModal(); lierChoixCompte(TYPES_COMPTE[0][1]); apercu();
+}
+function dialogueIBKR(nom, I, fin) {
+  const dlg = $("#dlg"), base = I.base || "EUR", ok = I.positions.length || I.nav != null;
+  const totalPos = I.positions.reduce((a, p) => a + (p.devise === base ? p.valeur : (enEuros(p.valeur, p.devise) ?? 0) * (taux(base) ?? 1)), 0), nav = I.nav ?? (I.cash != null ? totalPos + I.cash : null);
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><h2>Interactive Brokers</h2><p class="doux petit">« ${esc(nom)} »${I.date ? ` · arrêté au ${esc(fDate(I.date))}` : ""}</p>
+    ${ok ? `<div class="meta"><div><span class="sur">Valeur nette</span><b class="mono">${fArgent(nav, base)}</b></div><div><span class="sur">Positions</span><b>${I.positions.length}</b></div><div><span class="sur">Liquidités</span><b class="mono">${fArgent(I.cash, base)}</b></div></div>
+      ${I.positions.slice(0, 6).map(p => `<div class="pat-op"><b class="mono">${esc(p.symbole)}</b><span class="pat-lib doux">${esc(p.nom || p.classe)}</span><span class="mono">${fArgent(p.valeur, p.devise)}</span></div>`).join("")}${I.positions.length > 6 ? `<p class="doux petit">et ${I.positions.length - 6} autres</p>` : ""}
+      ${choixCompte(["courtage"], PAT.d.comptes.find(c => c.type === "courtage" && /interactive|ibkr/i.test(c.nom))?.id || "")}
+      <p class="doux petit">Les positions de ce compte sont remplacées par celles du relevé ; la valeur nette devient son solde.</p>`
+      : `<p class="baisse">Ce fichier ne contient ni positions ouvertes ni valeur nette. Exporte le relevé d'activité (Activity Statement) au format CSV, en anglais.</p>`}
+    <div class="rang" style="justify-content:flex-end;margin-top:10px"><button class="btn" id="pi-annuler">${ok ? "Annuler" : "Fermer"}</button>${ok ? '<button class="btn plein" id="pi-ok">Importer</button>' : ""}</div>`;
+  dlg.onclose = () => { dlg.onclose = null; fin(); };
+  $("#pi-annuler").onclick = () => dlg.close();
+  if (ok) $("#pi-ok").onclick = () => {
+    const c = compteChoisi(base, "ibkr"); c.devise = base; c.type = "courtage";
+    PAT.d.positions = PAT.d.positions.filter(p => p.compte !== c.id).concat(I.positions.map(p => ({ ...p, compte: c.id, date: I.date || AUJ() })), I.liquidites.filter(l => l.montant).map(l => ({ compte: c.id, symbole: l.devise, nom: "Liquidités " + l.devise, classe: "Liquidités", devise: l.devise, quantite: null, prix: null, valeur: l.montant, date: I.date || AUJ() })));
+    if (nav != null) { c.solde = nav; c.solde_date = I.date || AUJ(); }
+    c.source = "ibkr"; c.import = AUJ(); patSauver(); toast("Portefeuille mis à jour"); dlg.close();
+  };
+  dlg.showModal(); if (ok) lierChoixCompte("Interactive Brokers");
+}
+function dialogueCompte(c) {
+  const dlg = $("#dlg"), neuf = !c; c ??= { id: uid("c-"), nom: "", type: "courant", devise: "EUR", solde: null, solde_date: AUJ(), source: "manuel" };
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><form method="dialog"><h2>${neuf ? "Ajouter un compte" : "Modifier le compte"}</h2>
+    <label class="champ">Nom<input id="pc-nom" required value="${esc(c.nom)}" placeholder="ex. Livret A"></label>
+    <div class="pi-deux"><label class="champ">Type<select id="pc-type">${TYPES_COMPTE.map(([k, l]) => `<option value="${k}" ${k === c.type ? "selected" : ""}>${l}</option>`).join("")}</select></label><label class="champ">Devise<input id="pc-dev" value="${esc(c.devise)}" maxlength="3" style="text-transform:uppercase"></label></div>
+    <div class="pi-deux"><label class="champ">Solde<input id="pc-solde" inputmode="decimal" value="${c.solde == null ? "" : String(c.solde).replace(".", ",")}"></label><label class="champ">À la date du<input id="pc-date" type="date" value="${esc(c.solde_date || AUJ())}"></label></div>
+    <div class="rang" style="justify-content:space-between;margin-top:10px">${neuf ? "<span></span>" : '<button class="btn" type="button" id="pc-suppr"><span class="baisse">Supprimer le compte</span></button>'}<span class="rang"><button class="btn" type="button" id="pc-annuler">Annuler</button><button class="btn plein" type="submit">Enregistrer</button></span></div></form>`;
+  $("#pc-annuler").onclick = () => dlg.close();
+  $("form", dlg).onsubmit = () => { Object.assign(c, { nom: $("#pc-nom").value.trim(), type: $("#pc-type").value, devise: ($("#pc-dev").value.trim() || "EUR").toUpperCase(), solde: nombre($("#pc-solde").value), solde_date: $("#pc-date").value || AUJ() }); if (neuf) PAT.d.comptes.push(c); patSauver(); RENDU.patrimoine(); };
+  const s = $("#pc-suppr"); if (s) s.onclick = () => { if (!confirm(`Supprimer « ${c.nom} », ses opérations et ses positions ?`)) return; PAT.d.comptes = PAT.d.comptes.filter(x => x !== c); PAT.d.operations = PAT.d.operations.filter(o => o.compte !== c.id); PAT.d.positions = PAT.d.positions.filter(p => p.compte !== c.id); patSauver(); dlg.close(); RENDU.patrimoine(); };
+  dlg.showModal();
+}
+function aideImport() {
+  const dlg = $("#dlg");
+  dlg.innerHTML = `<div class="feuille-poignee" aria-hidden="true"></div><h2>Où trouver tes relevés</h2>
+    <h3 style="margin-top:14px">Ta banque</h3><p class="petit">Dans l'espace client (site web, rarement l'appli), cherche « Télécharger », « Exporter » ou « Relevé d'opérations ». Choisis <b>OFX</b> (ou « Money », « Quicken ») si c'est proposé : c'est le plus fiable. Sinon <b>CSV</b> (ou « Excel / tableur »). Une période de trois mois suffit pour commencer ; réimporte ensuite chaque mois, les doublons sont écartés.</p>
+    <h3 style="margin-top:14px">Interactive Brokers</h3><p class="petit">Portail client : <b>Performance &amp; Reports › Statements › Activity</b>, période « Daily » ou « Month to date », format <b>CSV</b>, langue <b>anglais</b>. Le relevé donne les positions ouvertes, les liquidités et la valeur nette.</p>
+    <h3 style="margin-top:14px">Ensuite</h3><p class="petit">Glisse le fichier dans cette page (ou bouton « Importer »). Il est lu sur ton appareil ; seules les opérations et soldes sont gardés, chiffrés, dans ton dépôt privé. Le fichier lui-même n'est envoyé nulle part.</p>
+    <button class="btn" style="width:100%;margin-top:12px" id="ai-ok">Compris</button>`;
+  $("#ai-ok").onclick = () => dlg.close(); dlg.showModal();
+}
+
+/* ---------- Vue ---------- */
+const moisDe = iso => iso.slice(0, 7), libMois = m => new Date(m + "-15T12:00:00").toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+function budgetMois(m) {
+  const courants = new Set(PAT.d.comptes.filter(c => ["courant", "autre"].includes(c.type)).map(c => c.id)); // le budget suit les comptes courants : l'épargne et le courtage n'y entrent pas
+  const O = PAT.d.operations.filter(o => moisDe(o.date) === m && courants.has(o.compte)), B = O.filter(o => !HORS_BUDGET.includes(o.categorie));
+  const dep = B.filter(o => o.montant < 0).reduce((a, o) => a + (enEuros(-o.montant, o.devise) ?? 0), 0), rev = B.filter(o => o.montant > 0).reduce((a, o) => a + (enEuros(o.montant, o.devise) ?? 0), 0);
+  const parCat = new Map(); B.filter(o => o.montant < 0).forEach(o => parCat.set(o.categorie, (parCat.get(o.categorie) || 0) + (enEuros(-o.montant, o.devise) ?? 0)));
+  return { O, dep, rev, cats: [...parCat].sort((a, b) => b[1] - a[1]) };
+}
+const PALETTE_PAT = ["#27457A", "#A87B1E", "#28734F", "#6B4FA0", "#C0692B", "#2E7D9A", "#B2452F", "#857F70"];
+const COUL_TYPE = { "Compte courant": "#27457A", "Épargne": "#28734F", "Courtage": "#A87B1E", "Autre": "#857F70" };
+const barres = (L, total, act, coul = couleurCat) => L.map(([c, v], i) => `<button class="pat-barre" ${act ? `data-act="${act}" data-c="${esc(c)}" aria-pressed="${PAT.cat === c}"` : "tabindex=-1"}><span class="pat-barre-t"><span><i style="background:${esc(coul(c, i))}"></i>${esc(c)}</span><b class="mono">${fArgent(v)}</b></span><span class="pat-jauge"><span style="width:${total ? Math.max(1.5, v / total * 100).toFixed(1) : 0}%;background:${esc(coul(c, i))}"></span></span></button>`).join("");
+function courbePat(H) {
+  if (H.length < 2) return "";
+  const W = 600, Ht = 120, x0 = new Date(H[0].date) / 1, x1 = new Date(H.at(-1).date) / 1 || x0 + 1, v = H.map(h => h.total), a = Math.min(...v), b = Math.max(...v), e = (b - a) || 1;
+  const pts = H.map(h => [((new Date(h.date) - x0) / ((x1 - x0) || 1)) * W, Ht - 8 - ((h.total - a) / e) * (Ht - 16)]);
+  return `<svg viewBox="0 0 ${W} ${Ht}" class="pat-courbe" preserveAspectRatio="none" aria-hidden="true"><path d="M${pts.map(p => p.map(n => n.toFixed(1)).join(",")).join(" L")} L${W},${Ht} L0,${Ht}Z" class="pat-aire"/><path d="M${pts.map(p => p.map(n => n.toFixed(1)).join(",")).join(" L")}" class="pat-ligne"/></svg>`;
+}
+const valPos = p => enEuros(p.valeur, p.devise);
+function ecranCode() {
+  const neuf = PAT.etat === "absent";
+  return `<div class="carte pat-code"><div class="sur">Patrimoine · chiffré</div><h2 style="margin:8px 0">${neuf ? "Choisis ton code patrimoine" : "Déverrouiller le patrimoine"}</h2>
+    <p class="petit" style="color:var(--encre2)">${neuf ? "Tes comptes seront chiffrés (AES-256) sur cet appareil avant d'aller dans ton dépôt privé. Sans ce code, personne ne peut les lire, même avec ton jeton GitHub. <b>Si tu l'oublies, les données sont perdues</b> (il suffira de réimporter tes relevés)." : "Le fichier de ton dépôt privé est chiffré. Le code reste sur cet appareil le temps de la session."}${PAT.clair ? " Un fichier non chiffré a été trouvé : il sera chiffré avec ce code." : ""}${PAT.horsLigne ? " Hors ligne : dernière copie gardée sur cet appareil." : ""}</p>
+    <form id="f-pat" style="display:grid;gap:10px;margin-top:12px"><label class="champ">Code${neuf ? " (8 caractères au moins)" : ""}<input type="password" id="pat-code" autocomplete="${neuf ? "new-password" : "current-password"}" required minlength="${neuf ? 8 : 1}"></label>${neuf ? '<label class="champ">Le même code, encore une fois<input type="password" id="pat-code2" autocomplete="new-password" required></label>' : ""}
+      <p class="baisse petit" id="pat-err" role="alert"></p><button class="btn plein" type="submit">${neuf ? "Créer le patrimoine" : "Déverrouiller"}</button></form></div>`;
+}
+RENDU.patrimoine = async () => {
+  const v = $("#v-patrimoine"), tete = `<header><div class="sur">Patrimoine · comptes et portefeuille</div><h1>Le patrimoine</h1><p>Tes comptes, ton budget du mois et ton portefeuille, chiffrés avec un code à toi.</p></header>`;
+  if (["inconnu", "erreur"].includes(PAT.etat) || PAT.etat === "chargement") { v.innerHTML = tete + `<p class="doux">Chargement…</p>`; await patCharger(PAT.etat === "erreur"); if (S.vue !== "patrimoine") return; }
+  if (PAT.etat === "erreur") { v.innerHTML = tete + `<div class="vide"><b>Lecture impossible</b>${esc(PAT.erreur)}<br><br><button class="btn" data-act="patRecharger">Réessayer</button></div>`; return; }
+  if (["absent", "ferme"].includes(PAT.etat)) {
+    v.innerHTML = tete + ecranCode(); const f = $("#f-pat"); setTimeout(() => $("#pat-code")?.focus(), 50);
+    f.onsubmit = async e => {
+      e.preventDefault(); const c = $("#pat-code").value, err = $("#pat-err");
+      if (PAT.etat === "absent") { if (c !== $("#pat-code2").value) return err.textContent = "Les deux codes sont différents."; PAT.d = Object.assign(PAT_VIDE(), PAT.clair || {}); PAT.code = c; PAT.etat = "ouvert"; delete PAT.clair; patSauver(); RENDU.patrimoine(); return; }
+      err.textContent = "Vérification…";
+      try { PAT.d = Object.assign(PAT_VIDE(), await dechiffrer(PAT.env, c)); PAT.code = c; PAT.etat = "ouvert"; RENDU.patrimoine(); if (S.vue === "accueil") RENDU.accueil(); }
+      catch { err.textContent = "Code incorrect."; }
+    };
+    return;
+  }
+  const d = PAT.d, total = patTotal(), H = tab(d.historique), il30 = (() => { const j = new Date(); j.setDate(j.getDate() - 30); const iso = isoJour(j); return [...H].reverse().find(h => h.date <= iso); })();
+  const ong = PAT.onglet, mois = PAT.mois ||= moisDe(AUJ()), bm = budgetMois(mois), pos = d.positions, totPos = pos.reduce((a, p) => a + (valPos(p) ?? 0), 0);
+  const sansT = sansTaux(), parType = TYPES_COMPTE.map(([k, l]) => [l, d.comptes.filter(c => c.type === k).reduce((a, c) => a + (enEuros(c.solde, c.devise) ?? 0), 0)]).filter(x => x[1] > 0);
+  const ligneCompte = c => { const vieux = c.solde_date && joursDepuis(c.solde_date) > 35; return `<button class="pat-compte" data-act="patCompte" data-id="${esc(c.id)}"><span><b>${esc(c.nom)}</b><span class="doux petit">${esc((TYPES_COMPTE.find(t => t[0] === c.type) || [, ""])[1])}${c.solde_date ? " · au " + esc(fDate(c.solde_date)) : ""}${vieux ? ' · <span class="baisse">à mettre à jour</span>' : ""}</span></span><b class="mono">${c.solde == null ? '<span class="doux">solde ?</span>' : fArgent(c.solde, c.devise)}</b></button>`; };
+  const onglets = [["synthese", "Synthèse"], ["comptes", "Comptes"], ["budget", "Budget"], ["portefeuille", "Portefeuille"]];
+  let corps = "";
+  if (!d.comptes.length && ong !== "comptes") corps = `<div class="vide"><b>Aucun compte pour l'instant</b>Glisse un relevé de ta banque (CSV ou OFX) ou ton relevé Interactive Brokers dans la page, ou ajoute un compte à la main.<br><br><span class="rang" style="justify-content:center"><button class="btn plein" data-act="patImporter">Importer un fichier</button><button class="btn" data-act="patNouveau">Ajouter un compte</button><button class="btn" data-act="patAide">Où trouver mes relevés ?</button></span></div>`;
+  else if (ong === "synthese") corps = `<div class="pat-grille">
+      <section class="carte pat-net"><div class="sur">Patrimoine net</div><div class="pat-total mono">${fArgent(total)}</div>
+        <p class="doux petit">${il30 ? `<span class="${total - il30.total >= 0 ? "hausse" : "baisse"}">${fArgent(total - il30.total, "EUR", true)}</span> depuis le ${esc(fDate(il30.date))}` : "L'évolution apparaîtra au fil des mises à jour."}${sansT.length ? ` · <span class="baisse">Taux de change manquant pour ${esc(sansT.map(c => c.devise).join(", "))}</span>` : ""}</p>${masque() ? "" : courbePat(H)}</section>
+      <section class="carte"><div class="acc-tete"><h2>Répartition</h2></div>${barres(parType, total, "", c => COUL_TYPE[c] || "#857F70")}</section>
+      <section class="carte"><div class="acc-tete"><h2>Comptes</h2><button class="acc-ouvrir" data-act="patOnglet" data-o="comptes">Gérer ›</button></div>${d.comptes.map(ligneCompte).join("")}</section>
+      <section class="carte"><div class="acc-tete"><h2>${esc(libMois(mois))}</h2><button class="acc-ouvrir" data-act="patOnglet" data-o="budget">Budget ›</button></div><div class="pat-deuxchiffres"><div><span class="sur">Dépenses</span><b class="mono">${fArgent(bm.dep)}</b></div><div><span class="sur">Revenus</span><b class="mono hausse">${fArgent(bm.rev)}</b></div></div>${barres(bm.cats.slice(0, 4), bm.dep)}</section>
+      ${pos.length ? `<section class="carte"><div class="acc-tete"><h2>Portefeuille</h2><button class="acc-ouvrir" data-act="patOnglet" data-o="portefeuille">Détail ›</button></div><div class="pat-deuxchiffres"><div><span class="sur">Valeur</span><b class="mono">${fArgent(totPos)}</b></div><div><span class="sur">Plus-value latente</span><b class="mono">${fArgent(pos.reduce((a, p) => a + (enEuros(p.pnl, p.devise) ?? 0), 0), "EUR", true)}</b></div></div>${[...pos].sort((a, b) => (valPos(b) ?? 0) - (valPos(a) ?? 0)).slice(0, 4).map(p => `<div class="pat-op"><b class="mono">${esc(p.symbole)}</b><span class="pat-lib doux">${esc(p.nom || p.classe)}</span><span class="mono">${totPos ? ((valPos(p) ?? 0) / totPos * 100).toFixed(1).replace(".", ",") + " %" : ""}</span></div>`).join("")}</section>` : ""}
+    </div>`;
+  else if (ong === "comptes") corps = `<div class="rang" style="margin-bottom:14px"><button class="btn plein" data-act="patImporter">Importer un relevé</button><button class="btn" data-act="patNouveau">Ajouter un compte</button><button class="btn" data-act="patAide">Où trouver mes relevés ?</button></div>
+      <div class="pat-grille"><section class="carte"><div class="acc-tete"><h2>Tes comptes</h2></div>${d.comptes.length ? d.comptes.map(ligneCompte).join("") : '<p class="doux">Aucun compte.</p>'}<p class="doux petit" style="margin-top:10px">Touche un compte pour corriger son nom, son type ou son solde.</p></section>
+      <section class="carte"><div class="acc-tete"><h2>Tes règles de catégories</h2></div>${tab(d.regles).length ? d.regles.map((r, i) => `<div class="pat-op"><span class="pat-lib">« ${esc(r.mot)} »</span><span class="puce"><i style="color:${esc(couleurCat(r.categorie))}"></i>${esc(r.categorie)}</span><button class="btn mini" data-act="patRegleSuppr" data-i="${i}" aria-label="Supprimer la règle">✕</button></div>`).join("") : '<p class="doux petit">Quand tu changes la catégorie d\'une opération dans Budget, tu peux l\'appliquer à toutes les opérations semblables : la règle apparaît ici.</p>'}</section>
+      <section class="carte"><div class="acc-tete"><h2>Sécurité</h2></div><p class="petit" style="color:var(--encre2)">Fichier chiffré : <span class="mono">data/patrimoine.json</span> dans ton dépôt privé. Le code n'est enregistré nulle part.</p><div class="rang"><button class="btn" data-act="patVerrouiller">Verrouiller</button><button class="btn" data-act="patChangerCode">Changer le code</button><button class="btn" data-act="patExporter">Télécharger une copie (non chiffrée)</button></div></section></div>`;
+  else if (ong === "budget") {
+    const O = bm.O.filter(o => (!PAT.cat || o.categorie === PAT.cat) && (!PAT.q || norm(o.libelle).includes(norm(PAT.q)))).sort((a, b) => b.date.localeCompare(a.date)), opts = CATS_PAT.map(c => c[0]);
+    const decal = n => { const x = new Date(mois + "-15T12:00:00"); x.setMonth(x.getMonth() + n); return isoJour(x).slice(0, 7); };
+    corps = `<div class="rang pat-mois"><button class="btn mini" data-act="patMois" data-m="${decal(-1)}" aria-label="Mois précédent">‹</button><h2>${esc(libMois(mois))}</h2><button class="btn mini" data-act="patMois" data-m="${decal(1)}" aria-label="Mois suivant" ${mois >= moisDe(AUJ()) ? "disabled" : ""}>›</button></div>
+      <div class="pat-grille"><section class="carte"><div class="pat-deuxchiffres"><div><span class="sur">Dépenses</span><b class="mono">${fArgent(bm.dep)}</b></div><div><span class="sur">Revenus</span><b class="mono hausse">${fArgent(bm.rev)}</b></div><div><span class="sur">Reste</span><b class="mono ${bm.rev - bm.dep >= 0 ? "hausse" : "baisse"}">${fArgent(bm.rev - bm.dep, "EUR", true)}</b></div></div>
+        ${bm.cats.length ? barres(bm.cats, bm.dep, "patCat") : '<p class="doux">Aucune dépense ce mois-ci.</p>'}${PAT.cat ? `<button class="btn mini" data-act="patCat" data-c="${esc(PAT.cat)}" style="margin-top:8px">Toutes les catégories</button>` : ""}<p class="doux petit" style="margin-top:8px">Seuls les comptes courants entrent dans le budget. Les virements vers l'épargne et les placements ne comptent ni en dépense ni en revenu.</p></section>
+      <section class="carte pat-ops"><div class="acc-tete"><h2>${PAT.cat ? esc(PAT.cat) : "Opérations"} <span class="doux petit">· ${O.length}</span></h2></div><input class="saisie" type="search" id="pat-q" placeholder="Chercher un libellé" aria-label="Chercher un libellé" value="${esc(PAT.q)}" style="margin-bottom:8px">
+        ${O.length ? O.slice(0, 300).map(o => `<div class="pat-op pat-op-l"><span class="mono doux">${esc(o.date.slice(8))}/${esc(o.date.slice(5, 7))}</span><span class="pat-lib"><span>${esc(o.libelle)}</span><select class="pat-sel" data-op="${esc(o.id)}" aria-label="Catégorie" style="--c:${esc(couleurCat(o.categorie))}">${opts.map(c => `<option ${c === o.categorie ? "selected" : ""}>${esc(c)}</option>`).join("")}</select></span><b class="mono ${o.montant >= 0 ? "hausse" : ""}">${fArgent(o.montant, o.devise, true)}</b></div>`).join("") : '<p class="doux">Aucune opération.</p>'}</section></div>`;
+  } else {
+    const parC = new Map(), parD = new Map(); pos.forEach(p => { parC.set(p.classe || "Autre", (parC.get(p.classe || "Autre") || 0) + (valPos(p) ?? 0)); parD.set(p.devise, (parD.get(p.devise) || 0) + (valPos(p) ?? 0)); });
+    const tri = [...pos].sort((a, b) => (valPos(b) ?? 0) - (valPos(a) ?? 0));
+    corps = pos.length ? `<div class="pat-grille"><section class="carte"><div class="pat-deuxchiffres"><div><span class="sur">Valeur</span><b class="mono">${fArgent(totPos)}</b></div><div><span class="sur">Plus-value latente</span><b class="mono">${fArgent(pos.reduce((a, p) => a + (enEuros(p.pnl, p.devise) ?? 0), 0), "EUR", true)}</b></div></div><h3 style="margin:12px 0 6px">Par classe</h3>${barres([...parC].sort((a, b) => b[1] - a[1]), totPos, "", (c, i) => PALETTE_PAT[i % 8])}<h3 style="margin:12px 0 6px">Par devise</h3>${barres([...parD].sort((a, b) => b[1] - a[1]), totPos, "", (c, i) => PALETTE_PAT[(i + 2) % 8])}</section>
+      <section class="carte pat-large"><div class="table-zone sans-cadre"><table class="pat-table"><thead><tr><th>Ligne</th><th class="p-ext">Quantité</th><th class="p-ext">Cours</th><th>Valeur</th><th>Poids</th><th class="p-ext">Latente</th><th>Jour</th></tr></thead><tbody>${tri.map(p => { const t = valeurM(p.symbole), j = t ? varP(t, "1J") : null; return `<tr${t ? ` data-act="mFiche" data-s="${esc(p.symbole)}" style="cursor:pointer"` : ""}><td><b class="mono">${esc(p.symbole)}</b><span class="doux petit" style="display:block">${esc(p.nom || p.classe)}</span></td><td class="mono p-ext">${p.quantite == null ? "" : esc(String(p.quantite).replace(".", ","))}</td><td class="mono p-ext">${p.prix == null ? "" : fArgent(p.prix, p.devise)}</td><td class="mono">${fArgent(p.valeur, p.devise)}</td><td class="mono">${totPos ? ((valPos(p) ?? 0) / totPos * 100).toFixed(1).replace(".", ",") + " %" : ""}</td><td class="mono p-ext ${p.pnl > 0 ? "hausse" : p.pnl < 0 ? "baisse" : ""}">${p.pnl == null ? "" : fArgent(p.pnl, p.devise, true)}</td><td class="mono ${j == null ? "" : j >= 0 ? "hausse" : "baisse"}">${j == null ? '<span class="doux">—</span>' : txtVar(t, j)}</td></tr>`; }).join("")}</tbody></table></div><p class="doux petit" style="margin-top:8px">Positions au ${esc(fDate(pos[0].date))}, d'après ton dernier relevé. « Jour » : variation du marché aujourd'hui, quand la valeur est suivie dans l'onglet Marché.</p></section></div>`
+      : `<div class="vide"><b>Pas encore de portefeuille</b>Importe ton relevé d'activité Interactive Brokers (CSV) pour voir tes positions.<br><br><button class="btn plein" data-act="patImporter">Importer</button> <button class="btn" data-act="patAide">Comment l'exporter ?</button></div>`;
+  }
+  v.innerHTML = `${tete.replace("</header>", `<div class="rang" style="margin-top:12px"><span class="doux petit" id="pat-etat">${patEtatTxt()}</span><button class="btn mini" data-act="patMasquer" aria-pressed="${masque()}" aria-label="${masque() ? "Afficher les montants" : "Masquer les montants"}">${masque() ? "Afficher" : "Masquer"} les montants</button>${PAT.etat === "ouvert" ? '<button class="btn mini" data-act="patVerrouiller">Verrouiller</button>' : ""}</div></header>`)}
+    ${PAT.etat === "demo" ? `<div class="bandeau"><span><b>Exemple.</b> Connecte ton dépôt privé dans les réglages pour créer ton patrimoine chiffré.</span></div>` : ""}
+    <div class="seg pat-onglets" role="tablist" aria-label="Partie du patrimoine">${onglets.map(([k, l]) => `<button role="tab" aria-selected="${ong === k}" aria-pressed="${ong === k}" data-act="patOnglet" data-o="${k}">${l}</button>`).join("")}</div>${corps}`;
+  const q = $("#pat-q"); if (q) q.oninput = () => { PAT.q = q.value; const p = q.selectionStart; RENDU.patrimoine().then(() => { const i = $("#pat-q"); i?.focus(); i?.setSelectionRange(p, p); }); };
+};
+$("#v-patrimoine")?.addEventListener("change", e => {
+  const s = e.target; if (!s.matches(".pat-sel")) return;
+  const o = PAT.d.operations.find(x => x.id === s.dataset.op); if (!o) return; o.categorie = s.value;
+  const mot = motsLib(o.libelle).trim().split(" ").filter(m => m.length > 2 && !/^(cb|vir|prlv|sepa|carte|paiement|achat|recu|de|du|le|la)$/.test(m) && !/^\d+$/.test(m)).slice(0, 2).join(" ");
+  if (mot && confirm(`Ranger aussi dans « ${s.value} » toutes les opérations dont le libellé contient « ${mot} » ?`)) { PAT.d.regles = tab(PAT.d.regles).filter(r => r.mot !== mot); PAT.d.regles.unshift({ mot, categorie: s.value }); PAT.d.operations.forEach(x => { if (motsLib(x.libelle).includes(motsLib(mot))) x.categorie = s.value; }); }
+  patSauver(); RENDU.patrimoine();
+});
+Object.assign(ACT, {
+  patOnglet: d => { PAT.onglet = d.o; RENDU.patrimoine(); },
+  patMois: d => { PAT.mois = d.m; PAT.cat = ""; RENDU.patrimoine(); },
+  patCat: d => { PAT.cat = PAT.cat === d.c ? "" : d.c; RENDU.patrimoine(); },
+  patMasquer: () => { R.patMasque = !masque(); sauverReglages(); RENDU.patrimoine(); },
+  patImporter: () => choisirFichiers(F => patDepot(F), ".csv,.ofx,.qfx,.txt"),
+  patAide: aideImport,
+  patNouveau: () => dialogueCompte(),
+  patCompte: d => dialogueCompte(PAT.d.comptes.find(c => c.id === d.id)),
+  patRegleSuppr: d => { PAT.d.regles.splice(+d.i, 1); patSauver(); RENDU.patrimoine(); },
+  patRecharger: () => { PAT.etat = "inconnu"; RENDU.patrimoine(); },
+  patVerrouiller: () => { if (PAT.etat !== "ouvert") return; if (PAT.attente) return toast("Enregistrement en cours, réessaie dans un instant"); PAT.d = null; PAT.code = null; PAT.etat = "inconnu"; RENDU.patrimoine(); },
+  patChangerCode: async () => { const a = prompt("Nouveau code (8 caractères au moins) :"); if (!a) return; if (a.length < 8) return alert("8 caractères au moins."); if (prompt("Le même code, encore une fois :") !== a) return alert("Les deux codes sont différents."); PAT.code = a; patSauver(); toast("Code changé : le fichier est rechiffré"); },
+  patExporter: () => { if (confirm("La copie téléchargée n'est pas chiffrée : garde-la en lieu sûr. Continuer ?")) telecharger(`patrimoine-${AUJ()}.json`, JSON.stringify(PAT.d, null, 1)); }
+});
+/* Carte de l'accueil */
+function cartePatrimoine() {
+  if (!vuesVisibles().includes("patrimoine")) return "";
+  const ouvert = ["ouvert", "demo"].includes(PAT.etat), bm = ouvert ? budgetMois(moisDe(AUJ())) : null;
+  return carteA("patrimoine", "Patrimoine", ouvert ? `<div class="acc-chiffre"><b class="mono">${fArgent(patTotal())}</b><span>${PAT.etat === "demo" ? "exemple" : "net"}</span></div><div class="pat-deuxchiffres"><div><span class="sur">Dépensé ce mois</span><b class="mono">${fArgent(bm.dep)}</b></div><div><span class="sur">Revenus</span><b class="mono hausse">${fArgent(bm.rev)}</b></div></div>`
+    : `<p class="doux">Comptes, budget et portefeuille, chiffrés avec ton code.</p><div class="acc-actions"><button class="btn" data-act="aller" data-v="patrimoine">Ouvrir</button></div>`, { vue: "patrimoine" });
+}
 
 if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {}); // application installable et ouverture hors ligne
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", appliquerTheme);

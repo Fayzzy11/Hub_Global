@@ -1,6 +1,6 @@
 # Hub · Noah
 
-Tableau de bord personnel sous forme d'application installable : quartier financier 3D, marché, cartes d'indices, cours, documents, réseau, briefs, bot.
+Tableau de bord personnel sous forme d'application installable : accueil du jour, réseau de projets, marché, cartes d'indices, cours, documents, réseau, briefs, bot, patrimoine.
 
 ## Comment c'est construit
 
@@ -20,9 +20,14 @@ Tableau de bord personnel sous forme d'application installable : quartier financ
 5. **Connecter l'application** : Réglages > Dépôt privé, coller le jeton, choisir un code de protection.
 6. **Installer** : bouton « Installer » du navigateur (PC, Android) ou Partager > « Sur l'écran d'accueil » (iPhone).
 
+## Accueil et téléphone
+
+- **Accueil** : ce qui compte aujourd'hui, en cartes (agenda du jour et de demain, networking du jour ou relances, six repères de marché, échéances et examens, dernier brief, patrimoine), des accès rapides à toutes les vues et les projets en réseau 2D (touche un projet pour sa fiche, le centre pour l'agent).
+- **Sur téléphone** : barre d'onglets en bas (4 onglets au choix dans Réglages > Barre du téléphone, le reste dans « Plus »), fenêtres qui montent du bas, boutons d'au moins 40 px, champs en 16 px (pas de zoom automatique sur iPhone). L'univers s'ouvre en réseau 2D ; la 3D reste à un bouton.
+
 ## Univers 3D : le réseau de neurones
 
-- La vue d'accueil montre le hub comme un réseau de neurones : chaque fiche est un neurone qui porte son logo, l'agent global est au centre, et les branches relient les fiches liées entre elles. Plus une fiche est récente, plus son neurone est gros.
+- La vue Univers montre le hub comme un réseau de neurones : chaque fiche est un neurone qui porte son logo, l'agent global est au centre, et les branches relient les fiches liées entre elles. Plus une fiche est récente, plus son neurone est gros.
 - Tout est calculé dans le navigateur avec three.js (embarqué dans `assets/lib/`) : aucune image ni modèle à télécharger pour cette vue.
 - Réglages > Décor de l'univers 3D permet de revenir au quartier de La Défense. Réglages > Qualité de la 3D : « Allégée » pour les appareils modestes, « Toujours en liste » pour désactiver la 3D.
 
@@ -74,6 +79,19 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 - La recherche lit ce texte : taper « nvidia » montre les briefs qui en parlent, avec le nombre de mentions et les passages surlignés. Les sociétés des cartes de marché sont reconnues par leur nom et par leur symbole (« nvidia » et « NVDA »).
 - Un bandeau propose de lire le texte des PDF déposés avant cette fonction. Les PDF scannés (images sans texte) ne sont pas lisibles.
 
+## Cours : documents en dossiers
+
+- Chaque cours a deux onglets : **Documents** (l'arborescence de `documents/cours/<cours>/`, dossiers et fichiers, recherche, « Déposer ici », « Nouveau dossier ») et **Infos et notes**.
+- Le bouton ⋯ d'un fichier ou d'un dossier permet de le **déplacer** (vers un autre dossier, un autre cours ou `à trier`), de le **renommer** ou de le supprimer. Un déplacement est un seul enregistrement, et la base de cours suit. Rien n'est rangé automatiquement : c'est toi qui décides.
+- Le même menu ⋯ existe dans la vue Documents.
+
+## Patrimoine (chiffré)
+
+- Comptes, budget du mois (catégories automatiques d'après le libellé, corrigeables, avec des règles que tu crées en un geste) et portefeuille.
+- **Imports** lus dans le navigateur : relevé bancaire **CSV** (colonnes reconnues d'après leur nom, vérifiables) ou **OFX**, relevé d'activité **Interactive Brokers** (CSV en anglais : positions ouvertes, liquidités, valeur nette). Glisse le fichier sur la page Patrimoine : il n'est envoyé nulle part. Les doublons sont écartés.
+- `data/patrimoine.json` est **chiffré (AES-256-GCM, clé dérivée du code par PBKDF2, 600 000 itérations)** avant d'aller dans le dépôt privé. Le code n'est enregistré nulle part : s'il est perdu, il faut réimporter les relevés. Aucun numéro de compte ni IBAN n'est gardé.
+- Les montants en devises sont convertis avec les cours du Marché (EURUSD=X, etc.). Bouton « Masquer les montants » pour l'écran en public.
+
 ## Déposer beaucoup de fichiers
 
 Glisse des fichiers ou des dossiers entiers n'importe où dans la fenêtre (ou utilise « Ajouter des fichiers » / « Ajouter un dossier entier »). Une fenêtre propose une place pour chaque fichier d'après son nom et son dossier : brief (PDF daté), cours, projet, dossier courant, sinon `documents/à trier`. Tu corriges si besoin, puis tout part en un seul enregistrement. Ce rangement suit des règles simples, sans IA. Limite : 50 Mo par fichier.
@@ -89,6 +107,7 @@ data/courses.json         base de cours
 data/morning-brief.json   index des briefs
 data/briefs-texte.json    texte des briefs, pour la recherche
 data/marche-perso.json    favoris et pages du Marché
+data/patrimoine.json      comptes, opérations et positions, chiffrés avec ton code patrimoine
 documents/briefs/         PDF des briefs envoyés par « Ajouter le PDF du jour » (AAAA-MM-JJ.pdf)
 pdf/                      PDF des briefs ajoutés à la main (ancien emplacement)
 documents/cours/<cours>/   fichiers d'un cours
