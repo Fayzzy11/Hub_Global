@@ -92,6 +92,11 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 - Ton suivi (intéressé, candidaté, écarté, notes) est gardé dans `data/offres.json` du dépôt privé du hub. Le hub ne modifie jamais le bot.
 - **Accès** : ajouter le dépôt du bot au jeton « Hub robot » avec `Contents : Read-only` (lecture des offres) et `Actions : Read and write` (bouton « Lancer la veille »).
 
+## Langue
+
+- Réglages › Apparence › **Langue de l'application** : français ou anglais. L'interface, les dates et les nombres suivent ; tes données (titres, notes, contacts, offres) restent telles quelles.
+- L'app est écrite en français ; en anglais, chaque texte affiché est remplacé au vol d'après un dictionnaire (`TRAD_EN`), des modèles avec nombres (`TRAD_EN_NUM`), quelques motifs et des sens selon la vue (`TRAD_EN_CTX`). Un texte absent du dictionnaire reste en français : l'ajouter au dictionnaire suffit.
+
 ## Pavé numérique (téléphone)
 
 - Sur écran tactile, le code de déverrouillage et le code patrimoine se tapent sur un pavé à grosses touches. « Clavier (ABC) » repasse au clavier normal si le code contient des lettres ; le choix est retenu sur l'appareil.
