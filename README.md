@@ -86,6 +86,16 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 - Le même menu ⋯ existe dans la vue Documents.
 - Les PDF s'ouvrent dans une visionneuse (pdf.js) : toutes les pages, aussi sur iPhone, avec zoom par boutons, Ctrl + molette, touches + et −, ou pincement à deux doigts.
 
+## Offres d'emploi (bot de veille)
+
+- L'onglet **Offres** lit en direct les offres trouvées par le bot (dépôt privé `TrackerJob`, fichier `data/jobs.json`) : filtres ville, contrat, fonction, recherche, nouvelles depuis ta dernière visite, contacts du carnet réseau dans la même société.
+- Ton suivi (intéressé, candidaté, écarté, notes) est gardé dans `data/offres.json` du dépôt privé du hub. Le hub ne modifie jamais le bot.
+- **Accès** : ajouter le dépôt du bot au jeton « Hub robot » avec `Contents : Read-only` (lecture des offres) et `Actions : Read and write` (bouton « Lancer la veille »).
+
+## Pavé numérique (téléphone)
+
+- Sur écran tactile, le code de déverrouillage et le code patrimoine se tapent sur un pavé à grosses touches. « Clavier (ABC) » repasse au clavier normal si le code contient des lettres ; le choix est retenu sur l'appareil.
+
 ## Patrimoine (chiffré)
 
 - Comptes, budget du mois (catégories automatiques d'après le libellé, corrigeables, avec des règles que tu crées en un geste) et portefeuille.
@@ -108,6 +118,7 @@ data/courses.json         base de cours
 data/morning-brief.json   index des briefs
 data/briefs-texte.json    texte des briefs, pour la recherche
 data/marche-perso.json    favoris et pages du Marché
+data/offres.json          suivi des offres d'emploi (intéressé, candidaté, écarté, notes)
 data/patrimoine.json      comptes, opérations et positions, chiffrés avec ton code patrimoine
 documents/briefs/         PDF des briefs envoyés par « Ajouter le PDF du jour » (AAAA-MM-JJ.pdf)
 pdf/                      PDF des briefs ajoutés à la main (ancien emplacement)

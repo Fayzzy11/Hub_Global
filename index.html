@@ -627,6 +627,41 @@ svg.r2{width:100%;max-width:600px;height:auto;display:block;margin:0 auto;touch-
   #v-univers.plan #u-liste{padding:96px 14px 130px}
   #v-univers.plan .u-outils{left:0;right:0;bottom:0;padding:10px 14px;justify-content:center;background:var(--fond);border-top:1px solid var(--trait);z-index:3}
 }
+/* ---------- Pavé numérique ---------- */
+#verrou{overflow:auto}
+.pave{display:grid;gap:6px;justify-items:center;margin-top:2px}
+.pave-touches{display:grid;grid-template-columns:repeat(3,74px);gap:12px 24px;justify-content:center}
+.pave-touches[hidden]{display:none}
+.pave-touches button{width:74px;height:74px;border-radius:50%;border:1px solid var(--trait);background:var(--papier);font:500 27px var(--texte);color:var(--encre);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.pave-touches button:active{background:var(--or-doux);border-color:var(--or)}
+.pave-touches [data-pave="eff"],.pave-touches [data-pave="vide"]{border-color:transparent;background:none;font-size:22px;color:var(--encre2)}
+.pave-mode{border:0;background:none;color:var(--bleu);text-decoration:underline;font:inherit;font-size:14px;padding:10px 6px;cursor:pointer}
+input.pave-cible{border-color:var(--or)!important;box-shadow:0 0 0 3px var(--or-doux)}
+@media (max-height:720px){.pave-touches{grid-template-columns:repeat(3,64px);gap:10px 22px}.pave-touches button{width:64px;height:64px;font-size:24px}}
+/* ---------- Offres ---------- */
+a.acc-ligne{text-decoration:none}
+.of-etat{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;max-width:1100px}
+.of-etat b{font-weight:600;margin-right:4px}
+.of-vues{margin-bottom:12px;max-width:100%;overflow-x:auto}
+.of-vues button{min-height:40px;padding:8px 14px;font:500 14px var(--texte);white-space:nowrap}
+.of-filtres{display:grid;gap:8px;margin-bottom:4px;max-width:1100px}
+.of-filtres .saisie{max-width:420px}
+.of-filtres .puce{text-transform:none;letter-spacing:0;font:500 13px var(--texte);padding:6px 11px;cursor:pointer}
+.of-groupe{margin:18px 0 8px;font-size:17px}
+.of{max-width:1100px;background:var(--papier);border:1px solid var(--trait);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:grid;gap:5px}
+.of-tete{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:13px}
+.of-soc{font-weight:600}
+.of-titre{font:500 16px/1.35 var(--texte);color:var(--encre);text-decoration:none;overflow-wrap:anywhere}
+.of-titre:hover{text-decoration:underline}
+.of-pied{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.of-actions{margin-left:auto;display:flex;gap:6px}
+.of-actions .of-b-interesse[aria-pressed="true"]{background:var(--or);border-color:var(--or);color:#fff}
+.of-actions .of-b-candidate[aria-pressed="true"]{background:var(--hausse);border-color:var(--hausse);color:#fff}
+.of-actions .of-b-ecarte[aria-pressed="true"]{background:var(--encre2);border-color:var(--encre2);color:var(--fond)}
+.of-interesse{border-left:3px solid var(--or)} .of-candidate{border-left:3px solid var(--hausse)} .of-ecarte{opacity:.62}
+.of-note{margin:2px 0 0;font-size:13.5px;color:var(--encre2);background:var(--fond);border-radius:8px;padding:6px 10px;white-space:pre-wrap}
+.of-acces{max-width:760px} .of-acces ol{padding-left:20px;line-height:1.65;margin:10px 0}
+@media (max-width:820px){.of-lib{display:none}.of-actions{margin-left:0}.of-actions .btn{min-width:46px;justify-content:center}.of-etat>span{width:100%}.of-vues{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.of-vues button{padding:8px 4px}.of-etat [data-act=editerFiche]{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -749,7 +784,7 @@ function telecharger(nom, texte) {
 const VUES = [
   { id: "accueil", nom: "Accueil" }, { id: "univers", nom: "Univers" }, { id: "agent", nom: "Agent" }, { id: "marche", nom: "Marché" },
   { id: "bibliotheque", nom: "Bibliothèque" }, { id: "cours", nom: "Cours" }, { id: "documents", nom: "Documents" }, { id: "calendrier", nom: "Calendrier" }, { id: "reseau", nom: "Réseau" },
-  { id: "bot", nom: "Bot" }, { id: "patrimoine", nom: "Patrimoine" }, { id: "reglages", nom: "Réglages" }
+  { id: "bot", nom: "Offres" }, { id: "patrimoine", nom: "Patrimoine" }, { id: "reglages", nom: "Réglages" }
 ];
 const REGLAGES_DEFAUT = {
   theme: "clair", mode3d: "auto", scene3d: "reseau", liensApp: true, ordre: VUES.map(v => v.id), masquees: [], onglets: ["accueil", "marche", "calendrier", "cours"], patMasque: false,
@@ -812,6 +847,7 @@ const JEUX = {
   courses: { prive: true, vide: () => ({ version: 1, cours: [] }), nom: "Base de cours" },
   calendrier: { prive: true, vide: () => ({ version: 1, evenements: [], categories: [] }), nom: "Calendrier" },
   "morning-brief": { prive: true, vide: () => ({ version: 1, briefs: [] }), nom: "Morning brief" },
+  offres: { prive: true, vide: () => ({ version: 1, suivi: {} }), nom: "Offres : ton suivi" },
   "marche-perso": { prive: true, vide: () => ({ version: 1, favoris: [], pages: [] }), nom: "Marché : favoris et pages" },
   market: { prive: false, vide: () => ({ tickers: [] }), nom: "Marché" },
   heatmap: { prive: false, vide: () => ({ indices: [] }), nom: "Cartes de marché" }
@@ -872,6 +908,31 @@ $("#f-verrou").addEventListener("submit", async e => {
   try { GH.jeton = (await dechiffrer(GH.cfg.jetonChiffre, $("#v-pass").value)).jeton; const rb = LS.lire("hub.robot", null); if (rb?.jetonChiffre) GH.jetonRobot = (await dechiffrer(rb.jetonChiffre, $("#v-pass").value).catch(() => ({}))).jeton; $("#verrou").classList.remove("vu"); $("#v-pass").value = ""; $("#v-err").textContent = ""; charger(); }
   catch { $("#v-err").textContent = "Code incorrect."; }
 });
+/* Pavé numérique tactile pour taper un code sur téléphone, comme une appli bancaire : grosses touches,
+   pas de clavier qui couvre l'écran. « Clavier (ABC) » repasse au clavier normal si le code contient
+   des lettres ; le choix est retenu sur l'appareil. Sur ordinateur, rien ne change. */
+const tactile = () => matchMedia("(pointer:coarse)").matches;
+function monterPave(champs) {
+  champs = champs.filter(Boolean); if (!champs.length || !tactile()) return;
+  champs[0].closest("form")?.querySelector(".pave")?.remove();
+  const zone = document.createElement("div"); zone.className = "pave"; let cible = champs[0];
+  zone.innerHTML = `<div class="pave-touches">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-pave="${n}">${n}</button>`).join("")}<button type="button" data-pave="vide" aria-label="Tout effacer">C</button><button type="button" data-pave="0">0</button><button type="button" data-pave="eff" aria-label="Effacer le dernier chiffre">⌫</button></div><button type="button" class="pave-mode" data-pave="mode"></button>`;
+  const enPave = () => LS.lire("hub.pave", "pave") === "pave";
+  const appliquer = () => {
+    const p = enPave();
+    champs.forEach(c => { c.readOnly = p; c.inputMode = p ? "none" : "text"; c.classList.toggle("pave-cible", p && champs.length > 1 && c === cible); });
+    $(".pave-touches", zone).hidden = !p; $(".pave-mode", zone).textContent = p ? "Mon code contient des lettres : clavier (ABC)" : "Revenir au pavé numérique";
+  };
+  champs.forEach(c => c.addEventListener("focus", () => { cible = c; appliquer(); }));
+  zone.addEventListener("click", e => {
+    const b = e.target.closest("[data-pave]"); if (!b) return; const k = b.dataset.pave;
+    if (k === "mode") { LS.ecrire("hub.pave", enPave() ? "clavier" : "pave"); appliquer(); if (!enPave()) setTimeout(() => cible.focus(), 50); return; }
+    cible.value = k === "eff" ? cible.value.slice(0, -1) : k === "vide" ? "" : cible.value + k;
+    cible.dispatchEvent(new Event("input", { bubbles: true })); navigator.vibrate?.(8);
+  });
+  (champs.at(-1).closest("label") || champs.at(-1)).after(zone); appliquer();
+}
+monterPave([$("#v-pass")]);
 /* Enregistrement : chaque modification part dans le dépôt privé (un commit), avec une copie locale tant que l'envoi n'a pas réussi */
 const minuteries = {};
 async function sauver(n) {
@@ -1043,7 +1104,7 @@ function aller(id) {
   rendreNav(); RENDU[id]?.(); univActif(id === "univers");
 }
 addEventListener("hashchange", () => aller(location.hash.replace("#/", "")));
-function demarrer() { appliquerTheme(); aller(location.hash.replace("#/", "") || vuesVisibles()[0]); setTimeout(actualiserSiBesoin, 2500); addEventListener("visibilitychange", () => { if (!document.hidden) actualiserSiBesoin(); }); }
+function demarrer() { appliquerTheme(); aller(location.hash.replace("#/", "") || vuesVisibles()[0]); setTimeout(actualiserSiBesoin, 2500); setTimeout(() => { if (GH.pret && vuesVisibles().includes("bot")) lireBot().then(d => { if (d && S.vue === "accueil") RENDU.accueil(); }); }, 1500); addEventListener("visibilitychange", () => { if (!document.hidden) actualiserSiBesoin(); }); }
 
 /* Actions déclenchées par les boutons (attribut data-act) */
 const ACT = {
@@ -2193,7 +2254,7 @@ const ICONES_VUES = {
   documents: '<path d="M3.5 6.5h6.5l2 2h8.5v10.5h-17z"/>',
   calendrier: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
   reseau: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3 20c0-3.4 2.7-5.8 6-5.8s6 2.4 6 5.8"/><circle cx="17.2" cy="9.5" r="2.4"/><path d="M16.5 14.4c2.8.1 4.5 2.1 4.5 4.8"/>',
-  bot: '<rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 4.5V8M9.5 12.5v1M14.5 12.5v1M9.5 16h5"/>',
+  bot: '<rect x="3.5" y="7.5" width="17" height="12.5" rx="2.2"/><path d="M9 7.5V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8v1.7M3.5 12.5h17M11 12.5v1.6h2v-1.6"/>',
   patrimoine: '<path d="M4.5 7.5h14a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2H17"/><path d="M15.5 13.75h.01"/><path d="M20.5 11h-4a2.75 2.75 0 0 0 0 5.5h4"/>',
   reglages: '<path d="M4 6.5h9M17 6.5h3M4 12h3M11 12h9M4 17.5h11M19 17.5h1"/><circle cx="15" cy="6.5" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17.5" r="2"/>',
   plus: '<circle cx="5.5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.5" cy="12" r="1.5"/>'
@@ -2268,6 +2329,7 @@ RENDU.accueil = () => {
       ${carteA("marche", "Marché", marche, { vue: "marche" })}
       ${carteA("echeances", "Échéances", echeances, { vue: "calendrier", lien: "Calendrier" })}
       ${carteA("brief", "Dernier brief", brief, { vue: "bibliotheque", lien: "Bibliothèque", classe: "acc-large" })}
+      ${typeof carteOffres === "function" ? carteOffres() : ""}
       ${typeof cartePatrimoine === "function" ? cartePatrimoine() : ""}
       ${carteA("acces", "Accès rapides", acces, { classe: "acc-large" })}
       ${carteA("projets", "Tes projets", `${reseau2D()}<p class="doux petit" style="text-align:center">Touche un projet pour sa fiche, le centre pour l'agent. Un point doré : mis à jour ces trois derniers jours.</p>${!petitEcran() ? `<div class="acc-actions" style="justify-content:center"><button class="btn" data-act="aller" data-v="univers">Voir le réseau en 3D</button><button class="btn" data-act="editerFiche">Ajouter une fiche</button></div>` : `<div class="acc-actions" style="justify-content:center"><button class="btn" data-act="editerFiche">Ajouter une fiche</button></div>`}`, { classe: "acc-large" })}
@@ -2281,7 +2343,7 @@ Object.assign(ACT, {
 document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches?.(".r2-n")) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent("click", { bubbles: true })); } });
 
 /* ---------- Navigation du téléphone : une barre d'onglets en bas, et « Plus » pour le reste ---------- */
-const DESC_VUES = { accueil: "Ta journée en un coup d'œil", univers: "Tes projets en réseau", agent: "Questions sur tes projets", marche: "Cours, cartes et pages", bibliotheque: "Morning briefs et recherche", cours: "Cours SKEMA et documents", documents: "Tous tes fichiers", calendrier: "Agenda et rappels", reseau: "Contacts et networking", bot: "Offres sur Discord", patrimoine: "Comptes et portefeuille", reglages: "Jetons, apparence, vues" };
+const DESC_VUES = { accueil: "Ta journée en un coup d'œil", univers: "Tes projets en réseau", agent: "Questions sur tes projets", marche: "Cours, cartes et pages", bibliotheque: "Morning briefs et recherche", cours: "Cours SKEMA et documents", documents: "Tous tes fichiers", calendrier: "Agenda et rappels", reseau: "Contacts et networking", bot: "Offres d'emploi du bot de veille", patrimoine: "Comptes et portefeuille", reglages: "Jetons, apparence, vues" };
 function ongletsTel() { const vis = vuesVisibles(); return tab(R.onglets).filter(id => vis.includes(id)).slice(0, 4); }
 function rendreOnglets() {
   const z = $("#onglets"); if (!z) return;
@@ -3484,21 +3546,138 @@ document.body.insertAdjacentHTML("beforeend", '<div id="zone-depot" aria-hidden=
 }
 
 /* ============================================================
-   15. Bot : le hub renvoie vers Discord, où arrivent les offres.
-       Il ne lit ni ne modifie le bot et ne contient aucun jeton.
+   15. Offres d'emploi. Le bot de veille (dépôt privé du bot,
+       fichier data/jobs.json) trouve les offres et les envoie sur
+       Discord ; ici on les lit en direct, on les filtre, et on
+       garde ton suivi (intéressé, candidaté, écarté, notes) dans
+       le dépôt privé du hub. Le hub ne modifie jamais le bot :
+       il peut seulement lancer un passage si le jeton le permet.
    ============================================================ */
-RENDU.bot = () => {
-  const v = $("#v-bot"), b = projets().find(p => p.type === "bot"), L = b?.liens || {};
-  if (!b) { v.innerHTML = `<header><div class="sur">Bot</div><h1>Le bot</h1></header><div class="vide"><b>Aucun bot déclaré</b>Ajoute une fiche de type « bot » dans le quartier.</div>`; return; }
-  const depot = (L.depot || "").match(/github\.com\/([^/]+)\/([^/#?]+)/), actions = L.actions || (depot ? `https://github.com/${depot[1]}/${depot[2]}/actions` : "");
-  const lien = (u, t, plein) => `<a class="btn ${plein ? "plein" : ""}" ${u ? `href="${esc(u)}" target="_blank" rel="noopener"${attrApp(u)}` : 'aria-disabled="true"'}>${t}</a>`;
-  v.innerHTML = `<header><div class="sur">Bot · Discord</div><h1>${esc(b.nom)}</h1><p>${esc(b.objectif || "")}</p></header>
-    <div class="carte" style="max-width:720px"><div class="sur">Où lire les alertes</div><h2 style="margin:8px 0 6px">Tout arrive dans ton salon Discord</h2>
-    <p style="color:var(--encre2)">${esc(b.resume || "")}</p>
-    <div class="rang" style="margin-top:14px">${lien(L.discord, "Ouvrir le salon Discord", true)}${lien(actions, "Relancer le bot sur GitHub")}${lien(L.depot, "Dépôt du bot")}<button class="btn" data-act="editerFiche" data-id="${esc(b.id)}">Modifier les liens</button></div>
-    <p class="doux petit" style="margin-top:14px">Pour relancer un passage : sur la page GitHub, choisis le workflow puis « Run workflow ». Le hub ne déclenche rien lui-même.</p>
-    ${tab(b.fichiers_cles).length ? `<h3 style="margin:18px 0 6px">Fichiers utiles du dépôt</h3><ul class="liste">${b.fichiers_cles.map(f => `<li>${L.depot ? `<a href="${esc(L.depot)}/blob/HEAD/${esc(f)}" target="_blank" rel="noopener">${esc(f)}</a>` : esc(f)}</li>`).join("")}</ul>` : ""}</div>`;
+const BOT = { donnees: null, erreur: "", charge: 0, jeton: null, vuAvant: null, lance: "", f: { q: "", ville: "", contrat: "", fonction: "", vue: "regarder" } };
+const STATUTS_OFFRE = [["interesse", "Intéressé", "★"], ["candidate", "Candidaté", "✓"], ["ecarte", "Écarté", "✕"]];
+const ficheBot = () => projets().find(p => p.type === "bot");
+const depotBot = () => { const m = (ficheBot()?.liens?.depot || "").match(/github\.com\/([^/]+)\/([^/#?]+)/); return m ? `${m[1]}/${m[2].replace(/\.git$/, "")}` : "Fayzzy11/TrackerJob"; };
+const suiviOffres = () => (D.offres ??= JEUX.offres.vide()).suivi ??= {};
+const societeOffre = o => /pertinente|^\?$/i.test(o.company || "") || !o.company ? "Société non précisée" : o.company;
+/* Lecture des offres du bot : d'abord avec le jeton du robot, sinon avec celui du dépôt privé */
+async function lireBot(forcer) {
+  if (BOT.donnees && !forcer && Date.now() - BOT.charge < 10 * 6e4) return BOT.donnees;
+  const cles = [...new Set([GH.jetonRobot, GH.jeton].filter(Boolean))]; let derniere = null;
+  for (const jeton of cles) {
+    try {
+      const lire = async f => JSON.parse(await (await GH.api(`contents/${f}?ref=main`, { depot: depotBot(), jeton, brut: true })).text());
+      const [jobs, etat] = await Promise.all([lire("data/jobs.json"), lire("data/state.json").catch(() => ({}))]);
+      BOT.donnees = { offres: Object.values(jobs || {}).filter(o => o && o.id && o.title), etat: etat || {} }; BOT.jeton = jeton; BOT.charge = Date.now(); BOT.erreur = "";
+      return BOT.donnees;
+    } catch (e) { derniere = e; }
+  }
+  BOT.erreur = !cles.length ? "jeton" : [401, 403, 404].includes(derniere?.status) ? "acces" : derniere?.message || "erreur";
+  return null;
+}
+/* Contacts du carnet réseau dans la même société (premier mot significatif du nom) */
+const cleSociete = n => norm(n).replace(/[^a-z0-9 ]/g, " ").split(/\s+/).find(m => m.length > 2 && !["banque", "groupe", "group", "the", "les", "asset", "fonds"].includes(m)) || "";
+function contactsChez(societe) { const k = cleSociete(societe); return k ? contacts().filter(c => cleSociete(c.entreprise || "") === k) : []; }
+const vuOffres = () => LS.lire("hub.offres.vu", "") || new Date(Date.now() - 2 * 864e5).toISOString(); // première visite : les offres des deux derniers jours comptent comme nouvelles
+const nouvelleOffre = o => BOT.vuAvant && o.found_at > BOT.vuAvant;
+function offresFiltrees() {
+  const S2 = suiviOffres(), f = BOT.f, mots = jetons(f.q);
+  let L = tab(BOT.donnees?.offres);
+  // les offres suivies que le bot ne liste plus restent visibles dans « Mon suivi »
+  if (f.vue === "suivi" || f.vue === "ecartees") Object.entries(S2).forEach(([id, s]) => { if (!L.some(o => o.id === id) && s.offre) L = [...L, { ...s.offre, id, active: false }]; });
+  return L.filter(o => {
+    const st = S2[o.id]?.statut || "";
+    if (f.vue === "regarder" && (!o.active || st === "ecarte")) return false;
+    if (f.vue === "suivi" && !["interesse", "candidate"].includes(st)) return false;
+    if (f.vue === "ecartees" && st !== "ecarte") return false;
+    if (f.ville && o.city !== f.ville) return false;
+    if (f.contrat && (f.contrat === "Autres" ? ["Stage", "CDI"].includes(o.contract) : o.contract !== f.contrat)) return false;
+    if (f.fonction && o.function !== f.fonction) return false;
+    return mots.every(m => norm([o.title, o.company, o.location, o.source].join(" ")).includes(m));
+  }).sort((a, b) => String(b.found_at).localeCompare(String(a.found_at)));
+}
+function ligneOffre(o) {
+  const s = suiviOffres()[o.id] || {}, soc = societeOffre(o), C = soc === "Société non précisée" ? [] : contactsChez(soc);
+  return `<article class="of${s.statut ? " of-" + s.statut : ""}${o.active === false ? " of-close" : ""}">
+    <div class="of-tete"><b class="of-soc">${esc(soc)}</b><span class="doux">${esc([o.city, o.contract, o.function].filter(Boolean).join(" · "))}</span>${nouvelleOffre(o) ? '<span class="puce or">Nouvelle</span>' : ""}${/\b2027\b/.test(o.title) ? '<span class="puce">2027</span>' : ""}${o.active === false ? '<span class="puce">plus en ligne</span>' : ""}</div>
+    <a class="of-titre" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.title.replace(/\s+/g, " "))}</a>
+    <div class="of-pied"><span class="doux petit">Trouvée le ${esc(fDate(String(o.found_at).slice(0, 10)))}${o.source ? " · " + esc(o.source) : ""}</span>
+      ${C.length ? `<button class="lien-btn petit" data-act="ofContacts" data-s="${esc(soc)}">${C.length} contact${C.length > 1 ? "s" : ""} chez ${esc(soc.split(/\s+/)[0])}</button>` : ""}
+      <span class="of-actions">${STATUTS_OFFRE.map(([k, l, p]) => `<button class="btn mini of-b-${k}" data-act="ofStatut" data-id="${esc(o.id)}" data-s="${k}" aria-pressed="${s.statut === k}" title="${l}" aria-label="${l}">${p}<span class="of-lib"> ${l}</span></button>`).join("")}<button class="btn mini" data-act="ofNote" data-id="${esc(o.id)}" title="Ajouter une note">Note</button></span></div>
+    ${s.note ? `<p class="of-note">${esc(s.note)}</p>` : ""}</article>`;
+}
+RENDU.bot = async () => {
+  const v = $("#v-bot"), b = ficheBot(), L = b?.liens || {}, f = BOT.f;
+  const lien = (u, t, plein) => u ? `<a class="btn ${plein ? "plein" : ""}" href="${esc(u)}" target="_blank" rel="noopener"${attrApp(u)}>${t}</a>` : "";
+  const tete = `<header><div class="sur">Offres · bot de veille</div><h1>Les offres</h1><p>Ce que le bot trouve chaque jour à Paris et Genève (il les envoie aussi sur Discord), et ton suivi : intéressé, candidaté, écarté.</p></header>`;
+  if (!BOT.vuAvant) { BOT.vuAvant = vuOffres(); LS.ecrire("hub.offres.vu", new Date().toISOString()); }
+  if (!BOT.donnees && GH.pret) { v.innerHTML = tete + `<p class="doux">Lecture des offres du bot…</p>`; await lireBot(); if (S.vue !== "bot") return; }
+  const liens = `<span class="rang">${lien(L.discord, "Salon Discord")}${lien(L.depot ? L.depot + "/blob/HEAD/OFFRES.md" : "", "Liste sur GitHub")}${b ? `<button class="btn" data-act="editerFiche" data-id="${esc(b.id)}">Liens du bot</button>` : ""}</span>`;
+  if (!BOT.donnees) {
+    v.innerHTML = tete + `<div class="carte of-acces"><h2>${!GH.pret ? "Connecte ton dépôt privé" : "Donne au hub l'accès en lecture au dépôt du bot"}</h2>
+      ${!GH.pret ? `<p>Les offres se lisent avec ton jeton GitHub (Réglages).</p>` : `<p style="color:var(--encre2)">Le dépôt du bot (${esc(depotBot())}) est privé : le hub a besoin d'un jeton qui peut le lire. Le plus simple : ajouter ce dépôt à ton jeton « Hub robot ».</p>
+      <ol class="petit"><li>Ouvre <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a> et clique sur ton jeton <b>Hub robot</b> (crée-le s'il n'existe pas : Réglages › Robot du marché › « Comment créer ce jeton »).</li>
+      <li><b>Repository access</b> : ajoute <b>${esc(depotBot().split("/")[1])}</b> à côté de Hub_Global.</li>
+      <li><b>Permissions</b> : <b>Contents : Read-only</b> (pour lire les offres) et garde <b>Actions : Read and write</b> (pour lancer la veille depuis l'app).</li>
+      <li>Enregistre (<b>Update</b>). Le jeton reste le même : rien à recoller dans l'app.</li></ol>
+      ${BOT.erreur && BOT.erreur !== "acces" && BOT.erreur !== "jeton" ? `<p class="baisse petit">Erreur : ${esc(BOT.erreur)}</p>` : ""}
+      <div class="rang" style="margin-top:10px"><button class="btn plein" data-act="ofRecharger">J'ai donné l'accès : réessayer</button>${!GH.jetonRobot ? '<button class="btn" data-act="aller" data-v="reglages">Ajouter le jeton du robot</button>' : ""}</div>`}
+      <p class="doux petit" style="margin-top:12px">En attendant, les offres arrivent toujours sur Discord.</p><div style="margin-top:8px">${liens}</div></div>`;
+    return;
+  }
+  const E = BOT.donnees.etat || {}, S2 = suiviOffres(), toutes = BOT.donnees.offres, actives = toutes.filter(o => o.active), neuves = actives.filter(nouvelleOffre).length;
+  const nb = k => Object.values(S2).filter(s => s.statut === k).length;
+  const liste = offresFiltrees();
+  const puce = (cle, val, lib) => `<button class="puce" aria-pressed="${f[cle] === val}" data-act="ofFiltre" data-k="${cle}" data-v="${esc(val)}">${esc(lib)}</button>`;
+  const vues = [["regarder", "À regarder", actives.filter(o => S2[o.id]?.statut !== "ecarte").length], ["suivi", "Mon suivi", nb("interesse") + nb("candidate")], ["ecartees", "Écartées", nb("ecarte")], ["toutes", "Toutes", toutes.length]];
+  const groupes = [["Aujourd'hui", 0, 0], ["Hier", 1, 1], ["Cette semaine", 2, 6], ["Plus tôt", 7, 1e9]];
+  const corps = liste.length ? groupes.map(([t, a, z]) => { const g = liste.filter(o => { const j = joursDepuis(String(o.found_at).slice(0, 10)); return j >= a && j <= z; }); return g.length ? `<h3 class="of-groupe">${t} <span class="doux petit">· ${g.length}</span></h3>${g.slice(0, 150).map(ligneOffre).join("")}${g.length > 150 ? `<p class="doux petit">et ${g.length - 150} autres : affine les filtres.</p>` : ""}` : ""; }).join("")
+    : `<div class="vide"><b>Aucune offre ici</b>${f.vue === "suivi" ? "Marque une offre « Intéressé » ou « Candidaté » pour la retrouver ici." : "Modifie les filtres."}</div>`;
+  v.innerHTML = tete + `<div class="of-etat carte"><div><div class="sur">Dernier passage du bot</div><b>${E.last_run ? esc(fHeure(E.last_run)) : "inconnu"}</b><span class="doux petit">${E.last_new != null ? ` · ${E.last_new} nouvelle${E.last_new > 1 ? "s" : ""} à ce passage` : ""} · ${actives.length} offres en ligne${neuves ? ` · <b class="hausse">${neuves} depuis ta dernière visite</b>` : ""}</span>${BOT.lance ? `<p class="petit" style="margin-top:4px">${esc(BOT.lance)}</p>` : ""}</div>
+      <span class="rang"><button class="btn plein" data-act="ofLancer" ${/en cours/.test(BOT.lance) ? "disabled" : ""}>Lancer la veille</button><button class="btn" data-act="ofRecharger">Recharger</button>${liens}</span></div>
+    <div class="seg of-vues" role="tablist" aria-label="Offres affichées">${vues.map(([k, l, n]) => `<button role="tab" aria-selected="${f.vue === k}" aria-pressed="${f.vue === k}" data-act="ofFiltre" data-k="vue" data-v="${k}">${l} <span class="doux">${n}</span></button>`).join("")}</div>
+    <div class="of-filtres"><input class="saisie" type="search" id="of-q" placeholder="Chercher un poste ou une société" aria-label="Chercher une offre" value="${esc(f.q)}">
+      <div class="rang">${puce("ville", "", "Toutes villes")}${puce("ville", "Paris", "Paris")}${puce("ville", "Genève", "Genève")}</div>
+      <div class="rang">${puce("contrat", "", "Tous contrats")}${puce("contrat", "Stage", "Stage")}${puce("contrat", "CDI", "CDI")}${puce("contrat", "Autres", "Autres")}</div>
+      <div class="rang">${puce("fonction", "", "Toutes fonctions")}${["Gestion / PM", "Analyste", "Risk", "Middle office"].map(x => puce("fonction", x, x)).join("")}</div></div>
+    <p class="doux petit" style="margin:4px 0 10px">${liste.length} offre${liste.length > 1 ? "s" : ""}</p>${corps}`;
+  const q = $("#of-q"); q.oninput = () => { f.q = q.value; const p = q.selectionStart; RENDU.bot().then(() => { const i = $("#of-q"); i?.focus(); i?.setSelectionRange(p, p); }); };
 };
+/* Lancer un passage du bot (droit Actions sur son dépôt), puis guetter son résultat */
+async function lancerVeille() {
+  const jeton = GH.jetonRobot || GH.jeton; if (!jeton) return toast("Il faut le jeton du robot (Réglages)");
+  BOT.lance = "Veille en cours : le bot lit environ 180 sites, compte 10 à 30 minutes. Les nouvelles offres arrivent aussi sur Discord."; RENDU.bot();
+  try { await GH.api("actions/workflows/veille.yml/dispatches", { methode: "POST", corps: { ref: "main" }, depot: depotBot(), jeton }); }
+  catch (e) { BOT.lance = e.status === 403 || e.status === 404 ? "Lancement refusé : le jeton « Hub robot » doit avoir « Actions : Read and write » sur le dépôt du bot." : "Lancement impossible : " + e.message; if (S.vue === "bot") RENDU.bot(); return; }
+  const avant = BOT.donnees?.etat?.last_run;
+  for (let k = 0; k < 40; k++) {
+    await attendre(45000);
+    const d = await lireBot(true);
+    if (d && d.etat?.last_run && d.etat.last_run !== avant) { BOT.lance = `Veille terminée : ${d.etat.last_new || 0} nouvelle${d.etat.last_new > 1 ? "s" : ""} offre${d.etat.last_new > 1 ? "s" : ""}.`; if (S.vue === "bot") RENDU.bot(); toast(BOT.lance); return; }
+  }
+  BOT.lance = "La veille n'a pas encore fini : recharge plus tard."; if (S.vue === "bot") RENDU.bot();
+}
+function changerStatut(id, statut) {
+  const S2 = suiviOffres(), o = tab(BOT.donnees?.offres).find(x => x.id === id) || S2[id]?.offre, s = S2[id] ||= {};
+  s.statut = s.statut === statut ? "" : statut; s.maj = AUJ();
+  if (o) s.offre = { title: o.title, company: o.company, city: o.city, contract: o.contract, function: o.function, url: o.url, found_at: o.found_at, source: o.source };
+  if (!s.statut && !s.note) delete S2[id];
+  sauver("offres"); RENDU.bot(); if (s.statut === "candidate") toast("Noté comme candidaté. Pense à une relance dans 10 jours (Calendrier).");
+}
+Object.assign(ACT, {
+  ofFiltre: d => { BOT.f[d.k] = BOT.f[d.k] === d.v && d.k !== "vue" ? "" : d.v; RENDU.bot(); },
+  ofStatut: d => changerStatut(d.id, d.s),
+  ofNote: d => { const S2 = suiviOffres(), s = S2[d.id] || {}, n = prompt("Note sur cette offre (vide pour effacer) :", s.note || ""); if (n === null) return; const o = tab(BOT.donnees?.offres).find(x => x.id === d.id) || s.offre; S2[d.id] = { ...s, note: n.trim(), maj: AUJ(), ...(o ? { offre: { title: o.title, company: o.company, city: o.city, contract: o.contract, function: o.function, url: o.url, found_at: o.found_at, source: o.source } } : {}) }; if (!S2[d.id].statut && !S2[d.id].note) delete S2[d.id]; sauver("offres"); RENDU.bot(); },
+  ofContacts: d => { filtreN.q = d.s.split(/\s+/)[0]; location.hash = "#/reseau"; },
+  ofRecharger: async () => { BOT.donnees = null; BOT.erreur = ""; await lireBot(true); RENDU.bot(); },
+  ofLancer: () => lancerVeille()
+});
+/* Carte de l'accueil : offres arrivées depuis la dernière visite de l'onglet */
+function carteOffres() {
+  if (!vuesVisibles().includes("bot") || !BOT.donnees) return "";
+  const vu = vuOffres(), S2 = suiviOffres(), A = BOT.donnees.offres.filter(o => o.active && S2[o.id]?.statut !== "ecarte");
+  const neuves = A.filter(o => o.found_at > vu).sort((a, b) => String(b.found_at).localeCompare(String(a.found_at))), stages = (neuves.length ? neuves : A.sort((a, b) => String(b.found_at).localeCompare(String(a.found_at)))).slice(0, 3);
+  return carteA("offres", "Offres", `<div class="acc-chiffre"><b class="mono">${neuves.length}</b><span>nouvelle${neuves.length > 1 ? "s" : ""} depuis ta dernière visite</span></div>${stages.map(o => `<a class="acc-ligne" href="${esc(o.url)}" target="_blank" rel="noopener"><span><b>${esc(o.title.replace(/\s+/g, " ").slice(0, 70))}</b><span class="doux">${esc(societeOffre(o))} · ${esc([o.city, o.contract].filter(Boolean).join(" · "))}</span></span></a>`).join("")}<div class="acc-actions"><button class="btn" data-act="aller" data-v="bot">Toutes les offres</button></div>`, { vue: "bot" });
+}
 
 /* ============================================================
    15 bis. Calendrier : événements modifiables, catégories en
@@ -4066,7 +4245,7 @@ RENDU.patrimoine = async () => {
   if (["inconnu", "erreur"].includes(PAT.etat) || PAT.etat === "chargement") { v.innerHTML = tete + `<p class="doux">Chargement…</p>`; await patCharger(PAT.etat === "erreur"); if (S.vue !== "patrimoine") return; }
   if (PAT.etat === "erreur") { v.innerHTML = tete + `<div class="vide"><b>Lecture impossible</b>${esc(PAT.erreur)}<br><br><button class="btn" data-act="patRecharger">Réessayer</button></div>`; return; }
   if (["absent", "ferme"].includes(PAT.etat)) {
-    v.innerHTML = tete + ecranCode(); const f = $("#f-pat"); setTimeout(() => $("#pat-code")?.focus(), 50);
+    v.innerHTML = tete + ecranCode(); const f = $("#f-pat"); monterPave([$("#pat-code"), $("#pat-code2")]); setTimeout(() => $("#pat-code")?.focus(), 50);
     f.onsubmit = async e => {
       e.preventDefault(); const c = $("#pat-code").value, err = $("#pat-err");
       if (PAT.etat === "absent") { if (c !== $("#pat-code2").value) return err.textContent = "Les deux codes sont différents."; PAT.d = Object.assign(PAT_VIDE(), PAT.clair || {}); PAT.code = c; PAT.etat = "ouvert"; delete PAT.clair; patSauver(); RENDU.patrimoine(); return; }
