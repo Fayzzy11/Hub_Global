@@ -84,6 +84,7 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 - Chaque cours a deux onglets : **Documents** (l'arborescence de `documents/cours/<cours>/`, dossiers et fichiers, recherche, « Déposer ici », « Nouveau dossier ») et **Infos et notes**.
 - Le bouton ⋯ d'un fichier ou d'un dossier permet de le **déplacer** (vers un autre dossier, un autre cours ou `à trier`), de le **renommer** ou de le supprimer. Un déplacement est un seul enregistrement, et la base de cours suit. Rien n'est rangé automatiquement : c'est toi qui décides.
 - Le même menu ⋯ existe dans la vue Documents.
+- Les PDF s'ouvrent dans une visionneuse (pdf.js) : toutes les pages, aussi sur iPhone, avec zoom par boutons, Ctrl + molette, touches + et −, ou pincement à deux doigts.
 
 ## Patrimoine (chiffré)
 

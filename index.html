@@ -200,22 +200,30 @@ body:has(#fiche.ouverte) #v-univers:not(.plan) .u-tete>*{pointer-events:none}
 .cal-vues{display:inline-flex;border:1px solid var(--trait);border-radius:8px;overflow:hidden;background:var(--papier)}
 .cal-vues button{border:0;background:none;padding:0 13px;min-height:36px;font-size:14px;font-weight:500;color:var(--encre2);cursor:pointer} .cal-vues button+button{border-left:1px solid var(--trait)}
 .cal-vues button[aria-pressed="true"]{background:var(--encre);color:var(--fond)}
-.cal-sem{border:1px solid var(--trait);border-radius:12px;overflow:hidden;background:var(--papier);box-shadow:var(--ombre);min-width:0}
+.cal-sem{border:1px solid var(--trait);border-radius:12px;overflow:clip;background:var(--papier);box-shadow:var(--ombre);min-width:0}
 .cal-sem-tete,.cal-sem-jour,.cal-sem-corps{display:grid;grid-template-columns:52px repeat(var(--n),minmax(0,1fr))}
-.cal-sem-tete{border-bottom:1px solid var(--trait)}
+.cal-sem-tete{border-bottom:1px solid var(--trait);position:sticky;top:-34px;z-index:4;background:var(--papier)} /* collé en haut de l'écran (la vue a 34 px de marge haute) */
+@media (max-width:820px){.cal-sem-tete{top:-18px}}
 .cal-sem-tete button{border:0;border-left:1px solid var(--trait);background:none;padding:9px 4px;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--doux);cursor:pointer;display:flex;gap:7px;align-items:center;justify-content:center}
 .cal-sem-tete b{font:500 13px/1 var(--mono);letter-spacing:0;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;color:var(--encre)}
 .cal-sem-tete .auj b{background:var(--encre);color:var(--fond)} .cal-sem-tete .choisi{box-shadow:inset 0 -2px 0 var(--or)}
 .cal-sem-jour{border-bottom:1px solid var(--trait);min-height:30px} .cal-sem-jour>div{border-left:1px solid var(--trait);padding:3px;display:flex;flex-direction:column;gap:3px;min-width:0;cursor:pointer}
 .cal-h{font:500 10.5px/1 var(--mono);color:var(--doux);padding:5px 6px 0 0;text-align:right}
 .cal-sem-corps{position:relative} .cal-heures{position:relative} .cal-heures .cal-h{position:absolute;right:0;transform:translateY(-1px)}
-.cal-col{position:relative;border-left:1px solid var(--trait);cursor:cell;background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--hh) - 1px),var(--trait) calc(var(--hh) - 1px),var(--trait) var(--hh))}
+.cal-col{position:relative;border-left:1px solid var(--trait);cursor:cell;container-type:inline-size;background-image:linear-gradient(to bottom,var(--trait) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--trait) 45%,transparent) 1px,transparent 1px);background-size:100% var(--hh),100% calc(var(--hh) / 2)}
 .cal-col.auj{background-color:color-mix(in srgb,var(--or-doux) 45%,transparent)}
-.cal-bloc{position:absolute;overflow:hidden;border-radius:6px;padding:4px 7px;background:var(--c);color:#fff;font-size:12px;line-height:1.25;cursor:pointer;display:flex;flex-direction:column;gap:1px;box-shadow:0 1px 0 rgba(0,0,0,.12)}
-.cal-bloc:hover{filter:brightness(1.1)} .cal-bloc .h{font:500 10.5px/1.2 var(--mono);opacity:.92;display:flex;gap:4px;align-items:center;white-space:nowrap}
-.cal-bloc .h svg{flex:none;width:12px;height:12px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.cal-bloc b{font-weight:600} .cal-bloc .l{opacity:.85;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cal-bloc.court{flex-direction:row;gap:6px;align-items:center;padding:1px 7px} .cal-bloc.court b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .cal-bloc.court .l{display:none}
+.cal-bloc{position:absolute;overflow:hidden;border-radius:7px;padding:5px 8px;background:color-mix(in srgb,var(--c) 15%,var(--papier));border-left:3px solid var(--c);color:var(--encre);font-size:12.5px;line-height:1.25;cursor:pointer;display:flex;flex-direction:column;gap:2px;box-shadow:0 1px 2px rgba(24,32,47,.07);transition:background .15s}
+.cal-bloc:hover{background:color-mix(in srgb,var(--c) 27%,var(--papier));z-index:2}
+.cal-bloc .h{font:500 10.5px/1.2 var(--mono);color:color-mix(in srgb,var(--c) 70%,var(--encre));display:flex;gap:4px;align-items:center;white-space:nowrap;overflow:hidden}
+.cal-bloc .h svg{flex:none;width:12px;height:12px;fill:none;stroke:var(--c);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cal-bloc b{font-weight:600;overflow-wrap:anywhere} .cal-bloc .l{color:var(--encre2);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-bloc.court{flex-direction:row;gap:7px;align-items:center;padding:1px 8px} .cal-bloc.court b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .cal-bloc.court .l{display:none}
+.cal-bloc.mini{flex-direction:row;gap:6px;align-items:center;padding:0 7px;font-size:10.5px;line-height:1;border-radius:5px} .cal-bloc.mini b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .cal-bloc.mini .h svg,.cal-bloc.mini .fin,.cal-bloc.mini .l{display:none}
+.cal-bloc.pause{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--c) 10%,var(--papier)) 0 5px,var(--papier) 5px 10px);border-left-color:color-mix(in srgb,var(--c) 55%,transparent);box-shadow:none;color:var(--encre2)}
+.cal-bloc.pause b{font-weight:500}
+@container (max-width:118px){.cal-bloc .fin,.cal-bloc .l,.cal-bloc.court .h,.cal-bloc.mini .h{display:none}.cal-bloc{padding-inline:6px}}
+.cal-bloc.court .h,.cal-bloc.mini .h{flex:none}
+@container (max-width:78px){.cal-bloc .h svg{display:none}.cal-bloc{font-size:11px}}
 .cal-maint{position:absolute;left:0;right:0;height:2px;background:var(--baisse);pointer-events:none} .cal-maint::before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--baisse)}
 #v-calendrier .puce[aria-pressed="false"]{opacity:.45;text-decoration:line-through}
 @media (max-width:1100px){.cal-corps{grid-template-columns:1fr}}
@@ -223,7 +231,7 @@ body:has(#fiche.ouverte) #v-univers:not(.plan) .u-tete>*{pointer-events:none}
   .cal-ev{padding:0;width:8px;height:8px;border-radius:50%;border:0;background:var(--c)}.cal-ev svg,.cal-ev i,.cal-ev b{display:none}.cal-plus{font-size:9px;padding:0}.cal-tete{padding:8px 0;text-align:center;letter-spacing:.04em}
   .cal-barre h2{font-size:19px}#v-calendrier>header p{display:none}
   .cal-sem-tete,.cal-sem-jour,.cal-sem-corps{grid-template-columns:34px repeat(var(--n),minmax(0,1fr))}.cal-h{font-size:9px;padding-right:3px}.cal-sem-tete button{flex-direction:column;gap:3px;letter-spacing:.02em;padding:7px 0}
-  .cal-sem[style*="--n:7"] .cal-bloc{padding:2px 3px;font-size:9.5px;line-height:1.15}.cal-sem[style*="--n:7"] .cal-bloc .h,.cal-sem[style*="--n:7"] .cal-bloc .l{display:none}.cal-sem[style*="--n:7"] .cal-bloc b{font-weight:500;overflow-wrap:anywhere}.cal-sem[style*="--n:7"] .cal-sem-jour .cal-ev{margin:auto}}
+  .cal-sem[style*="--n:7"] .cal-bloc{padding:2px 3px;font-size:9.5px;line-height:1.15;border-left-width:2px}.cal-sem[style*="--n:7"] .cal-bloc .h,.cal-sem[style*="--n:7"] .cal-bloc .l{display:none}.cal-sem[style*="--n:7"] .cal-bloc b{font-weight:500;overflow-wrap:anywhere}.cal-sem[style*="--n:7"] .cal-sem-jour .cal-ev{margin:auto}}
 
 /* ---------- Fiche (panneau latéral) ---------- */
 #fiche{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--papier);border-left:1px solid var(--trait);box-shadow:var(--ombre);transform:translateX(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);z-index:30;overflow:auto;padding:24px 24px 40px}
@@ -277,6 +285,20 @@ details.note pre{white-space:pre-wrap;font:14px/1.6 var(--texte);margin:10px 0 6
 /* ---------- Dialogues ---------- */
 dialog.grand[open]{display:flex;flex-direction:column;width:min(1100px,96vw);height:92dvh;padding:14px}
 dialog.grand iframe,dialog.grand img{flex:1;min-height:0;width:100%;border:1px solid var(--trait);border-radius:8px;background:#fff;object-fit:contain}
+dialog.visu-dlg[open]{width:min(1200px,98vw);height:96dvh;padding:10px 12px 12px;gap:8px}
+.visu-barre{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap}
+.visu-nom{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.visu-zoom{display:inline-flex;gap:4px}
+.visu-zoom .btn{min-width:40px;justify-content:center;font-size:16px}
+.visu-zoom .visu-pc{min-width:66px;font:500 13px var(--mono)}
+.visu{flex:1;min-height:0;overflow:auto;background:color-mix(in srgb,var(--encre) 9%,var(--fond));border-radius:8px;padding:12px;touch-action:pan-x pan-y;overscroll-behavior:contain;outline:none}
+.visu-pages{width:max-content;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.visu-pages:has(.visu-texte),.visu-pages:has(.vide){width:auto}
+.visu-page{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);flex:none}
+.visu-page canvas,dialog.grand .visu-page img{display:block;width:100%;height:100%;border:0;border-radius:0;flex:none;min-height:0}
+.visu-img{background:transparent;box-shadow:none}
+.visu-texte{margin:0 auto;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.5 var(--mono);color:var(--encre);background:var(--papier);padding:16px;border-radius:6px;max-width:900px}
+@media (max-width:820px){.visu-nom{flex-basis:100%}.visu-actions{margin-left:auto}.visu{padding:8px}}
 dialog{border:1px solid var(--trait);border-radius:14px;background:var(--papier);color:var(--encre);padding:24px;width:min(620px,94vw);max-height:90dvh;box-shadow:var(--ombre)}
 dialog::backdrop{background:rgba(24,32,47,.4)}
 /* Dépôt en masse : zone de dépôt plein écran et fenêtre de rangement */
@@ -894,18 +916,83 @@ async function televerser(fichier, dossier) {
   try { sha = (await (await GH.api(GH.u(chemin) + GH.ref())).json()).sha; } catch {} // remplace un fichier du même nom
   await GH.ecrire(chemin, b64(await fichier.arrayBuffer()), sha, `Hub : ajout de ${chemin}`); return chemin;
 }
+/* Visionneuse des documents : PDF affichés page par page avec pdf.js (toutes les pages, aussi sur iPhone),
+   images et textes, avec zoom (boutons, Ctrl + molette, touches + et −, pincement à deux doigts sur téléphone). */
+const ZOOMS = [.5, .67, .8, .9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4];
 async function ouvrirDoc(chemin) {
   if (/^https?:\/\//.test(chemin)) return window.open(chemin, "_blank", "noopener");
   if (!GH.pret) return toast("Connecte ton dépôt privé pour ouvrir ce fichier");
-  toast("Ouverture…"); let blob;
-  try { blob = new Blob([await (await GH.api(GH.u(chemin) + GH.ref(), { brut: true })).arrayBuffer()], { type: MIMES[ext(chemin)] || "application/octet-stream" }); } catch (e) { return toast("Impossible d'ouvrir : " + e.message); }
-  const url = URL.createObjectURL(blob), nom = chemin.split("/").pop(), e = ext(nom), dlg = $("#dlg");
-  if (!MIMES[e]) { const a = document.createElement("a"); a.href = url; a.download = nom; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); return; }
-  dlg.classList.add("grand");
-  dlg.innerHTML = `<div class="rang" style="justify-content:space-between;margin-bottom:10px"><b>${esc(nom)}</b><span class="rang"><a class="btn mini" href="${url}" download="${esc(nom)}">Télécharger</a><button class="btn mini plein" id="d_fermer">Fermer</button></span></div>${MIMES[e].startsWith("image") ? `<img src="${url}" alt="${esc(nom)}">` : `<iframe src="${url}" title="${esc(nom)}"></iframe>`}`;
-  $("#d_fermer").onclick = () => dlg.close();
-  dlg.onclose = () => { dlg.classList.remove("grand"); URL.revokeObjectURL(url); dlg.onclose = null; };
-  dlg.showModal();
+  toast("Ouverture…"); let buf;
+  try { buf = await (await GH.api(GH.u(chemin) + GH.ref(), { brut: true })).arrayBuffer(); } catch (e) { return toast("Impossible d'ouvrir : " + e.message); }
+  const nom = chemin.split("/").pop(), e = ext(nom), type = MIMES[e], url = URL.createObjectURL(new Blob([buf], { type: type || "application/octet-stream" })), dlg = $("#dlg");
+  if (!type) { const a = document.createElement("a"); a.href = url; a.download = nom; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); return; }
+  dlg.classList.add("grand", "visu-dlg");
+  dlg.innerHTML = `<div class="visu-barre"><b class="visu-nom" title="${esc(nom)}">${esc(nom)}</b>
+      <span class="visu-zoom" role="group" aria-label="Zoom"><button class="btn mini" data-z="-1" aria-label="Dézoomer">−</button><button class="btn mini visu-pc" data-z="0" title="Ajuster à la largeur">100 %</button><button class="btn mini" data-z="1" aria-label="Zoomer">+</button></span>
+      <span class="rang visu-actions"><a class="btn mini" href="${url}" download="${esc(nom)}">Télécharger</a><button class="btn mini plein" id="d_fermer">Fermer</button></span></div>
+    <div class="visu" tabindex="0"><div class="visu-pages"><p class="doux" style="padding:24px">Chargement…</p></div></div>`;
+  const zone = $(".visu", dlg), pages = $(".visu-pages", dlg), pc = $(".visu-pc", dlg);
+  const Z = { z: 1, base: 1, items: [], doc: null, taches: new Set(), fin: false };
+  let obs = null, attente = null;
+  const fermer = () => dlg.close();
+  $("#d_fermer").onclick = fermer;
+  dlg.onclose = () => { Z.fin = true; obs?.disconnect(); Z.taches.forEach(t => t.cancel?.()); Z.doc?.destroy(); URL.revokeObjectURL(url); dlg.classList.remove("grand", "visu-dlg"); removeEventListener("keydown", clavier); dlg.onclose = null; };
+  // Mise en page : chaque page a la taille « ajustée à la largeur » × zoom
+  const disposer = () => {
+    pc.textContent = Math.round(Z.z * 100) + " %";
+    if (Z.texte) { Z.texte.style.fontSize = (14 * Z.z).toFixed(1) + "px"; return; }
+    Z.items.forEach(it => { const s = Z.base * Z.z; it.el.style.width = (it.w * s).toFixed(1) + "px"; it.el.style.height = (it.h * s).toFixed(1) + "px"; });
+  };
+  const zoomer = (nz, ancre) => {
+    nz = Math.min(4, Math.max(.5, nz)); if (Math.abs(nz - Z.z) < .001) return;
+    ancre ??= { x: zone.clientWidth / 2, y: zone.clientHeight / 2 };
+    const r = nz / Z.z, sx = zone.scrollLeft + ancre.x, sy = zone.scrollTop + ancre.y;
+    Z.z = nz; disposer(); zone.scrollLeft = sx * r - ancre.x; zone.scrollTop = sy * r - ancre.y;
+    clearTimeout(attente); attente = setTimeout(rendreVisibles, 220); // net après un court instant (l'image est d'abord agrandie)
+  };
+  const pas = k => { if (k === 0) return zoomer(1); const i = ZOOMS.findIndex(x => x >= Z.z - .001); zoomer(k > 0 ? ZOOMS[Math.min(ZOOMS.length - 1, ZOOMS[i] > Z.z + .001 ? i : i + 1)] : ZOOMS[Math.max(0, i - 1)]); };
+  $(".visu-zoom", dlg).onclick = ev => { const b = ev.target.closest("[data-z]"); if (b) pas(+b.dataset.z); };
+  const clavier = ev => { if (!dlg.open || ev.target.matches?.("input,textarea")) return; if (ev.key === "+" || ev.key === "=") { ev.preventDefault(); pas(1); } else if (ev.key === "-") { ev.preventDefault(); pas(-1); } else if (ev.key === "0") { ev.preventDefault(); pas(0); } };
+  addEventListener("keydown", clavier);
+  zone.addEventListener("wheel", ev => { if (!ev.ctrlKey && !ev.metaKey) return; ev.preventDefault(); const r = zone.getBoundingClientRect(); zoomer(Z.z * Math.exp(-ev.deltaY / 300), { x: ev.clientX - r.left, y: ev.clientY - r.top }); }, { passive: false });
+  // Pincement à deux doigts (téléphone, tablette)
+  let pince = null;
+  const ecart = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  zone.addEventListener("touchstart", ev => { if (ev.touches.length === 2) { const r = zone.getBoundingClientRect(); pince = { d: ecart(ev.touches), z: Z.z, x: (ev.touches[0].clientX + ev.touches[1].clientX) / 2 - r.left, y: (ev.touches[0].clientY + ev.touches[1].clientY) / 2 - r.top }; } }, { passive: true });
+  zone.addEventListener("touchmove", ev => { if (pince && ev.touches.length === 2) { ev.preventDefault(); zoomer(pince.z * ecart(ev.touches) / pince.d, pince); } }, { passive: false });
+  zone.addEventListener("touchend", ev => { if (ev.touches.length < 2) pince = null; });
+  dlg.showModal(); zone.focus({ preventScroll: true });
+  // Rendu des pages visibles, à la définition de l'écran (limitée pour ménager la mémoire du téléphone)
+  const rendre = async it => {
+    if (Z.fin || !it.page) return;
+    const s = Z.base * Z.z; if (it.rendu === s) return;
+    let dpr = Math.min(devicePixelRatio || 1, 2.5); const aire = it.w * it.h * s * s; if (aire * dpr * dpr > 1.4e7) dpr = Math.max(.6, Math.sqrt(1.4e7 / aire));
+    const vp = it.page.getViewport({ scale: s * dpr }), c = document.createElement("canvas"); c.width = Math.floor(vp.width); c.height = Math.floor(vp.height);
+    const t = it.page.render({ canvasContext: c.getContext("2d"), viewport: vp }); Z.taches.add(t); it.rendu = s;
+    try { await t.promise; if (!Z.fin && it.rendu === s) it.el.replaceChildren(c); } catch {} finally { Z.taches.delete(t); }
+  };
+  const rendreVisibles = () => Z.items.filter(it => it.vu).forEach(rendre);
+  try {
+    if (type === "application/pdf") {
+      const lib = await chargerPdfJs(); Z.doc = await lib.getDocument({ data: new Uint8Array(buf.slice(0)) }).promise; if (Z.fin) return;
+      const p1 = (await Z.doc.getPage(1)).getViewport({ scale: 1 });
+      Z.base = Math.min((zone.clientWidth - 24) / p1.width, petitEcran() ? 4 : 1.6);
+      pages.innerHTML = "";
+      for (let i = 1; i <= Z.doc.numPages; i++) { const el = document.createElement("div"); el.className = "visu-page"; el.setAttribute("aria-label", `Page ${i} sur ${Z.doc.numPages}`); pages.append(el); Z.items.push({ i, el, w: p1.width, h: p1.height }); }
+      disposer();
+      obs = new IntersectionObserver(E => E.forEach(en => { const it = Z.items.find(x => x.el === en.target); it.vu = en.isIntersecting;
+        if (it.vu) (it.page ? Promise.resolve(it.page) : Z.doc.getPage(it.i).then(p => { it.page = p; const v = p.getViewport({ scale: 1 }); if (Math.abs(v.width - it.w) > 1 || Math.abs(v.height - it.h) > 1) { it.w = v.width; it.h = v.height; disposer(); } return p; })).then(() => rendre(it)).catch(() => {});
+        else if (it.rendu) { it.rendu = 0; it.el.replaceChildren(); } // page loin de l'écran : on libère sa mémoire
+      }), { root: zone, rootMargin: "900px 0px" });
+      Z.items.forEach(it => obs.observe(it.el));
+    } else if (type.startsWith("image")) {
+      const img = new Image(); img.src = url; img.alt = nom; await img.decode().catch(() => {}); if (Z.fin) return;
+      const w = img.naturalWidth || 800, h = img.naturalHeight || 600; Z.base = Math.min(1, (zone.clientWidth - 24) / w, (zone.clientHeight - 24) / h);
+      const el = document.createElement("div"); el.className = "visu-page visu-img"; el.append(img); pages.replaceChildren(el); Z.items.push({ el, w, h }); disposer();
+    } else {
+      const pre = document.createElement("pre"); pre.className = "visu-texte"; pre.textContent = new TextDecoder().decode(buf); pages.replaceChildren(pre); Z.texte = pre; disposer();
+    }
+  } catch (x) { if (!Z.fin) pages.innerHTML = `<div class="vide" style="margin:20px"><b>Aperçu impossible</b>${esc(x.message || "")}<br><br><a class="btn" href="${url}" download="${esc(nom)}">Télécharger le fichier</a></div>`; }
 }
 function choisirFichiers(surChoix, accept = "", dossier = false) { const i = document.createElement("input"); i.type = "file"; i.multiple = true; i.accept = accept; i.hidden = true; if (dossier) i.webkitdirectory = true; i.onchange = () => { const F = [...i.files]; i.remove(); if (F.length) surChoix(F); }; document.body.append(i); i.click(); }
 
@@ -917,8 +1004,8 @@ function lienApp(u) {
   u = String(u || "");
   let m = u.match(/^https?:\/\/(?:www\.|ptb\.|canary\.)?discord(?:app)?\.com\/channels\/([\w@]+)\/(\d+)(?:\/(\d+))?/i);
   if (m) return `discord://-/channels/${m[1]}/${m[2]}${m[3] ? "/" + m[3] : ""}`;
-  m = u.match(/^https?:\/\/claude\.ai\/(?:cowork\/)?project\/([0-9a-f-]{36})/i);
-  return m && !MOBILE ? `claude://claude.ai/project/${m[1]}` : "";
+  m = u.match(/^https?:\/\/claude\.ai\/(?:cowork\/)?(project|chat)\/([0-9a-f-]{36})/i);
+  return m ? `claude://claude.ai/${m[1].toLowerCase()}/${m[2]}` : ""; // ordinateur et téléphone : l'app Claude répond au schéma claude://
 }
 function ouvrirLien(u) {
   const app = R.liensApp === false ? "" : lienApp(u), web = () => { const w = window.open(u, "_blank"); if (w) w.opener = null; else location.href = u; };
@@ -3513,12 +3600,14 @@ RENDU.calendrier = () => {
       ${avecDate ? "" : `<span class="rang" style="margin-top:8px">${e.lie ? `<button class="btn mini" data-act="aller" data-v="${e.lie}">Ouvrir dans ${e.lie === "cours" ? "Cours" : "Réseau"}</button>` : `<button class="btn mini" data-act="calEditer" data-id="${esc(e.id)}">Modifier</button>`}<button class="btn mini plein" data-act="calAgenda" data-id="${esc(e.id)}">Ajouter à mon agenda</button></span>`}</div></div>`;
   // Vues semaine et jour : une colonne par jour, les heures en ordonnée, les événements placés à leur horaire
   const min = t => { const [h, m] = t.split(":").map(Number); return h * 60 + (m || 0); }, finDe = e => e.fin && e.fin > e.debut ? min(e.fin) : Math.min(1439, min(e.debut) + 60);
-  const horaires = jours.flatMap(d => (parJour.get(d) || []).filter(e => e.debut)), h0 = Math.min(8, ...horaires.map(e => Math.floor(min(e.debut) / 60))), h1 = Math.max(19, ...horaires.map(e => Math.ceil(finDe(e) / 60))), HH = 46;
+  const horaires = jours.flatMap(d => (parJour.get(d) || []).filter(e => e.debut)), h0 = Math.min(8, ...horaires.map(e => Math.floor(min(e.debut) / 60))), h1 = Math.max(19, ...horaires.map(e => Math.ceil(finDe(e) / 60))), HH = CAL.vue === "jour" ? 76 : petitEcran() ? 56 : 66;
   const colonne = d => { // les événements qui se chevauchent se partagent la largeur
     const E = (parJour.get(d) || []).filter(e => e.debut).map(e => ({ e, a: min(e.debut), b: finDe(e) })).sort((x, y) => x.a - y.a || y.b - x.b); let groupe = [], finG = -1; const poses = [];
     const clore = () => { const n = Math.max(1, ...groupe.map(g => g.col + 1)); groupe.forEach(g => { g.n = n; poses.push(g); }); groupe = []; };
     E.forEach(x => { if (groupe.length && x.a >= finG) clore(); const prises = new Set(groupe.filter(g => g.b > x.a).map(g => g.col)); let c = 0; while (prises.has(c)) c++; x.col = c; groupe.push(x); finG = Math.max(finG, x.b); }); clore();
-    return poses.map(p => `<div class="cal-bloc${p.b - p.a < 50 ? " court" : ""}" style="--c:${esc(categorie(p.e.categorie).couleur)};top:${((p.a - h0 * 60) / 60 * HH).toFixed(1)}px;height:${Math.max(18, (p.b - p.a) / 60 * HH - 2).toFixed(1)}px;left:calc(${(p.col / p.n * 100).toFixed(2)}% + 2px);width:calc(${(100 / p.n).toFixed(2)}% - 4px)" data-act="calOuvrir" data-id="${esc(p.e.id)}" data-d="${d}" title="${esc(p.e.titre)} · ${esc(fHoraire(p.e))}${p.e.lieu ? " · " + esc(p.e.lieu) : ""}"><span class="h">${svgPicto(pictoEv(p.e))}${esc(fHoraire(p.e))}</span><b>${esc(p.e.titre)}</b>${p.e.lieu ? `<span class="l">${esc(p.e.lieu)}</span>` : ""}</div>`).join("");
+    const estPause = e => /pause|repas|d[ée]jeuner|d[îi]ner|petit-d[ée]j|go[ûu]ter/i.test(categorie(e.categorie).nom + " " + e.titre);
+    return poses.map(p => { const px = (p.b - p.a) / 60 * HH, cls = px < 26 ? " mini" : p.b - p.a < 50 ? " court" : "", fin = p.e.fin && p.e.fin > p.e.debut ? p.e.fin : "";
+      return `<div class="cal-bloc${cls}${estPause(p.e) ? " pause" : ""}" style="--c:${esc(categorie(p.e.categorie).couleur)};top:${((p.a - h0 * 60) / 60 * HH + 1).toFixed(1)}px;height:${Math.max(6, px - 3).toFixed(1)}px;left:calc(${(p.col / p.n * 100).toFixed(2)}% + 3px);width:calc(${(100 / p.n).toFixed(2)}% - 6px)" data-act="calOuvrir" data-id="${esc(p.e.id)}" data-d="${d}" title="${esc(p.e.titre)} · ${esc(fHoraire(p.e))}${p.e.lieu ? " · " + esc(p.e.lieu) : ""}"><span class="h">${svgPicto(pictoEv(p.e))}<span>${esc(p.e.debut)}</span>${fin ? `<span class="fin">– ${esc(fin)}</span>` : ""}</span><b>${esc(p.e.titre)}</b>${p.e.lieu ? `<span class="l">${esc(p.e.lieu)}</span>` : ""}</div>`; }).join("");
   };
   const maint = new Date(), yMaint = ((maint.getHours() * 60 + maint.getMinutes()) / 60 - h0) * HH;
   const semaine = () => `<div class="cal-sem" style="--n:${jours.length}">
