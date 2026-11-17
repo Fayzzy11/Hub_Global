@@ -89,6 +89,7 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 ## Offres d'emploi (bot de veille)
 
 - L'onglet **Offres** lit en direct les offres trouvées par le bot (dépôt privé `TrackerJob`, fichier `data/jobs.json`) : filtres ville, contrat, fonction, recherche, nouvelles depuis ta dernière visite, contacts du carnet réseau dans la même société.
+- Mêmes couleurs que les messages du bot sur Discord : bleu pour Gestion / PM, vert pour Analyste, orange pour Risk, gris pour Middle office. Le badge « ★ Pour toi » marque les stages en gestion ou en analyse ; ils passent en tête de chaque journée (puis les offres avec 2027 dans le titre, puis Paris avant Genève). Le filtre « ★ Pour toi » ne garde qu'elles ; « Par date » rétablit l'ordre chronologique.
 - Ton suivi (intéressé, candidaté, écarté, notes) est gardé dans `data/offres.json` du dépôt privé du hub. Le hub ne modifie jamais le bot.
 - **Accès** : ajouter le dépôt du bot au jeton « Hub robot » avec `Contents : Read-only` (lecture des offres) et `Actions : Read and write` (bouton « Lancer la veille »).
 
