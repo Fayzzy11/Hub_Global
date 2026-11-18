@@ -98,8 +98,9 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 
 ## Langue
 
-- Réglages › Apparence › **Langue de l'application** : français ou anglais. L'interface, les dates et les nombres suivent ; tes données (titres, notes, contacts, offres) restent telles quelles.
-- L'app est écrite en français ; en anglais, chaque texte affiché est remplacé au vol d'après un dictionnaire (`TRAD_EN`), des modèles avec nombres (`TRAD_EN_NUM`), quelques motifs et des sens selon la vue (`TRAD_EN_CTX`). Un texte absent du dictionnaire reste en français : l'ajouter au dictionnaire suffit.
+- Réglages › Apparence › **Langue de l'application** : français, anglais, italien ou chinois simplifié. L'interface, les dates et les nombres suivent ; tes données (titres, notes, contacts, offres) restent telles quelles.
+- L'app est écrite en français ; dans une autre langue, chaque texte affiché est remplacé au vol d'après un dictionnaire, des modèles avec nombres, quelques motifs et des sens selon la vue. L'anglais est dans `index.html` (`TRAD_EN`, `TRAD_EN_NUM`, `TRAD_EN_CTX`) ; l'italien et le chinois sont dans `i18n/it.js` et `i18n/zh.js`, chargés seulement quand la langue est choisie. Un texte absent du dictionnaire reste en français : l'ajouter au dictionnaire suffit.
+- La toute première ouverture dans une nouvelle langue demande la connexion (le fichier de la langue est ensuite gardé pour le hors-ligne) ; sans elle, l'app s'affiche en français.
 
 ## Pavé numérique (téléphone)
 
