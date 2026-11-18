@@ -1,10 +1,13 @@
-# Hub · Noah
+# Hub
 
 Tableau de bord personnel sous forme d'application installable : accueil du jour, réseau de projets, marché, cartes d'indices, cours, documents, réseau, briefs, bot, patrimoine.
 
+**Créer ton propre Hub** : voir [INSTALLATION.md](INSTALLATION.md), ou dans l'app Réglages › « Créer ton propre Hub » › « Copier le prompt d'installation » (un prompt à envoyer à Claude, qui guide tout pas à pas).
+
 ## Comment c'est construit
 
-- **Ce dépôt (public)** contient uniquement le code de l'application et les données de marché. Aucune donnée personnelle.
+- **Ce dépôt (public)** contient uniquement le code de l'application et les données de marché. Aucune donnée personnelle : sans dépôt privé relié, l'app est en mode démonstration avec des données fictives, sans nom.
+- **Le profil** (`data/profil.json` du dépôt privé : prénom, école, import d'emploi du temps, dépôt du bot de veille) personnalise l'app une fois le dépôt relié. Il est créé par l'assistant de bienvenue (dépôt neuf) et se modifie dans Réglages › Profil.
 - **Les données personnelles** (fiches de projets, contacts, cours, briefs, documents) vivent dans un **dépôt privé séparé**. L'application les lit et les écrit avec un jeton GitHub personnel, saisi une fois par appareil et gardé dans le navigateur.
 - Pas de serveur à gérer : GitHub Pages sert l'application, l'API de GitHub sert les données, GitHub Actions met le marché à jour.
 
@@ -17,7 +20,7 @@ Tableau de bord personnel sous forme d'application installable : accueil du jour
 3. **Créer un dépôt privé** pour les données, par exemple `Hub_data`.
 4. **Créer un jeton** : github.com/settings/personal-access-tokens/new (jeton « fine-grained »).
    Repository access : « Only select repositories », le dépôt privé. Permissions : `Contents` en lecture et écriture.
-5. **Connecter l'application** : Réglages > Dépôt privé, coller le jeton, choisir un code de protection.
+5. **Connecter l'application** : Réglages > Dépôt privé, coller le jeton, choisir un code de protection. Sur un dépôt neuf, l'assistant de bienvenue crée le profil.
 6. **Installer** : bouton « Installer » du navigateur (PC, Android) ou Partager > « Sur l'écran d'accueil » (iPhone).
 
 ## Accueil et téléphone
@@ -33,7 +36,7 @@ Tableau de bord personnel sous forme d'application installable : accueil du jour
 
 ## Networking du jour
 
-- Chaque matin en semaine, la routine Claude « Daily Networking Checklist » écrit la checklist du jour dans le dépôt privé (`data/networking.json`, clé `jour`), avec l'état du tracker (contacts, statuts, échéances, compteurs).
+- Chaque matin en semaine, une routine Claude dépose la checklist du jour dans le dépôt privé (`entrees/networking/`) ; un robot GitHub Actions du dépôt privé la fusionne dans `data/networking.json` (clé `jour`), avec l'état du tracker (contacts, statuts, échéances, compteurs).
 - Accueil : une carte compacte montre les actions du jour, cochables, avec un bouton Claude qui ouvre la discussion networking du jour. Sur téléphone, la carte est repliée : touche-la pour la déplier.
 - Vue Réseau : le détail de chaque action, les messages prêts à copier-coller (bouton Copier), les compteurs, les jours précédents et l'accès aux documents du tracker (`documents/networking/`).
 - Ce que tu coches ou modifies dans l'app est gardé et repris par Claude au passage suivant (journal des modifications) ; la page Checklist réseau et le tracker du projet Claude restent la référence.
@@ -43,7 +46,7 @@ Tableau de bord personnel sous forme d'application installable : accueil du jour
 
 - La vue Calendrier permet d'ajouter, modifier et supprimer des événements directement dans l'app. Ils sont enregistrés dans le dépôt privé (`data/calendrier.json`, créé au premier enregistrement).
 - Trois affichages : jour, semaine (grille horaire) et mois. Un clic dans une colonne crée un événement à cette heure.
-- « Importer un emploi du temps SKEMA » : colle le texte de la page My Calendar, les séances sont ajoutées sans doublon.
+- « Importer un emploi du temps SKEMA » (si le profil le demande) : colle le texte de la page My Calendar, les séances sont ajoutées sans doublon.
 - Chaque événement a une catégorie (couleur et pictogramme, modifiables), un rappel et une répétition éventuelle. Les examens de la base de cours et les relances du carnet réseau s'affichent automatiquement.
 - Rappels : une app sans serveur ne peut pas notifier quand elle est fermée. Le bouton « Ajouter à mon agenda » envoie l'événement et son alarme dans l'agenda du téléphone ou de l'ordinateur (fichier `.ics`), qui se charge de la notification. Rien n'est publié dans le dépôt public.
 
@@ -88,7 +91,7 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 
 ## Offres d'emploi (bot de veille)
 
-- L'onglet **Offres** lit en direct les offres trouvées par le bot (dépôt privé `TrackerJob`, fichier `data/jobs.json`) : filtres ville, contrat, fonction, recherche, nouvelles depuis ta dernière visite, contacts du carnet réseau dans la même société.
+- L'onglet **Offres** lit en direct les offres trouvées par un bot de veille (son dépôt GitHub, indiqué dans le profil ou dans une fiche de type « bot », fichier `data/jobs.json`) : filtres ville, contrat, fonction, recherche, nouvelles depuis ta dernière visite, contacts du carnet réseau dans la même société.
 - Mêmes couleurs que les messages du bot sur Discord : bleu pour Gestion / PM, vert pour Analyste, orange pour Risk, gris pour Middle office. Le badge « ★ Pour toi » marque les stages en gestion ou en analyse ; ils passent en tête de chaque journée (puis les offres avec 2027 dans le titre, puis Paris avant Genève). Le filtre « ★ Pour toi » ne garde qu'elles ; « Par date » rétablit l'ordre chronologique.
 - Ton suivi (intéressé, candidaté, écarté, notes) est gardé dans `data/offres.json` du dépôt privé du hub. Le hub ne modifie jamais le bot.
 - **Accès** : ajouter le dépôt du bot au jeton « Hub robot » avec `Contents : Read-only` (lecture des offres) et `Actions : Read and write` (bouton « Lancer la veille »).
@@ -116,10 +119,12 @@ Glisse des fichiers ou des dossiers entiers n'importe où dans la fenêtre (ou u
 ## Organisation du dépôt privé
 
 ```
+data/profil.json          profil : prénom, école, import d'emploi du temps, dépôts liés
 data/projects.json        fiches de contexte (projets, sites, outils, bot)
 data/networking.json      contacts, checklist du jour, compteurs et modèles de messages (écrit par la routine Claude)
 documents/networking/     documents du tracker networking (checklists, état des contacts, fichiers du projet Claude)
-scripts/hub_sync.py       conversion du tracker vers l'app (utilisé par Claude)
+scripts/hub_sync.py       conversion du tracker vers l'app (utilisé par Claude et par le robot)
+entrees/                  fichiers déposés par les routines Claude, appliqués par les robots GitHub Actions
 data/courses.json         base de cours
 data/morning-brief.json   index des briefs
 data/briefs-texte.json    texte des briefs, pour la recherche
