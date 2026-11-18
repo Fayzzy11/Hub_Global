@@ -89,17 +89,6 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 - Le même menu ⋯ existe dans la vue Documents.
 - Les PDF s'ouvrent dans une visionneuse (pdf.js) : toutes les pages, aussi sur iPhone, avec zoom par boutons, Ctrl + molette, touches + et −, ou pincement à deux doigts.
 
-## Suivi de révision (onglet « Suivi » d'un cours)
-
-- Un cours peut avoir un **suivi de révision** (pensé pour le CFA) : il s'ouvre alors sur l'onglet **Suivi**. Données : `data/revision.json` du dépôt privé, une entrée par cours.
-- En haut : jours avant l'examen, préparation globale pondérée par le poids des matières, modules maîtrisés, précision moyenne à la banque de questions, heures de la semaine.
-- **Évolution** : trois courbes au choix. Préparation (une mesure par jour où le suivi change), mocks (score global face à l'objectif de 70 %), heures par semaine face à l'objectif.
-- **Par matière** : avancement, modules vus, précision, mocks et statut ; tri par priorité (poids à l'examen × ce qu'il reste à faire). Une matière ouverte montre ses modules : étapes faites (vidéo, notes, exercices de fin de chapitre), confiance de 1 à 5, questions et précision, date de révision. La prochaine révision se cale sur la confiance (7, 14, 21 ou 30 jours) et remonte dans « À réviser ».
-- **Fiches** : photos ou PDF déposés depuis la matière, rangés dans `documents/cours/<cours>/Fiches/<matière>/`.
-- **Cette semaine** : phase, matières, heures et questions (boutons +30 min, +1 h, +10, +30) ; « Tout le planning » pour les autres semaines. **Mocks** : score global, scores par matière, temps par session.
-- **Fichier Excel** : un classeur au modèle du tracker (onglets Dashboard, une feuille par matière, Weekly Planner, Mock Exams) se réimporte à tout moment, lu dans le navigateur sans bibliothèque. Modules et planning sont remplacés par le fichier, les mocks fusionnés, l'historique gardé. Un cours sans suivi en crée un depuis l'onglet « Infos et notes ».
-- Règles de calcul (reprises du tracker) : avancement d'un module = vidéo 25 % + notes 15 % + exercices 20 % + confiance ÷ 5 × 40 % ; « Maîtrisé » = vidéo et exercices faits, confiance ≥ 4 et précision ≥ 75 % ; « À revoir » = vidéo faite, questions commencées, confiance ≥ 3. Ces poids et seuils sont dans `data/revision.json` (`etapes`, `poids_confiance`, `seuils`, `rappels`).
-
 ## Offres d'emploi (bot de veille)
 
 - L'onglet **Offres** lit en direct les offres trouvées par un bot de veille (son dépôt GitHub, indiqué dans le profil ou dans une fiche de type « bot », fichier `data/jobs.json`) : filtres ville, contrat, fonction, recherche, nouvelles depuis ta dernière visite, contacts du carnet réseau dans la même société.
@@ -138,7 +127,6 @@ documents/networking/     documents du tracker networking (checklists, état des
 scripts/hub_sync.py       conversion du tracker vers l'app (utilisé par Claude et par le robot)
 entrees/                  fichiers déposés par les routines Claude, appliqués par les robots GitHub Actions
 data/courses.json         base de cours
-data/revision.json        suivi de révision par cours (modules, planning, mocks, historique)
 data/morning-brief.json   index des briefs
 data/briefs-texte.json    texte des briefs, pour la recherche
 data/marche-perso.json    favoris et pages du Marché
