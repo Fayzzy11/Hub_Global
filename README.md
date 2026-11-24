@@ -89,6 +89,11 @@ Les cours sont différés et non garantis. Les fichiers livrés au départ sont 
 - Le même menu ⋯ existe dans la vue Documents.
 - Les PDF s'ouvrent dans une visionneuse (pdf.js) : toutes les pages, aussi sur iPhone, avec zoom par boutons, Ctrl + molette, touches + et −, ou pincement à deux doigts.
 
+## Mes sites
+
+- La vue **Mes sites** montre en grand les fiches de type « site » : logo, adresse, boutons « Ouvrir le site », « Code source » et « Voir la fiche ». Un site s'ajoute avec « Ajouter un site » (fiche de type « site ») ; liens et logo se modifient dans la fiche.
+- Le profil (`data/profil.json`) peut masquer des vues sur tous les appareils : `"vues_masquees": ["cours"]`. C'est appliqué une fois par appareil (on peut réafficher la vue dans Réglages › Vues) ; dans la barre du téléphone, la vue masquée laisse sa place à « Mes sites ».
+
 ## Offres d'emploi (bot de veille)
 
 - L'onglet **Offres** lit en direct les offres trouvées par un bot de veille (son dépôt GitHub, indiqué dans le profil ou dans une fiche de type « bot », fichier `data/jobs.json`) : filtres ville, contrat, fonction, recherche, nouvelles depuis ta dernière visite, contacts du carnet réseau dans la même société.
