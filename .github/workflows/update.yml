@@ -2,10 +2,12 @@ name: Mise à jour du marché
 
 on:
   schedule:
-    # Un passage par heure, du lundi au vendredi, de 6 h 17 à 21 h 17 UTC (7 h 17 à 22 h 17 à Paris en hiver, une heure de plus en été).
-    # GitHub lance souvent ces passages en retard et en saute certains : en prévoir un par heure garantit des données fraîches.
+    # Trois passages en semaine : 6 h 41, 11 h 41 et 15 h 41 UTC (7 h 41, 12 h 41 et 16 h 41 à Paris en hiver,
+    # une heure de plus en été). GitHub saute environ 9 passages programmés sur 10 sur ce dépôt et en lance
+    # certains avec des heures de retard : l'app lance aussi le robot quand on l'ouvre, et un passage
+    # programmé qui tombe la nuit ne fait rien (garde-fou dans scripts/update_market.py).
     # Pour changer la fréquence, modifie cette ligne : minute, heures, jour du mois, mois, jours de la semaine.
-    - cron: "17 6-21 * * 1-5"
+    - cron: "41 6,11,15 * * 1-5"
   workflow_dispatch: {}   # bouton « Run workflow » pour lancer un passage à la main
 
 permissions:

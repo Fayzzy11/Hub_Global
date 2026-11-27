@@ -249,7 +249,20 @@ def compacter(pts):
     return {"d0": pts[0][0], "j": [(dt.date.fromisoformat(d) - d0).days for d, _ in pts], "c": [arrondi(c) for _, c in pts]}
 
 
+def passage_de_nuit(quand=None, manuel=None):
+    """Garde-fou : GitHub lance parfois les passages programmés avec plusieurs heures de retard (jusqu'à 4 h du
+    matin). Un passage programmé qui tombe la nuit (avant 7 h ou à partir de 23 h, heure de Paris) ne fait rien.
+    Un lancement à la main ou par l'app (FORCER_MESSAGE=1) passe toujours."""
+    quand = quand or dt.datetime.now(PARIS)
+    manuel = bool(os.environ.get("FORCER_MESSAGE")) if manuel is None else manuel
+    h = quand.astimezone(PARIS).hour
+    return not manuel and (h < 7 or h >= 23)
+
+
 def main():
+    if passage_de_nuit():
+        print("Passage programmé tombé la nuit (retard de GitHub) : rien à faire.")
+        return 0
     debut_passage = time.time()
     cfg = lire("config/tickers.json", {})
     suivis = [t for t in cfg.get("tickers", []) if t.get("symbole")]
