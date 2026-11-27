@@ -678,6 +678,8 @@ a.acc-ligne{text-decoration:none}
 [data-theme="nuit"]{--f-pm:#7FB0E0;--f-an:#7CC98A;--f-risk:#EE9F66;--f-mo:#B3AEA3;--f-autre:#7E7A70}
 [data-fn="pm"]{--fc:var(--f-pm)} [data-fn="an"]{--fc:var(--f-an)} [data-fn="risk"]{--fc:var(--f-risk)} [data-fn="mo"]{--fc:var(--f-mo)} [data-fn="autre"]{--fc:var(--f-autre)}
 .of{border-left:6px solid var(--fc,var(--trait))}
+.of-li{border-color:#0A66C2;color:#0A66C2}[data-theme="nuit"] .of-li{border-color:#70B5F9;color:#70B5F9}
+.li-bloc{margin-bottom:12px;padding:12px 14px}.li-bloc p{margin:6px 0 0}.li-ev{margin:6px 0 0;padding-left:18px}.li-ev li{margin:2px 0}
 .of-fn{font:600 12px var(--texte);color:var(--fc);border:1px solid color-mix(in srgb,var(--fc) 45%,transparent);border-radius:999px;padding:2px 9px;white-space:nowrap}
 .of-match{font:600 12px var(--texte);color:#fff;background:var(--fc);border-radius:999px;padding:3px 10px;white-space:nowrap}
 [data-theme="nuit"] .of-match{color:#10151F}
@@ -979,7 +981,9 @@ const JEUX = {
   "marche-perso": { prive: true, vide: () => ({ version: 1, favoris: [], pages: [] }), nom: "Marché : favoris et pages" },
   market: { prive: false, vide: () => ({ tickers: [] }), nom: "Marché" },
   heatmap: { prive: false, vide: () => ({ indices: [] }), nom: "Cartes de marché" },
-  profil: { prive: true, vide: () => ({ version: 1 }), nom: "Profil" }
+  profil: { prive: true, vide: () => ({ version: 1 }), nom: "Profil" },
+  // tenu par le robot linkedin.yml de Hub_data : l'app le lit, ne l'écrit jamais
+  linkedin: { prive: true, vide: () => ({ version: 1, contacts: {}, nouveautes: [], offres_linkedin: [] }), nom: "LinkedIn (lecture seule)" }
 };
 const D = {};      // données en mémoire
 const M = {};      // état de chaque jeu : source, attente d'envoi, erreur
@@ -1266,6 +1270,7 @@ document.addEventListener("click", e => { const b = e.target.closest("[data-act]
 function formulaire(titre, champs, valeurs, surValider, surSupprimer) {
   const dlg = $("#dlg");
   dlg.innerHTML = `<form method="dialog"><h2>${esc(titre)}</h2>${champs.map(c => {
+    if (c.t === "html") return c.html || ""; // bloc d'information, non enregistré
     const v = lire(valeurs, c.k); const id = "f_" + c.k.replace(/\W/g, "_");
     let ctl;
     if (c.t === "fichier") ctl = `<input id="${id}" type="file" accept="${esc(c.accept || "")}">`;
@@ -1280,7 +1285,7 @@ function formulaire(titre, champs, valeurs, surValider, surSupprimer) {
   if (surSupprimer) $("#f_suppr", dlg).onclick = () => { if (confirm("Supprimer définitivement cet élément ?")) { dlg.close(); surSupprimer(); } };
   $("form", dlg).onsubmit = () => {
     const res = JSON.parse(JSON.stringify(valeurs));
-    champs.forEach(c => {
+    champs.filter(c => c.t !== "html").forEach(c => {
       const el = $("#f_" + c.k.replace(/\W/g, "_"), dlg), brut = el.value;
       ecrire(res, c.k, c.t === "fichier" ? [...el.files] : c.t === "liste" ? brut.split("\n").map(s => s.trim()).filter(Boolean) : c.t === "tags" ? brut.split(",").map(s => s.trim()).filter(Boolean) : c.t === "number" ? Number(brut) || 0 : brut.trim());
     });
@@ -3486,6 +3491,30 @@ function journaliser(c, avant, apres, texte) {
 }
 const CHAMPS_SUIVIS = ["statut", "prochaine_relance", "derniere_interaction", "notes", "canal", "poste", "entreprise", "ville"];
 const MAX_LIGNES = 150;
+/* LinkedIn : fiche du contact dans data/linkedin.json (robot linkedin.yml), par id puis par nom */
+const LI_TYPES = { message: "Message", invitation_acceptee: "Invitation acceptée", invitation_recue: "Invitation reçue", changement_poste: "Changement de poste", post: "Post", profil_maj: "Profil mis à jour" };
+const LI = { src: null, idx: null };
+const cleNomLi = n => norm(String(n || "").split(",")[0]).replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+function ficheLinkedin(c) {
+  const F = D.linkedin?.contacts;
+  if (!F || typeof F !== "object") return null;
+  if (LI.src !== F) { // index refait seulement quand le fichier change
+    const parId = {}, parNom = {};
+    Object.values(F).forEach(f => { if (!f || typeof f !== "object") return; if (f.networking_id) parId[f.networking_id] = f; const k = cleNomLi(f.nom); if (k) (parNom[k] ??= []).push(f); });
+    LI.src = F; LI.idx = { parId, parNom };
+  }
+  const n = LI.idx.parNom[cleNomLi(c.nom)];
+  return LI.idx.parId[c.id] || (n?.length === 1 && !n[0].networking_id ? n[0] : null);
+}
+function blocLinkedin(c) {
+  const f = ficheLinkedin(c); if (!f) return "";
+  const p = f.profil || {}, m = f.dernier_message, E = tab(f.evenements).slice(0, 6);
+  const lien = (u, t) => /^https:\/\/([a-z]+\.)?linkedin\.com\//.test(u || "") ? `<a href="${esc(u)}" target="_blank" rel="noopener">${t}</a>` : "";
+  return `<div class="carte li-bloc"><div class="rang" style="justify-content:space-between"><b>LinkedIn</b>${lien(f.linkedin, "Profil")}</div>
+    ${p.poste || p.entreprise ? `<p class="petit">${esc([p.poste, p.entreprise].filter(Boolean).join(" · "))}${p.vu_le ? ` <span class="doux">(vu le ${esc(fDate(p.vu_le))})</span>` : ""}${p.precedent ? `<br><span class="doux">Avant : ${esc([p.precedent.poste, p.precedent.entreprise].filter(Boolean).join(" · "))}</span>` : ""}</p>` : ""}
+    ${m ? `<p class="petit"><b>Dernier message</b> · ${esc(fDate(String(m.date).slice(0, 10)))} ${lien(m.lien, "ouvrir")}<br>${esc(m.resume || m.extrait || "")}</p>` : ""}
+    ${E.length ? `<ul class="petit li-ev">${E.map(e => `<li><span class="doux">${esc(fDate(String(e.date).slice(0, 10)))}</span> · ${esc(LI_TYPES[e.type] || e.type)}${e.resume ? " : " + esc(e.resume) : ""} ${lien(e.lien, "↗")}</li>`).join("")}</ul>` : ""}</div>`;
+}
 RENDU.reseau = () => {
   const C = contacts(), Mo = tab(D.networking?.modeles), v = $("#v-reseau"), rel = relances(), ST = statuts();
   const motsN = jetons(filtreN.q), liste = C.filter(c => (!filtreN.statut || c.statut === filtreN.statut) && motsN.every(m => norm([c.nom, c.entreprise, c.poste, c.ville, c.notes].join(" ")).includes(m)));
@@ -3521,8 +3550,8 @@ Object.assign(ACT, {
   njCopier: d => { const a = jourNet()?.actions.find(x => String(x.rang) === String(d.r)), m = a && blocsMessages(a.message)[+d.i]; if (m) copier(m.corps, "Message copié : colle-le dans " + (/e-?mail/i.test(m.tete) ? "ton e-mail" : "LinkedIn")); },
   njDocs: () => { DOCS.chemin = "documents/networking"; DOCS.items = null; DOCS.q = ""; if (S.vue === "documents") RENDU.documents(); else location.hash = "#/documents"; },
   nEditer: d => {
-    const c = contacts().find(x => x.id === d.id), neuf = !c;
-    formulaire(neuf ? "Nouveau contact" : "Modifier le contact", [{ k: "nom", l: "Nom" }, { k: "entreprise", l: "Entreprise" }, { k: "poste", l: "Poste" }, { k: "ville", l: "Ville" }, { k: "statut", l: "Statut", t: "choix", o: statuts() }, { k: "canal", l: "Canal", t: "choix", o: [...new Set(["LinkedIn", "E-mail", "Téléphone", "Événement", "Autre", ...(c?.canal ? [c.canal] : [])])] }, { k: "derniere_interaction", l: "Premier message ou dernière interaction", t: "date" }, { k: "prochaine_relance", l: "Prochaine échéance", t: "date" }, { k: "notes", l: "Notes", t: "zone" }],
+    const c = contacts().find(x => x.id === d.id), neuf = !c, li = neuf ? "" : blocLinkedin(c);
+    formulaire(neuf ? "Nouveau contact" : "Modifier le contact", [...(li ? [{ t: "html", k: "", html: li }] : []), { k: "nom", l: "Nom" }, { k: "entreprise", l: "Entreprise" }, { k: "poste", l: "Poste" }, { k: "ville", l: "Ville" }, { k: "statut", l: "Statut", t: "choix", o: statuts() }, { k: "canal", l: "Canal", t: "choix", o: [...new Set(["LinkedIn", "E-mail", "Téléphone", "Événement", "Autre", ...(c?.canal ? [c.canal] : [])])] }, { k: "derniere_interaction", l: "Premier message ou dernière interaction", t: "date" }, { k: "prochaine_relance", l: "Prochaine échéance", t: "date" }, { k: "notes", l: "Notes", t: "zone" }],
       c || { id: uid("c-"), nom: "", statut: "À contacter", canal: "LinkedIn", origine: "app" }, r => {
         if (!r.nom) return;
         if (neuf) { r.origine = "app"; D.networking.contacts.push(r); }
@@ -3734,21 +3763,48 @@ const ficheBot = () => projets().find(p => p.type === "bot");
 const depotBot = () => { const m = (ficheBot()?.liens?.depot || "").match(/github\.com\/([^/]+)\/([^/#?]+)/); return m ? `${m[1]}/${m[2].replace(/\.git$/, "")}` : (PROFIL().depot_bot || ""); };
 const suiviOffres = () => (D.offres ??= JEUX.offres.vide()).suivi ??= {};
 const societeOffre = o => /pertinente|^\?$/i.test(o.company || "") || !o.company ? "Société non précisée" : o.company;
+/* Bot illisible ou absent : on montre quand même les offres LinkedIn, avec un bandeau */
+function seulLinkedin() { const li = fusionLinkedin([]); if (!li.length) return null; BOT.donnees = { offres: li, etat: {}, seulLinkedin: true }; BOT.charge = Date.now(); return BOT.donnees; }
 /* Lecture des offres du bot : d'abord avec le jeton du robot, sinon avec celui du dépôt privé */
 async function lireBot(forcer) {
   if (BOT.donnees && !forcer && Date.now() - BOT.charge < 10 * 6e4) return BOT.donnees;
-  if (!depotBot()) { BOT.erreur = "aucun"; return null; } // aucun bot de veille relié
+  if (!depotBot()) { BOT.erreur = "aucun"; return seulLinkedin(); } // aucun bot de veille relié
   const cles = [...new Set([GH.jetonRobot, GH.jeton].filter(Boolean))]; let derniere = null;
   for (const jeton of cles) {
     try {
       const lire = async f => JSON.parse(await (await GH.api(`contents/${f}?ref=main`, { depot: depotBot(), jeton, brut: true })).text());
       const [jobs, etat] = await Promise.all([lire("data/jobs.json"), lire("data/state.json").catch(() => ({}))]);
-      BOT.donnees = { offres: Object.values(jobs || {}).filter(o => o && o.id && o.title), etat: etat || {} }; BOT.jeton = jeton; BOT.charge = Date.now(); BOT.erreur = "";
+      BOT.donnees = { offres: fusionLinkedin(Object.values(jobs || {}).filter(o => o && o.id && o.title)), etat: etat || {} }; BOT.jeton = jeton; BOT.charge = Date.now(); BOT.erreur = "";
       return BOT.donnees;
     } catch (e) { derniere = e; }
   }
   BOT.erreur = !cles.length ? "jeton" : [401, 403, 404].includes(derniere?.status) ? "acces" : derniere?.message || "erreur";
-  return null;
+  return seulLinkedin();
+}
+/* Offres LinkedIn (data/linkedin.json → offres_linkedin, alertes e-mail LinkedIn) : mises au
+   format du bot ; une offre déjà trouvée par le bot n'est pas doublée, elle prend le badge LinkedIn */
+const cleTitre = t => norm(t).replace(/[^a-z0-9]+/g, " ").replace(/\b(f h|h f|m f|f m|w m|m w)\b/g, " ").replace(/\s+/g, " ").trim();
+const cleOffreFus = o => cleSociete(o.company || "") + "|" + cleTitre(o.title);
+const idJobLinkedin = u => (String(u || "").match(/linkedin\.com\/(?:comm\/)?jobs\/view\/(?:[^/?#]*-)?(\d+)/) || [])[1] || "";
+function offresLinkedin() {
+  return tab(D.linkedin?.offres_linkedin).filter(o => o && o.id && o.titre).map(o => {
+    const lieu = String(o.lieu || ""), t = String(o.titre);
+    return { id: "li:" + o.id, title: t, company: o.entreprise || "", location: lieu,
+      city: /paris|la d[ée]fense|neuilly|courbevoie|puteaux/i.test(lieu) ? "Paris" : /gen[eè]v/i.test(lieu) ? "Genève" : lieu.split(/[,(]/)[0].trim(),
+      contract: /\b(stage|stagiaire|intern(ship)?|alternance|apprenti)/i.test(t) ? "Stage" : /\bcdi\b/i.test(t) ? "CDI" : "",
+      function: /g[ée]rant|portfolio|gestion (de portefeuille|d'actifs|privée)|asset manag|\bpm\b/i.test(t) ? "Gestion / PM" : /risk|risque/i.test(t) ? "Risk" : /middle.?office/i.test(t) ? "Middle office" : /analys|research|recherche/i.test(t) ? "Analyste" : "",
+      url: o.lien || "", found_at: (o.date || o.vu_le || "") + "T12:00:00", source: "LinkedIn", active: true, linkedin: true };
+  });
+}
+function fusionLinkedin(bot) {
+  const parCle = new Map(), parJob = new Map();
+  bot.forEach(o => { parCle.set(cleOffreFus(o), o); const j = idJobLinkedin(o.url); if (j) parJob.set(j, o); });
+  const ajout = [];
+  offresLinkedin().forEach(o => {
+    const j = idJobLinkedin(o.url), meme = (j && parJob.get(j)) || parCle.get(cleOffreFus(o));
+    if (meme) meme.linkedin = true; else { ajout.push(o); parCle.set(cleOffreFus(o), o); if (j) parJob.set(j, o); }
+  });
+  return [...bot, ...ajout];
 }
 /* Contacts du carnet réseau dans la même société (premier mot significatif du nom) */
 const cleSociete = n => norm(n).replace(/[^a-z0-9 ]/g, " ").split(/\s+/).find(m => m.length > 2 && !["banque", "groupe", "group", "the", "les", "asset", "fonds"].includes(m)) || "";
@@ -3787,7 +3843,7 @@ function ligneOffre(o) {
   const s = suiviOffres()[o.id] || {}, soc = societeOffre(o), C = soc === "Société non précisée" ? [] : contactsChez(soc);
   const p = pertinence(o);
   return `<article class="of${s.statut ? " of-" + s.statut : ""}${o.active === false ? " of-close" : ""}${p === 3 ? " of-top" : p <= 1 ? " of-bas" : ""}" data-fn="${fnOffre(o)}">
-    <div class="of-tete">${p === 3 ? '<span class="of-match">★ Pour toi</span>' : ""}<b class="of-soc">${esc(soc)}</b>${o.function ? `<span class="of-fn">${esc(o.function)}</span>` : ""}<span class="doux">${esc([o.city, o.contract].filter(Boolean).join(" · "))}</span>${nouvelleOffre(o) ? '<span class="puce or">Nouvelle</span>' : ""}${/\b2027\b/.test(o.title) ? '<span class="puce">2027</span>' : ""}${o.active === false ? '<span class="puce">plus en ligne</span>' : ""}</div>
+    <div class="of-tete">${p === 3 ? '<span class="of-match">★ Pour toi</span>' : ""}<b class="of-soc">${esc(soc)}</b>${o.function ? `<span class="of-fn">${esc(o.function)}</span>` : ""}<span class="doux">${esc([o.city, o.contract].filter(Boolean).join(" · "))}</span>${nouvelleOffre(o) ? '<span class="puce or">Nouvelle</span>' : ""}${o.linkedin ? '<span class="puce of-li" title="Vue dans les alertes LinkedIn">LinkedIn</span>' : ""}${/\b2027\b/.test(o.title) ? '<span class="puce">2027</span>' : ""}${o.active === false ? '<span class="puce">plus en ligne</span>' : ""}</div>
     <a class="of-titre" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.title.replace(/\s+/g, " "))}</a>
     <div class="of-pied"><span class="doux petit">Trouvée le ${esc(fDate(String(o.found_at).slice(0, 10)))}${o.source ? " · " + esc(o.source) : ""}</span>
       ${C.length ? `<button class="lien-btn petit" data-act="ofContacts" data-s="${esc(soc)}">${C.length} contact${C.length > 1 ? "s" : ""} chez ${esc(soc.split(/\s+/)[0])}</button>` : ""}
@@ -3825,7 +3881,7 @@ RENDU.bot = async () => {
   const groupes = [["Aujourd'hui", 0, 0], ["Hier", 1, 1], ["Cette semaine", 2, 6], ["Plus tôt", 7, 1e9]];
   const corps = liste.length ? groupes.map(([t, a, z]) => { const g = liste.filter(o => { const j = joursDepuis(String(o.found_at).slice(0, 10)); return j >= a && j <= z; }); return g.length ? `<h3 class="of-groupe">${t} <span class="doux petit">· ${g.length}</span></h3>${g.slice(0, 150).map(ligneOffre).join("")}${g.length > 150 ? `<p class="doux petit">et ${g.length - 150} autres : affine les filtres.</p>` : ""}` : ""; }).join("")
     : `<div class="vide"><b>Aucune offre ici</b>${f.vue === "suivi" ? "Marque une offre « Intéressé » ou « Candidaté » pour la retrouver ici." : "Modifie les filtres."}</div>`;
-  v.innerHTML = tete + `<div class="of-etat carte"><div><div class="sur">Dernier passage du bot</div><b>${E.last_run ? esc(fHeure(E.last_run)) : "inconnu"}</b><span class="doux petit">${E.last_new != null ? ` · ${E.last_new} nouvelle${E.last_new > 1 ? "s" : ""} à ce passage` : ""} · ${actives.length} offres en ligne · <b style="color:var(--f-pm)">${pourToi} pour toi</b>${neuves ? ` · <b class="hausse">${neuves} depuis ta dernière visite</b>` : ""}</span>${BOT.lance ? `<p class="petit" style="margin-top:4px">${esc(BOT.lance)}</p>` : ""}</div>
+  v.innerHTML = tete + (BOT.donnees.seulLinkedin ? `<div class="bandeau"><span><b>Offres du bot non lues</b> (${esc(BOT.erreur === "aucun" ? "aucun bot relié" : BOT.erreur === "jeton" ? "jeton manquant" : BOT.erreur === "acces" ? "accès refusé au dépôt du bot" : BOT.erreur)}) : seules les offres LinkedIn sont affichées.</span></div>` : "") + `<div class="of-etat carte"><div><div class="sur">Dernier passage du bot</div><b>${E.last_run ? esc(fHeure(E.last_run)) : "inconnu"}</b><span class="doux petit">${E.last_new != null ? ` · ${E.last_new} nouvelle${E.last_new > 1 ? "s" : ""} à ce passage` : ""} · ${actives.length} offres en ligne · <b style="color:var(--f-pm)">${pourToi} pour toi</b>${neuves ? ` · <b class="hausse">${neuves} depuis ta dernière visite</b>` : ""}</span>${BOT.lance ? `<p class="petit" style="margin-top:4px">${esc(BOT.lance)}</p>` : ""}</div>
       <span class="rang"><button class="btn plein" data-act="ofLancer" ${/en cours/.test(BOT.lance) ? "disabled" : ""}>Lancer la veille</button><button class="btn" data-act="ofRecharger">Recharger</button>${liens}</span></div>
     <div class="seg of-vues" role="tablist" aria-label="Offres affichées">${vues.map(([k, l, n]) => `<button role="tab" aria-selected="${f.vue === k}" aria-pressed="${f.vue === k}" data-act="ofFiltre" data-k="vue" data-v="${k}">${l} <span class="doux">${n}</span></button>`).join("")}</div>
     <div class="of-filtres"><input class="saisie" type="search" id="of-q" placeholder="Chercher un poste ou une société" aria-label="Chercher une offre" value="${esc(f.q)}">
